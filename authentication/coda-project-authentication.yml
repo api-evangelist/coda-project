@@ -1,0 +1,43 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/coda-project-admin-openapi-original.json, openapi/coda-project-openapi-original.json, https://coda.io/.well-known/oauth-authorization-server
+docs: https://coda.io/developers/apis/v1#section/Authentication
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+  token_restrictions: >-
+    Docs API bearer tokens can be created with restrictions limiting them to read, write, or
+    read+write access, and scoped to specific documents or tables. /whoami and
+    /resolveBrowserLink are special-cased.
+schemes:
+- name: Bearer
+  type: http
+  scheme: bearer
+  bearerFormat: UUID
+  description: |-
+    The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)
+    in Superhuman Docs. This token should be specified by setting a header as follows.
+
+    ```Authorization: Bearer <api_token>```
+
+    Keep your token safe, as anyone who gets access to it can access your account. Once a token is created
+    it cannot be viewed or modi
+  sources:
+  - openapi/coda-project-admin-openapi-original.json
+  - openapi/coda-project-openapi-original.json
+- name: OAuth2
+  type: oauth2
+  source: well-known/coda-project-oauth-authorization-server.json
+  note: >-
+    Separate OAuth 2.0 authorization server powering third-party apps and the official remote
+    MCP server. PKCE (S256), dynamic client registration, authorization_code grant, scope mcp:all.
+  flows:
+    authorizationCode:
+      authorizationUrl: https://coda.io/v4/api/oauth2/authorize
+      tokenUrl: https://coda.io/v4/api/oauth2/token
+      registrationUrl: https://coda.io/v4/api/oauth2/register
+      scopes:
+        "mcp:all": Full read/write access via the remote MCP server.
