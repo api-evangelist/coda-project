@@ -1,0 +1,1385 @@
+openapi: 3.0.0
+info:
+  version: 0.0.2
+  title: Superhuman Docs Admin Account Analytics API
+  license:
+    name: Superhuman Developer Terms
+    url: https://docs.superhuman.com/trust/developer
+  description: "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n"
+  termsOfService: https://superhuman.com/legal/terms
+  contact:
+    name: Developer Support
+    url: https://superhuman.com/developers
+    email: care@superhuman.com
+  x-logo:
+    url: https://cdn.coda.io/icons/png/color/superhuman-docs-128.png
+    backgroundColor: transparent
+    altText: Superhuman Docs Admin API
+    href: '#'
+servers:
+- url: https://docs.superhuman.com/apis/admin/v1
+  description: Superhuman Docs Admin API (v1)
+security:
+- Bearer: []
+tags:
+- name: Analytics
+  description: This API offers analytics data for your docs and Packs over time.
+paths:
+  /analytics/docs:
+    get:
+      summary: List doc analytics
+      description: 'Returns analytics data for available docs per day.
+
+        '
+      operationId: listDocAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/docIds'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      - $ref: '#/components/parameters/query'
+      - $ref: '#/components/parameters/isPublished'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/scale'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/docAnalyticsOrderBy'
+      - $ref: '#/components/parameters/direction'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: List of document analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+      x-codeSamples:
+      - label: Python 3.13
+        lang: python
+        source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://docs.superhuman.com/apis/v1/analytics/docs'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First doc is: {res[\"items\"][0][\"doc\"][\"title\"]}')\n# => First doc is: New Document\n"
+      - label: Shell
+        lang: shell
+        source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/v1/analytics/docs' |\n  jq .items[0].doc.title\n# => \"New Document\"\n"
+  /analytics/docs/{docId}/pages:
+    get:
+      summary: List page analytics
+      description: 'Returns analytics data for a given doc within the day.
+
+        This method will return a 401 if the given doc is not in an Enterprise workspace.
+
+        '
+      operationId: listPageAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/docId'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/pageToken'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: List of page analytics for the given document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+      x-codeSamples:
+      - label: Python 3.13
+        lang: python
+        source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://docs.superhuman.com/apis/v1/analytics/docs/abcdefghi/pages'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First page is: {res[\"items\"][0][\"page\"][\"name\"]}')\n# => First page is: My Page\n"
+      - label: Shell
+        lang: shell
+        source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/v1/analytics/docs/abcdefghi/pages' |\n  jq .items[0].page.name\n# => \"My Page\"\n"
+  /analytics/docs/summary:
+    get:
+      summary: Get doc analytics summary
+      description: 'Returns summarized analytics data for available docs.
+
+        '
+      operationId: listDocAnalyticsSummary
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/isPublished'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      responses:
+        '200':
+          description: Response of document summary analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocAnalyticsSummary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /analytics/packs:
+    get:
+      summary: List Pack analytics
+      description: 'Returns analytics data for Packs the user can edit.
+
+        '
+      operationId: listPackAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/packIds'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      - $ref: '#/components/parameters/query'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/scale'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/packAnalyticsOrderBy'
+      - $ref: '#/components/parameters/direction'
+      - $ref: '#/components/parameters/isPublishedNoDefault'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: Response of Superhuman Pack analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+      x-codeSamples:
+      - label: Python 3.13
+        lang: python
+        source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://docs.superhuman.com/apis/v1/analytics/packs'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First Pack is: {res[\"items\"][0][\"pack\"][\"name\"]}')\n# => First Pack is: New Pack\n"
+      - label: Shell
+        lang: shell
+        source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/v1/analytics/packs' |\n  jq .items[0].pack.name\n# => \"New Pack\"\n"
+  /analytics/packs/summary:
+    get:
+      summary: Get Pack analytics summary
+      description: 'Returns summarized analytics data for Packs the user can edit.
+
+        '
+      operationId: listPackAnalyticsSummary
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/packIds'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      - $ref: '#/components/parameters/isPublishedNoDefault'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      responses:
+        '200':
+          description: Response of Superhuman Pack summary analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackAnalyticsSummary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /analytics/packs/{packId}/formulas:
+    get:
+      summary: List Pack formula analytics
+      description: 'Returns analytics data for Pack formulas.
+
+        '
+      operationId: listPackFormulaAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - name: packFormulaNames
+        description: A list of Pack formula names (case-sensitive) for which to retrieve analytics.
+        in: query
+        explode: false
+        example: SquareRoot,CubeRoot
+        schema:
+          type: array
+          items:
+            type: string
+      - name: packFormulaTypes
+        description: A list of Pack formula types corresponding to the `packFormulaNames`. If specified, this must have the same length as `packFormulaNames`.
+        in: query
+        explode: false
+        example: action,formula
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaType'
+      - $ref: '#/components/parameters/packId'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/scale'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/packFormulaAnalyticsOrderBy'
+      - $ref: '#/components/parameters/direction'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: Response of Superhuman Pack formula analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackFormulaAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /analytics/updated:
+    get:
+      summary: Get analytics last updated day
+      description: 'Returns days based on Pacific Standard Time when analytics were last updated.
+
+        '
+      operationId: getAnalyticsLastUpdated
+      tags:
+      - Analytics
+      responses:
+        '200':
+          description: Response of analytics last updated days.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsLastUpdatedResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    DocReference:
+      x-schema-name: DocReference
+      description: Reference to a document.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the document.
+          example: AbCDeFGH
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - doc
+          x-tsType: Type.Doc
+        href:
+          type: string
+          format: url
+          description: API link to the document.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the document.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH
+    PageAnalyticsDetails:
+      x-schema-name: PageAnalyticsDetails
+      description: Metadata about a page relevant to analytics.
+      required:
+      - id
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: section-IjkLmnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        icon:
+          $ref: '#/components/schemas/Icon'
+          example: https://docs.superhuman.com/d/_dAbCDeFGH
+    SortDirection:
+      x-schema-name: SortDirection
+      description: Direction of a sort for a table or view.
+      type: string
+      enum:
+      - ascending
+      - descending
+      x-tsEnumNames:
+      - Ascending
+      - Descending
+    PackFormulaIdentifier:
+      x-schema-name: PackFormulaIdentifier
+      type: object
+      required:
+      - name
+      - type
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The Pack formula name.
+          example: SquareRoot
+        type:
+          $ref: '#/components/schemas/PackFormulaType'
+    PackFormulaAnalyticsMetrics:
+      x-schema-name: PackFormulaAnalyticsMetrics
+      description: Analytics metrics for a Superhuman Pack formula.
+      type: object
+      required:
+      - date
+      - formulaInvocations
+      - errors
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        formulaInvocations:
+          type: integer
+          description: Number of times this formula has been invoked.
+          example: 123
+        errors:
+          type: integer
+          description: Number of errors from invocations.
+          example: 5
+        medianLatencyMs:
+          type: integer
+          description: Median latency of an invocation in milliseconds. Only present for daily metrics.
+          example: 500
+        medianResponseSizeBytes:
+          type: integer
+          description: Median response size in bytes. Only present for daily metrics.
+          example: 300
+        docsActivelyUsing:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past day.
+          example: 50
+        docsActivelyUsing7Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 7 days.
+          example: 100
+        docsActivelyUsing30Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 30 days.
+          example: 200
+        docsActivelyUsing90Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 90 days.
+          example: 300
+        docsActivelyUsingAllTime:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack ever.
+          example: 500
+        workspacesActivelyUsing:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past day.
+          example: 10
+        workspacesActivelyUsing7Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 7 days.
+          example: 15
+        workspacesActivelyUsing30Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 30 days.
+          example: 20
+        workspacesActivelyUsing90Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 90 days.
+          example: 30
+        workspacesActivelyUsingAllTime:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack ever.
+          example: 50
+        workspacesActivelyTrialing:
+          type: integer
+          description: Number of unique workspaces that are currently involved in a trial.
+        workspacesActivelyTrialing7Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 7 days.
+        workspacesActivelyTrialing30Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 30 days.
+        workspacesActivelyTrialing90Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 90 days.
+        workspacesActivelyTrialingAllTime:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial ever.
+        workspacesNewlySubscribed:
+          type: integer
+          description: Number of unique workspaces that have recently subscribed to the Pack.
+        workspacesWithActiveSubscriptions:
+          type: integer
+          description: Number of unique workspaces that are currently subscribed to the Pack.
+        workspacesWithSuccessfulTrials:
+          type: integer
+          description: Number of unique workspaces that subscribed after undertaking a Pack trial.
+        revenueUsd:
+          type: string
+          description: Amount of revenue (in USD) that the Pack has produced.
+    DocAnalyticsMetrics:
+      x-schema-name: DocAnalyticsMetrics
+      description: Analytics metrics for a document.
+      type: object
+      required:
+      - date
+      - views
+      - copies
+      - likes
+      - sessionsMobile
+      - sessionsDesktop
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat,
+      - aiCreditsBlock,
+      - aiCreditsColumn,
+      - aiCreditsAssistant,
+      - aiCreditsReviewer,
+      - aiCredits,
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        views:
+          type: integer
+          description: Number of times the doc was viewed.
+          example: 980
+        copies:
+          type: integer
+          description: Number of times the doc was copied.
+          example: 24
+        likes:
+          type: integer
+          description: Number of times the doc was liked.
+          example: 342
+        sessionsMobile:
+          type: integer
+          description: Number of unique visitors to this doc from a mobile device.
+          example: 530
+        sessionsDesktop:
+          type: integer
+          description: Number of unique visitors to this doc from a desktop device.
+          example: 212
+        sessionsOther:
+          type: integer
+          description: Number of unique visitors to this doc from an unknown device type.
+          example: 10
+        totalSessions:
+          type: integer
+          description: Sum of the total sessions from any device.
+          example: 1000
+        aiCreditsChat:
+          type: integer
+          description: Number of credits used for AI chat.
+          example: 10
+        aiCreditsBlock:
+          type: integer
+          description: Number of credits used for AI block.
+          example: 10
+        aiCreditsColumn:
+          type: integer
+          description: Number of credits used for AI column.
+          example: 10
+        aiCreditsAssistant:
+          type: integer
+          description: Number of credits used for AI assistant.
+          example: 10
+        aiCreditsReviewer:
+          type: integer
+          description: Number of credits used for AI reviewer.
+          example: 10
+        aiCredits:
+          type: integer
+          description: Total number of AI credits used.
+          example: 50
+    PackAnalyticsDetails:
+      x-schema-name: PackAnalyticsDetails
+      description: Metadata about a Pack relevant to analytics.
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - createdAt
+      properties:
+        id:
+          type: number
+          description: ID of the Pack.
+          example: 1003
+        name:
+          type: string
+          description: The name of the Pack.
+          example: Cool Geometry Formulas
+        logoUrl:
+          type: string
+          format: url
+          description: The link to the logo of the Pack.
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time of the Pack.
+          example: '2022-04-11T00:18:57.946Z'
+    PackFormulaType:
+      x-schema-name: PackFormulaType
+      type: string
+      enum:
+      - action
+      - formula
+      - sync
+      - metadata
+      x-tsEnumNames:
+      - Action
+      - Formula
+      - Sync
+      - Metadata
+    PackAnalyticsCollection:
+      x-schema-name: PackAnalyticsCollection
+      description: List of analytics for Superhuman Packs over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/packs?pageToken=xyz
+    PackAnalyticsItem:
+      x-schema-name: PackAnalyticsItem
+      description: Analytics data for a Superhuman Pack.
+      type: object
+      required:
+      - pack
+      - metrics
+      additionalProperties: false
+      properties:
+        pack:
+          $ref: '#/components/schemas/PackAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsMetrics'
+    PageAnalyticsCollection:
+      x-schema-name: PageAnalyticsCollection
+      description: List of analytics for pages within a document over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz
+    PackAnalyticsOrderBy:
+      x-schema-name: PackAnalyticsOrderBy
+      description: Determines how the Pack analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - packId
+      - name
+      - createdAt
+      - docInstalls
+      - workspaceInstalls
+      - numFormulaInvocations
+      - numActionInvocations
+      - numSyncInvocations
+      - numMetadataInvocations
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      - workspacesWithActiveSubscriptions
+      - workspacesWithSuccessfulTrials
+      - revenueUsd
+      x-tsEnumNames:
+      - AnalyticsDate
+      - PackId
+      - Name
+      - CreatedAt
+      - DocInstalls
+      - WorkspaceInstalls
+      - NumFormulaInvocations
+      - NumActionInvocations
+      - NumSyncInvocations
+      - NumMetadataInvocations
+      - DocsActivelyUsing
+      - DocsActivelyUsing7Day
+      - DocsActivelyUsing30Day
+      - DocsActivelyUsing90Day
+      - DocsActivelyUsingAllTime
+      - WorkspacesActivelyUsing
+      - WorkspacesActivelyUsing7Day
+      - WorkspacesActivelyUsing30Day
+      - WorkspacesActivelyUsing90Day
+      - WorkspacesActivelyUsingAllTime
+      - WorkspacesWithActiveSubscriptions
+      - WorkspacesWithSuccessfulTrials
+      - RevenueUsd
+    DocAnalyticsCollection:
+      x-schema-name: DocAnalyticsCollection
+      description: List of analytics for documents over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/docs?pageToken=xyz
+    PackFormulaAnalyticsCollection:
+      x-schema-name: PackFormulaAnalyticsCollection
+      description: A collection of analytics for Superhuman Packs formulas over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
+      type: object
+      required:
+      - name
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
+    AnalyticsLastUpdatedResponse:
+      x-schema-name: AnalyticsLastUpdatedResponse
+      description: Response representing the last day analytics were updated.
+      type: object
+      required:
+      - docAnalyticsLastUpdated
+      - packAnalyticsLastUpdated
+      - packFormulaAnalyticsLastUpdated
+      additionalProperties: false
+      properties:
+        docAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that doc analytics were last updated.
+          example: '2022-05-01'
+        packAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack analytics were last updated.
+          example: '2022-05-01'
+        packFormulaAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack formula analytics were last updated.
+          example: '2022-05-01'
+    PackAnalyticsSummary:
+      x-schema-name: PackAnalyticsSummary
+      description: Summary analytics for Packs.
+      type: object
+      required:
+      - totalDocInstalls
+      - totalWorkspaceInstalls
+      - totalInvocations
+      additionalProperties: false
+      properties:
+        totalDocInstalls:
+          type: integer
+          description: The number of times this Pack was installed in docs.
+        totalWorkspaceInstalls:
+          type: integer
+          description: The number of times this Pack was installed in workspaces.
+        totalInvocations:
+          type: integer
+          description: The number of times formulas in this Pack were invoked.
+    DocAnalyticsItem:
+      x-schema-name: DocAnalyticsItem
+      description: Analytics data for a document.
+      type: object
+      required:
+      - doc
+      - metrics
+      additionalProperties: false
+      properties:
+        doc:
+          $ref: '#/components/schemas/DocAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocAnalyticsMetrics'
+    PageAnalyticsItem:
+      x-schema-name: PageAnalyticsItem
+      description: Analytics data for a page within a document.
+      type: object
+      required:
+      - page
+      - metrics
+      additionalProperties: false
+      properties:
+        page:
+          $ref: '#/components/schemas/PageAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageAnalyticsMetrics'
+    PackAnalyticsMetrics:
+      x-schema-name: PackAnalyticsMetrics
+      description: Analytics metrics for a Superhuman Pack.
+      type: object
+      additionalProperties: false
+      required:
+      - date
+      - docInstalls
+      - workspaceInstalls
+      - numFormulaInvocations
+      - numActionInvocations
+      - numSyncInvocations
+      - numMetadataInvocations
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      - workspacesActivelyTrialing
+      - workspacesActivelyTrialing7Day
+      - workspacesActivelyTrialing30Day
+      - workspacesActivelyTrialing90Day
+      - workspacesActivelyTrialingAllTime
+      - workspacesNewlySubscribed
+      - workspacesWithActiveSubscriptions
+      - workspacesWithSuccessfulTrials
+      - revenueUsd
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        docInstalls:
+          type: integer
+          description: Number of unique documents that have installed this Pack.
+          example: 100
+        workspaceInstalls:
+          type: integer
+          description: Number of unique workspaces that have installed this Pack.
+          example: 10
+        numFormulaInvocations:
+          type: integer
+          description: Number of times regular formulas have been called.
+          example: 100
+        numActionInvocations:
+          type: integer
+          description: Number of times action formulas have been called.
+          example: 100
+        numSyncInvocations:
+          type: integer
+          description: Number of times sync table formulas have been called.
+          example: 100
+        numMetadataInvocations:
+          type: integer
+          description: Number of times metadata formulas have been called.
+          example: 100
+        docsActivelyUsing:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past day.
+          example: 50
+        docsActivelyUsing7Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 7 days.
+          example: 100
+        docsActivelyUsing30Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 30 days.
+          example: 200
+        docsActivelyUsing90Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 90 days.
+          example: 300
+        docsActivelyUsingAllTime:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack ever.
+          example: 500
+        workspacesActivelyUsing:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past day.
+          example: 10
+        workspacesActivelyUsing7Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 7 days.
+          example: 15
+        workspacesActivelyUsing30Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 30 days.
+          example: 20
+        workspacesActivelyUsing90Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 90 days.
+          example: 30
+        workspacesActivelyUsingAllTime:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack ever.
+          example: 50
+        workspacesActivelyTrialing:
+          type: integer
+          description: Number of unique workspaces that are currently involved in a trial.
+        workspacesActivelyTrialing7Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 7 days.
+        workspacesActivelyTrialing30Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 30 days.
+        workspacesActivelyTrialing90Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 90 days.
+        workspacesActivelyTrialingAllTime:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial ever.
+        workspacesNewlySubscribed:
+          type: integer
+          description: Number of unique workspaces that have recently subscribed to the Pack.
+        workspacesWithActiveSubscriptions:
+          type: integer
+          description: Number of unique workspaces that are currently subscribed to the Pack.
+        workspacesWithSuccessfulTrials:
+          type: integer
+          description: Number of unique workspaces that subscribed after undertaking a Pack trial.
+        revenueUsd:
+          type: string
+          description: Amount of revenue (in USD) that the Pack has produced.
+    AnalyticsScale:
+      x-schema-name: AnalyticsScale
+      description: Quantization period over which to view analytics.
+      type: string
+      enum:
+      - daily
+      - cumulative
+      x-tsEnumNames:
+      - Daily
+      - Cumulative
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    DocAnalyticsSummary:
+      x-schema-name: DocAnalyticsSummary
+      description: Summarized metrics for documents.
+      type: object
+      required:
+      - totalSessions
+      additionalProperties: false
+      properties:
+        totalSessions:
+          type: integer
+          description: Total number of sessions across all docs.
+          example: 1337
+    DocAnalyticsDetails:
+      allOf:
+      - $ref: '#/components/schemas/DocReference'
+      - type: object
+        description: Metadata about a doc relevant to analytics.
+        required:
+        - title
+        - createdAt
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+            description: The name of the doc.
+            example: Cool Geometry Formulas
+          icon:
+            $ref: '#/components/schemas/Icon'
+            example: https://docs.superhuman.com/d/_dAbCDeFGH
+          createdAt:
+            type: string
+            format: date-time
+            description: Creation time of the doc.
+            example: '2022-04-11T00:18:57.946Z'
+          publishedAt:
+            type: string
+            format: date-time
+            description: Published time of the doc.
+            example: '2022-04-12T00:18:57.946Z'
+    DocAnalyticsOrderBy:
+      x-schema-name: DocAnalyticsOrderBy
+      description: Determines how the Doc analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - docId
+      - title
+      - createdAt
+      - publishedAt
+      - likes
+      - copies
+      - views
+      - sessionsDesktop
+      - sessionsMobile
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat
+      - aiCreditsBlock
+      - aiCreditsColumn
+      - aiCreditsAssistant
+      - aiCreditsReviewer
+      - aiCredits
+      x-tsEnumNames:
+      - AnalyticsDate
+      - DocId
+      - Title
+      - CreatedAt
+      - PublishedAt
+      - Likes
+      - Copies
+      - Views
+      - SessionsDesktop
+      - SessionsMobile
+      - SessionsOther
+      - TotalSessions
+      - AiCreditsChat
+      - AiCreditsBlock
+      - AiCreditsColumn
+      - AiCreditsAssistant
+      - AiCreditsReviewer
+      - AiCredits
+    PackFormulaAnalyticsOrderBy:
+      x-schema-name: PackFormulaAnalyticsOrderBy
+      description: Determines how the Pack formula analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - formulaName
+      - formulaType
+      - formulaInvocations
+      - medianLatencyMs
+      - medianResponseSizeBytes
+      - errors
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      x-tsEnumNames:
+      - AnalyticsDate
+      - FormulaName
+      - FormulaType
+      - FormulaInvocations
+      - MedianLatencyMs
+      - MedianResponseSizeBytes
+      - Errors
+      - DocsActivelyUsing
+      - DocsActivelyUsing7Day
+      - DocsActivelyUsing30Day
+      - DocsActivelyUsing90Day
+      - DocsActivelyUsingAllTime
+      - WorkspacesActivelyUsing
+      - WorkspacesActivelyUsing7Day
+      - WorkspacesActivelyUsing30Day
+      - WorkspacesActivelyUsing90Day
+      - WorkspacesActivelyUsingAllTime
+    PageAnalyticsMetrics:
+      x-schema-name: PageAnalyticsMetrics
+      description: Analytics metrics for a page within a document.
+      type: object
+      required:
+      - date
+      - views
+      - sessions
+      - users
+      - averageSecondsViewed
+      - medianSecondsViewed
+      - tabs
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2022-06-03'
+        views:
+          type: integer
+          description: Number of times the page was viewed within the given day.
+          example: 980
+        sessions:
+          type: integer
+          description: Number of unique browsers that viewed the page on the given day.
+          example: 24
+        users:
+          type: integer
+          description: Number of unique Superhuman Docs users that viewed the page on the given day.
+          example: 42
+        averageSecondsViewed:
+          type: integer
+          description: Average number of seconds that the page was viewed on the given day.
+          example: 42
+        medianSecondsViewed:
+          type: integer
+          description: Median number of seconds that the page was viewed on the given day.
+          example: 42
+        tabs:
+          type: integer
+          description: Number of unique tabs that opened the doc on the given day.
+          example: 10
+    PackFormulaAnalyticsItem:
+      x-schema-name: PackFormulaAnalyticsItem
+      description: Analytics data for a Superhuman Pack formula.
+      type: object
+      required:
+      - formula
+      - metrics
+      additionalProperties: false
+      properties:
+        formula:
+          $ref: '#/components/schemas/PackFormulaIdentifier'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsMetrics'
+  parameters:
+    packAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackAnalyticsOrderBy'
+    direction:
+      name: direction
+      description: Direction to sort results in.
+      in: query
+      schema:
+        $ref: '#/components/schemas/SortDirection'
+    sinceDate:
+      name: sinceDate
+      description: Limit results to activity on or after this date.
+      in: query
+      example: '2020-08-01'
+      schema:
+        type: string
+        format: date
+    isPublishedNoDefault:
+      name: isPublished
+      description: 'Limit results to only published items. If false or unspecified, returns all items including published ones.
+
+        '
+      in: query
+      schema:
+        type: boolean
+        x-no-default: true
+    scale:
+      name: scale
+      description: Quantization period over which to view analytics. Defaults to daily.
+      in: query
+      example: daily
+      schema:
+        $ref: '#/components/schemas/AnalyticsScale'
+    packIds:
+      name: packIds
+      description: Which Pack IDs to fetch.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: integer
+    workspaceIdInQuery:
+      name: workspaceId
+      description: ID of the workspace.
+      in: query
+      required: false
+      example: ws-1Ab234
+      schema:
+        type: string
+    isPublished:
+      name: isPublished
+      description: Limit results to only published items.
+      in: query
+      schema:
+        type: boolean
+    untilDate:
+      name: untilDate
+      description: Limit results to activity on or before this date.
+      in: query
+      example: '2020-08-05'
+      schema:
+        type: string
+        format: date
+    packFormulaAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack formula analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackFormulaAnalyticsOrderBy'
+    query:
+      name: query
+      description: Search term used to filter down results.
+      in: query
+      example: Supercalifragilisticexpialidocious
+      schema:
+        type: string
+    docIds:
+      name: docIds
+      description: List of docIds to fetch.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    docAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the doc analytics returned.
+      schema:
+        $ref: '#/components/schemas/DocAnalyticsOrderBy'
+    packId:
+      name: packId
+      description: ID of a Pack
+      in: path
+      required: true
+      example: 123
+      schema:
+        type: integer
+        minimum: 1
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+  responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+  securitySchemes:
+    Bearer:
+      description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)
+
+        in Superhuman Docs. This token should be specified by setting a header as follows.
+
+
+        ```Authorization: Bearer <api_token>```
+
+
+        Keep your token safe, as anyone who gets access to it can access your account. Once a token is created
+
+        it cannot be viewed or modified, so don''t lose it.
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: UUID
+x-tagGroups:
+- name: API Tokens
+  tags:
+  - API Tokens
+- name: Docs
+  tags:
+  - Docs
+  - Doc Permissions
+  - Doc Export
+- name: Doc Structure
+  tags:
+  - Pages
+- name: Events
+  tags:
+  - Events
+- name: Folders
+  tags:
+  - Folders
+  - Folder Permissions
+- name: Groups
+  tags:
+  - Groups
+- name: Import
+  tags:
+  - Preferences
+- name: LegalHolds
+  tags:
+  - LegalHolds
+- name: Organizations
+  tags:
+  - Organizations
+  - Organization Users
+  - Pack Controls
+  - Pack Configurations
+- name: Packs
+  tags:
+  - Packs
+- name: Webhooks
+  tags:
+  - Webhooks
+- name: Workspaces
+  tags:
+  - Workspaces
+  - Workspace Users
