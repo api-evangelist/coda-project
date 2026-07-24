@@ -1,0 +1,82 @@
+arazzo: 1.0.1
+info:
+  title: Create a Coda doc and populate a table
+  version: 1.0.0
+  summary: Create a doc, add a page, then upsert rows and wait for the async mutation to complete.
+sourceDescriptions:
+- name: codaDocs
+  url: ../openapi/coda-project-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: create-doc-and-populate
+  summary: Provision a new doc and write structured rows into its first table.
+  inputs:
+    type: object
+    properties:
+      title:
+        type: string
+      pageName:
+        type: string
+  steps:
+  - stepId: createDoc
+    operationId: createDoc
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.title
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      docId: $response.body#/id
+  - stepId: createPage
+    operationId: createPage
+    parameters:
+    - name: docId
+      in: path
+      value: $steps.createDoc.outputs.docId
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.pageName
+    successCriteria:
+    - condition: $statusCode == 202
+  - stepId: listTables
+    operationId: listTables
+    parameters:
+    - name: docId
+      in: path
+      value: $steps.createDoc.outputs.docId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tableId: $response.body#/items/0/id
+  - stepId: upsertRows
+    operationId: upsertRows
+    parameters:
+    - name: docId
+      in: path
+      value: $steps.createDoc.outputs.docId
+    - name: tableIdOrName
+      in: path
+      value: $steps.listTables.outputs.tableId
+    requestBody:
+      contentType: application/json
+      payload:
+        rows:
+        - cells:
+          - column: c-example
+            value: example
+    successCriteria:
+    - condition: $statusCode == 202
+    outputs:
+      requestId: $response.body#/requestId
+  - stepId: getMutationStatus
+    operationId: getMutationStatus
+    parameters:
+    - name: requestId
+      in: path
+      value: $steps.upsertRows.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    docId: $steps.createDoc.outputs.docId

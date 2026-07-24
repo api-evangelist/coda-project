@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: derived
+source: arazzo/*.yml
+workflows:
+- file: coda-project-list-and-read-rows.yml
+  workflowId: list-and-read-rows
+  title: List and read Coda doc rows
+  summary: Validate the token, find a doc and table, and page through its rows.
+- file: coda-project-create-doc-and-populate.yml
+  workflowId: create-doc-and-populate
+  title: Create a Coda doc and populate a table
+  summary: Create a doc, add a page, upsert rows, and await the async mutation.
+- file: coda-project-upsert-rows.yml
+  workflowId: upsert-rows
+  title: Upsert and reconcile Coda table rows
+  summary: Key-column upsert into a table, then confirm the reconciled state.

@@ -1,0 +1,46 @@
+generated: '2026-07-18'
+method: searched
+source: https://coda.io/developers/apis/v1, openapi/coda-project-openapi-original.json
+authentication:
+  style: bearer-token
+  header: "Authorization: Bearer <api_token>"
+  token_format: UUID
+  restrictions: per-token read/write and document/table object scoping
+  ref: authentication/coda-project-authentication.yml
+pagination:
+  style: cursor
+  request_params:
+  - name: limit
+    description: Maximum number of results to return in this page.
+  - name: pageToken
+    description: Opaque cursor token to fetch the next page (from a prior response).
+  response_fields:
+  - name: href
+    description: URL of the current request.
+  - name: nextPageToken
+    description: Token to pass as pageToken to retrieve the next page.
+  - name: nextPageLink
+    description: Fully-formed URL to retrieve the next page directly.
+idempotency:
+  supported: false
+  notes: >-
+    No Idempotency-Key header/parameter. Write mutations are asynchronous — POST/PUT/DELETE
+    that change doc content return 202 with a requestId; poll getMutationStatus
+    (GET /mutationStatus/{requestId}) until completed before assuming the change is applied.
+async_mutations:
+  pattern: request-id + status-poll
+  status_operation: getMutationStatus
+  status_path: /mutationStatus/{requestId}
+value_formatting:
+  param: valueFormat
+  options: [simple, simpleWithArrays, rich]
+  column_names_param: useColumnNames
+error_envelope:
+  content_type: application/json
+  shape: "{ statusCode, statusMessage, message }"
+  ref: errors/coda-project-problem-types.yml
+rate_limiting:
+  signal_status: 429
+  ref: rate-limits/coda-project-rate-limits.yml
+versioning:
+  ref: lifecycle/coda-project-lifecycle.yml

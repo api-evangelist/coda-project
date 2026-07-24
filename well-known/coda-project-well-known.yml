@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: searched
+source: live probes of https://coda.io/.well-known/* and https://docs.superhuman.com/.well-known/*
+hosts:
+- host: https://coda.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: coda-project-security.txt
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: coda-project-oauth-authorization-server.json
+    notes: >-
+      RFC 8414 authorization-server metadata for Coda's OAuth 2.0 / remote MCP server.
+      Advertises PKCE (S256), dynamic client registration, authorization_code grant, and the
+      single scope mcp:all.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://docs.superhuman.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+  - path: /.well-known/openid-configuration
+    status: 404

@@ -1,0 +1,32 @@
+generated: '2026-07-18'
+method: searched
+source: npm registry, PyPI, github.com/coda/packs-sdk
+notes: >-
+  Coda ships one first-party developer library — the Packs SDK (@codahq/packs-sdk), which
+  also provides the `coda`/`packs` CLI for building and uploading Coda Packs. There is no
+  first-party REST client SDK; the Docs API is called directly over HTTPS. A widely used
+  community Python wrapper (codaio) is listed for completeness and marked official:false.
+packages:
+- language: typescript
+  registry: npm
+  name: "@codahq/packs-sdk"
+  url: https://www.npmjs.com/package/@codahq/packs-sdk
+  install: npm install --save-dev @codahq/packs-sdk
+  repository: https://github.com/coda/packs-sdk
+  license: MIT
+  official: true
+  provides_cli: true
+  cli_bins:
+  - coda
+  - packs
+  description: >-
+    Official SDK and CLI for building Coda Packs (extensions that add integrations, building
+    blocks, and formulas to Coda docs). Ships the `coda`/`packs` command-line tool.
+- language: python
+  registry: pypi
+  name: codaio
+  url: https://pypi.org/project/codaio/
+  install: pip install codaio
+  repository: https://github.com/Blasterai/codaio
+  official: false
+  description: Community Python wrapper for the Coda Docs API (not maintained by Coda).

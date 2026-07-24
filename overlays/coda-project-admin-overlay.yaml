@@ -1,0 +1,17 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Coda Admin API
+  version: 1.0.0
+extends: openapi/coda-project-admin-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: coda-project
+    x-apievangelist-rating-family: admin
+    x-apievangelist-artifacts:
+      authentication: authentication/coda-project-authentication.yml
+      webhooks: asyncapi/coda-project-webhooks.yml
+      trust_center: security/coda-project-trust-center.yml
+- target: $.info
+  update:
+    x-webhooks-surface: Organization audit-event webhooks (see asyncapi/coda-project-webhooks.yml)

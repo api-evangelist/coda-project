@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: searched
+status: published
+source: https://help.coda.io/hc/en-us/articles/44722661982989-Connect-to-the-Coda-MCP
+server:
+  name: coda
+  description: >-
+    Official Coda (Superhuman Docs) remote MCP server. Lets AI clients (Claude, Cursor, and
+    other MCP hosts) read and write Coda docs using natural-language prompts. In beta —
+    tools and behavior are subject to change.
+  transport: http
+  url: https://coda.io/apis/mcp
+  probe:
+    endpoint: https://coda.io/apis/v1/mcp
+    status: 401
+    note: Returns 401 Unauthorized without an OAuth access token (JSON error envelope).
+  auth:
+    type: oauth2
+    scopes:
+    - mcp:all
+    authorization_endpoint: https://coda.io/v4/api/oauth2/authorize
+    token_endpoint: https://coda.io/v4/api/oauth2/token
+    registration_endpoint: https://coda.io/v4/api/oauth2/register
+    pkce: S256
+    metadata: well-known/coda-project-oauth-authorization-server.json
+docs:
+- title: Connect to the Coda MCP
+  url: https://help.coda.io/hc/en-us/articles/44722661982989-Connect-to-the-Coda-MCP
+- title: Using the Coda MCP
+  url: https://help.coda.io/hc/en-us/articles/44722756780173-Using-the-Coda-MCP

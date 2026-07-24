@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Coda Docs API
+  version: 1.0.0
+extends: openapi/coda-project-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: coda-project
+    x-apievangelist-rating-family: docs
+    x-apievangelist-artifacts:
+      authentication: authentication/coda-project-authentication.yml
+      conventions: conventions/coda-project-conventions.yml
+      errors: errors/coda-project-problem-types.yml
+      rate_limits: rate-limits/coda-project-rate-limits.yml
+      data_model: data-model/coda-project-data-model.yml
+      mcp: mcp/coda-project-mcp.yml
+- target: $.info
+  update:
+    x-conventions:
+      pagination: cursor (pageToken + limit)
+      idempotency: unsupported (async mutations via getMutationStatus)
+      error_envelope: "{ statusCode, statusMessage, message }"

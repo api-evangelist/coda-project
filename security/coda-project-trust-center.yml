@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+probe: true
+source: https://coda.io/trust/security
+url: https://coda.io/trust/security
+certifications:
+- SOC 2 Type II
+- SOC 3
+- ISO 27001
+- ISO 27017
+- ISO 27018
+- HIPAA
+- GDPR
+- CCPA
+status_page: https://status.coda.io
+bug_bounty: https://hackerone.com/coda_bbp
+evidence:
+- source: https://coda.io/trust/security
+  keywords:
+  - soc 2 type ii
+  - soc 3
+  - iso 27001
+  - iso 27017
+  - iso 27018
+  - hipaa
+  - gdpr
+  - ccpa
+  - hackerone bug bounty

@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/coda-project-openapi-original.json
+api: openapi/coda-project-openapi-original.json
+skills:
+- file: coda-project-list-and-read-rows.md
+  name: List docs and read table rows
+  api: openapi/coda-project-openapi-original.json
+  operations: [whoami, listDocs, listTables, listColumns, listRows, getRow]
+- file: coda-project-create-doc-and-populate.md
+  name: Create a doc and populate a table
+  api: openapi/coda-project-openapi-original.json
+  operations: [createDoc, createPage, listTables, upsertRows, getMutationStatus]
+- file: coda-project-upsert-rows.md
+  name: Upsert and reconcile table rows
+  api: openapi/coda-project-openapi-original.json
+  operations: [listTables, listColumns, upsertRows, getMutationStatus, listRows]
+- file: coda-project-manage-permissions.md
+  name: Manage document sharing and permissions
+  api: openapi/coda-project-openapi-original.json
+  operations: [getSharingMetadata, searchPrincipals, addPermission, getPermissions, deletePermission]

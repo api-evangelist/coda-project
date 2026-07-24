@@ -1,0 +1,55 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/coda-project-openapi-original.json (components.responses)
+format: custom-json
+envelope:
+  content_type: application/json
+  fields:
+  - name: statusCode
+    type: number
+    description: HTTP status code of the error.
+  - name: statusMessage
+    type: string
+    description: HTTP status phrase.
+  - name: message
+    type: string
+    description: Human-readable error message.
+  validation_errors_field: >-
+    Some 400 responses include a validationErrors[] array of {path, message} objects
+    (ValidationError schema) detailing which request fields failed validation.
+notes: >-
+  Coda does not use RFC 9457 application/problem+json; errors share a single {statusCode,
+  statusMessage, message} envelope reused across every operation via components.responses.
+problems:
+- status: 400
+  ref: components/responses/BadRequestError
+  title: Bad request
+  description: The request parameters did not conform to expectations.
+- status: 400
+  ref: components/responses/BadRequestWithValidationErrors
+  title: Bad request (with validation errors)
+  description: Request parameters failed validation; includes validationErrors[] detail.
+- status: 401
+  ref: components/responses/UnauthorizedError
+  title: Unauthorized
+  description: The API token is invalid or has expired.
+- status: 403
+  ref: components/responses/ForbiddenError
+  title: Forbidden
+  description: The API token does not grant access to this resource.
+- status: 404
+  ref: components/responses/NotFoundError
+  title: Not found
+  description: The resource could not be located with the current API token.
+- status: 410
+  ref: components/responses/GoneError
+  title: Gone
+  description: The resource has been deleted.
+- status: 422
+  ref: components/responses/UnprocessableEntityError
+  title: Unprocessable entity
+  description: Unable to process the request.
+- status: 429
+  ref: components/responses/TooManyRequestsError
+  title: Too many requests
+  description: The client has sent too many requests; back off and retry (see rate-limits/).

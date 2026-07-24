@@ -1,0 +1,32 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/coda-project-admin-openapi-original.json, openapi/coda-project-openapi-original.json, https://coda.io/developers/apis/v1
+spec_type: Webhooks
+notes: >-
+  Coda does not publish an AsyncAPI document. It exposes two real webhook/event surfaces:
+  (1) the Admin API manages organization-level webhooks that deliver audit-log events, and
+  (2) the Docs API exposes inbound webhook-triggered automations. There is no general
+  outbound doc-change event stream, so no AsyncAPI is fabricated.
+surfaces:
+- kind: outbound-webhooks
+  name: Organization audit-event webhooks (Admin API)
+  description: >-
+    Register org-level webhook endpoints that receive audit-log events. Managed via the
+    Admin API; audit events are also listable directly.
+  operations:
+  - listWebhooks        # GET /organizations/{organizationId}/webhooks
+  - addWebhook          # POST /organizations/{organizationId}/webhooks
+  - getWebhook          # GET /organizations/{organizationId}/webhooks/{webhookId}
+  - updateWebhook       # PUT /organizations/{organizationId}/webhooks/{webhookId}
+  - removeWebhook       # DELETE /organizations/{organizationId}/webhooks/{webhookId}
+  - resetWebhook        # POST /organizations/{organizationId}/webhooks/{webhookId}/reset
+  - listEvents          # GET /organizations/{organizationId}/audit/events
+  spec: openapi/coda-project-admin-openapi-original.json
+- kind: inbound-webhook-trigger
+  name: Webhook-triggered automations (Docs API)
+  description: >-
+    Trigger a doc automation rule by POSTing a payload to its webhook endpoint. Lets external
+    systems drive Coda automations.
+  operations:
+  - triggerWebhookAutomation   # POST /docs/{docId}/hooks/automation/{ruleId}
+  spec: openapi/coda-project-openapi-original.json

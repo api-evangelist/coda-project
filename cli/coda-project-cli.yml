@@ -1,0 +1,33 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/coda/packs-sdk, https://coda.io/packs/build/latest/tutorials/get-started/cli/
+name: coda
+package: "@codahq/packs-sdk"
+summary: >-
+  First-party CLI (shipped as the `coda` / `packs` binaries inside the @codahq/packs-sdk npm
+  package) for building, testing, and uploading Coda Packs — the extensions that add
+  integrations, building blocks, and formulas to Coda docs. Note this CLI targets Pack
+  development, not general Docs-API CRUD.
+install:
+- npm install --save-dev @codahq/packs-sdk
+- npx coda --help
+binaries:
+- coda
+- packs
+commands:
+- name: init
+  summary: Scaffold a new Pack project in the current directory.
+- name: auth
+  summary: Register an API token so the CLI can call the Packs API on your behalf.
+- name: execute
+  summary: Run a specific formula/sync-table locally for development and testing.
+- name: create
+  summary: Create a new Pack in Coda and get its Pack ID.
+- name: upload
+  summary: Build the Pack and upload a new version to Coda.
+- name: release
+  summary: Promote an uploaded Pack version to a live release.
+- name: validate
+  summary: Validate the Pack metadata and formulas before upload.
+- name: clone
+  summary: Pull an existing Pack down locally by Pack ID.

@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: searched
+source: https://coda.io/developers/apis/v1, https://status.coda.io, openapi/coda-project-openapi-original.json
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.5.0
+  admin_current: admin/v1
+  admin_spec_version: 0.0.2
+  docs: https://coda.io/developers/apis/v1
+deprecation:
+  policy_url: null
+  notes: >-
+    No formal published deprecation/sunset-header policy. Coda has deprecated the legacy
+    OpenAPI/Swagger 2.0 spec generation (only OpenAPI 3.0 is now published) and states rate
+    limits and behavior are subject to change without notice.
+status_page: https://status.coda.io
+sla:
+  url: null
+  notes: Uptime is published via status.coda.io; no public numeric SLA target found.
+deprecated_operations: []

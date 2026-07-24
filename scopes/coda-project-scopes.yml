@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: searched
+source: https://coda.io/.well-known/oauth-authorization-server
+docs: https://coda.io/developers/apis/v1
+notes: >-
+  Coda's Docs API and Admin API authenticate with Bearer API tokens (no OAuth scopes on those
+  schemes). Coda separately runs an OAuth 2.0 authorization server (RFC 8414 metadata below)
+  that powers third-party apps and the official remote MCP server, with PKCE (S256) and
+  dynamic client registration. Its advertised scope surface is a single coarse scope. Per-token
+  authorization on the Docs API is instead expressed as read/write access restrictions scoped
+  to documents or tables (see authentication/coda-project-authentication.yml).
+schemes:
+- name: OAuth2
+  source: well-known/coda-project-oauth-authorization-server.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://coda.io/v4/api/oauth2/authorize
+    tokenUrl: https://coda.io/v4/api/oauth2/token
+    registrationUrl: https://coda.io/v4/api/oauth2/register
+    pkce: S256
+scopes:
+- scope: "mcp:all"
+  description: Full access to Coda resources via the remote MCP server (read and write).
+  flows: [authorizationCode]
+  sources: [well-known/coda-project-oauth-authorization-server.json]

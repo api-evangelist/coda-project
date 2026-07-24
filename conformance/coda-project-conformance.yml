@@ -1,0 +1,46 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/coda-project-openapi-original.json, openapi/coda-project-admin-openapi-original.json, https://coda.io/trust/security
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: Both Docs and Admin APIs publish OpenAPI 3.0.0 documents.
+- id: oauth2
+  conforms: true
+  evidence: OAuth 2.0 authorization server (RFC 8414 metadata) with authorization_code grant powers third-party apps and the MCP server.
+- id: oauth2-pkce
+  conforms: true
+  evidence: oauth-authorization-server advertises code_challenge_methods_supported [S256].
+- id: rfc7591-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint advertised in oauth-authorization-server metadata.
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns valid JSON metadata.
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: /.well-known/security.txt present with Contact/Policy/Canonical fields.
+- id: bearer-token-auth
+  conforms: true
+  evidence: http bearer securityScheme (UUID token) on both specs.
+- id: cursor-pagination
+  conforms: true
+  evidence: List endpoints use pageToken + limit request params and href/nextPageLink response fields.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom {statusCode, statusMessage, message} envelope (application/json), not application/problem+json.
+- id: soc2-type-ii
+  conforms: true
+  evidence: Published on coda.io/trust/security.
+- id: iso-27001
+  conforms: true
+  evidence: Published on coda.io/trust/security (also ISO 27017, ISO 27018).
+- id: hipaa
+  conforms: true
+  evidence: Published on coda.io/trust/security.
+- id: gdpr
+  conforms: true
+  evidence: Published on coda.io/trust/security.
+- id: idempotency-keys
+  conforms: false
+  evidence: No Idempotency-Key header/parameter; write mutations are asynchronous (return requestId, poll getMutationStatus).

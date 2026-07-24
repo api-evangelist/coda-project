@@ -1,0 +1,92 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/coda-project-openapi-original.json, openapi/coda-project-admin-openapi-original.json (path hierarchy + schema $refs)
+notes: >-
+  Entity-relationship graph derived from the Docs and Admin API path hierarchy and schema
+  references. Coda resource ids carry human-readable type prefixes visible in the reference
+  (e.g. docs, tables named grid-*, rows named i-*, canvas columns c-*).
+entities:
+- name: Organization
+  id_field: organizationId
+  domain: admin
+- name: Workspace
+  id_field: workspaceId
+- name: Folder
+  id_field: folderId
+- name: Doc
+  id_field: docId
+  id_prefix_examples: [AbCDeFGH]
+- name: Page
+  id_field: pageIdOrName
+- name: Table
+  id_field: tableIdOrName
+  id_prefix_examples: [grid-]
+- name: Column
+  id_field: columnIdOrName
+  id_prefix_examples: [c-]
+- name: Row
+  id_field: rowIdOrName
+  id_prefix_examples: [i-]
+- name: Control
+  id_field: controlIdOrName
+- name: Formula
+  id_field: formulaIdOrName
+- name: Permission
+  id_field: permissionId
+- name: Pack
+  id_field: packId
+- name: Automation
+  id_field: ruleId
+relationships:
+- from: Workspace
+  to: Organization
+  type: belongs_to
+  via: organizationId
+- from: Folder
+  to: Workspace
+  type: belongs_to
+  via: workspaceId
+- from: Doc
+  to: Folder
+  type: belongs_to
+  via: folderId
+- from: Doc
+  to: Page
+  type: has_many
+  via: docId
+- from: Doc
+  to: Table
+  type: has_many
+  via: docId
+- from: Doc
+  to: Control
+  type: has_many
+  via: docId
+- from: Doc
+  to: Formula
+  type: has_many
+  via: docId
+- from: Doc
+  to: Permission
+  type: has_many
+  via: docId
+- from: Doc
+  to: Automation
+  type: has_many
+  via: docId
+- from: Table
+  to: Column
+  type: has_many
+  via: tableIdOrName
+- from: Table
+  to: Row
+  type: has_many
+  via: tableIdOrName
+- from: Row
+  to: Table
+  type: belongs_to
+  via: tableIdOrName
+- from: Column
+  to: Table
+  type: belongs_to
+  via: tableIdOrName

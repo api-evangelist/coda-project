@@ -1,0 +1,60 @@
+arazzo: 1.0.1
+info:
+  title: List and read Coda doc rows
+  version: 1.0.0
+  summary: Validate the token, find a doc and table, and read its rows.
+sourceDescriptions:
+- name: codaDocs
+  url: ../openapi/coda-project-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: list-and-read-rows
+  summary: Confirm identity, discover a doc/table, then page through rows.
+  inputs:
+    type: object
+    properties:
+      query:
+        type: string
+  steps:
+  - stepId: whoami
+    operationId: whoami
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: listDocs
+    operationId: listDocs
+    parameters:
+    - name: query
+      in: query
+      value: $inputs.query
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      docId: $response.body#/items/0/id
+  - stepId: listTables
+    operationId: listTables
+    parameters:
+    - name: docId
+      in: path
+      value: $steps.listDocs.outputs.docId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tableId: $response.body#/items/0/id
+  - stepId: listRows
+    operationId: listRows
+    parameters:
+    - name: docId
+      in: path
+      value: $steps.listDocs.outputs.docId
+    - name: tableIdOrName
+      in: path
+      value: $steps.listTables.outputs.tableId
+    - name: useColumnNames
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      rows: $response.body#/items
+  outputs:
+    rows: $steps.listRows.outputs.rows

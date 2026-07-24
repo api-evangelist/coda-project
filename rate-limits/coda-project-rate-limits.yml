@@ -1,0 +1,23 @@
+generated: '2026-07-18'
+method: searched
+source: https://coda.io/developers/apis/v1, https://help.coda.io/hc/en-us/articles/39555941038349
+notes: >-
+  Coda enforces per-user rate limits that are not plan-dependent (identical on Free, Pro, Team,
+  and Enterprise) and apply across all docs. Exceeding a limit returns HTTP 429 Too Many
+  Requests; clients should back off and retry. Limits are subject to change without notice.
+signal:
+  http_status: 429
+  response: components/responses/TooManyRequestsError
+rate_limits:
+- category: read
+  description: Reading data (GET).
+  limit_count: 100
+  window_seconds: 6
+- category: write
+  description: Writing data (POST / PUT / PATCH / DELETE).
+  limit_count: 10
+  window_seconds: 6
+- category: write-doc-content
+  description: Writing doc content (e.g. inserting page content).
+  limit_count: 3
+  window_seconds: 10

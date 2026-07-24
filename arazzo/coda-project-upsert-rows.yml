@@ -1,0 +1,83 @@
+arazzo: 1.0.1
+info:
+  title: Upsert and reconcile Coda table rows
+  version: 1.0.0
+  summary: Resolve key columns, upsert rows idempotently, await the mutation, and verify.
+sourceDescriptions:
+- name: codaDocs
+  url: ../openapi/coda-project-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: upsert-rows
+  summary: Key-column upsert into an existing table, then confirm reconciled state.
+  inputs:
+    type: object
+    properties:
+      docId:
+        type: string
+      tableIdOrName:
+        type: string
+      keyColumn:
+        type: string
+      keyValue:
+        type: string
+  steps:
+  - stepId: listColumns
+    operationId: listColumns
+    parameters:
+    - name: docId
+      in: path
+      value: $inputs.docId
+    - name: tableIdOrName
+      in: path
+      value: $inputs.tableIdOrName
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: upsertRows
+    operationId: upsertRows
+    parameters:
+    - name: docId
+      in: path
+      value: $inputs.docId
+    - name: tableIdOrName
+      in: path
+      value: $inputs.tableIdOrName
+    requestBody:
+      contentType: application/json
+      payload:
+        keyColumns:
+        - $inputs.keyColumn
+        rows:
+        - cells:
+          - column: $inputs.keyColumn
+            value: $inputs.keyValue
+    successCriteria:
+    - condition: $statusCode == 202
+    outputs:
+      requestId: $response.body#/requestId
+  - stepId: getMutationStatus
+    operationId: getMutationStatus
+    parameters:
+    - name: requestId
+      in: path
+      value: $steps.upsertRows.outputs.requestId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: listRows
+    operationId: listRows
+    parameters:
+    - name: docId
+      in: path
+      value: $inputs.docId
+    - name: tableIdOrName
+      in: path
+      value: $inputs.tableIdOrName
+    - name: useColumnNames
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      rows: $response.body#/items
+  outputs:
+    rows: $steps.listRows.outputs.rows
