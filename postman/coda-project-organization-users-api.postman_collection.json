@@ -1,0 +1,2069 @@
+{
+  "info": {
+    "_postman_id": "eaa9e4bc-95b9-450b-898e-ac724da814a6",
+    "name": "Superhuman Docs Admin Account Organization Users API",
+    "description": "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n\n\nContact Support:\n Name: Developer Support\n Email: care@superhuman.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:24:13.000Z",
+    "updatedAt": "2026-07-28T01:24:14.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-eaa9e4bc-95b9-450b-898e-ac724da814a6"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organizationId}",
+          "item": [
+            {
+              "name": "users",
+              "item": [
+                {
+                  "name": "transferResources",
+                  "item": [
+                    {
+                      "name": "Transfer user resources",
+                      "id": "1587a138-05fd-4505-ab97-a4dbc65e3fea",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users",
+                            "transferResources"
+                          ],
+                          "variable": [
+                            {
+                              "id": "55114ec7-ba87-40eb-9735-89efc0540f83",
+                              "key": "organizationId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the organization."
+                            }
+                          ]
+                        },
+                        "description": "Transfers resources such as docs and workspace membership from a deactivated user to an active user.\n"
+                      },
+                      "response": [
+                        {
+                          "id": "78909aac-fb7a-45e7-86dc-1066bf2db514",
+                          "name": "Request accepted and being processed asynchronously.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                "transferResources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Accepted",
+                          "code": 202,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"requestId\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-78909aac-fb7a-45e7-86dc-1066bf2db514"
+                        },
+                        {
+                          "id": "fc1a4609-a537-4d0e-adba-2e39fc8dd646",
+                          "name": "The request parameters did not conform to expectations.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                "transferResources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-fc1a4609-a537-4d0e-adba-2e39fc8dd646"
+                        },
+                        {
+                          "id": "8e8438d2-80ac-4389-89c2-151891329418",
+                          "name": "The API token is invalid or has expired.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                "transferResources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-8e8438d2-80ac-4389-89c2-151891329418"
+                        },
+                        {
+                          "id": "1203b69c-97bd-45b3-a71d-d45cc5d09133",
+                          "name": "The API token does not grant access to this resource.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                "transferResources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-1203b69c-97bd-45b3-a71d-d45cc5d09133"
+                        },
+                        {
+                          "id": "99eba385-6804-4707-909e-1e3702673a7d",
+                          "name": "The resource could not be located with the current API token.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                "transferResources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-99eba385-6804-4707-909e-1e3702673a7d"
+                        },
+                        {
+                          "id": "f18806ac-12bc-4704-a2bc-71cf37736081",
+                          "name": "The client has sent too many requests.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"fromEmail\": \"<string>\",\n  \"toEmail\": \"<string>\",\n  \"filterDocIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/transferResources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                "transferResources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-f18806ac-12bc-4704-a2bc-71cf37736081"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-1587a138-05fd-4505-ab97-a4dbc65e3fea"
+                    }
+                  ],
+                  "id": "9b8c1cd3-3ef4-4da3-997f-5b4059ecf39c",
+                  "createdAt": "2026-07-28T01:24:14.000Z",
+                  "updatedAt": "2026-07-28T01:24:14.000Z",
+                  "uid": "35240-9b8c1cd3-3ef4-4da3-997f-5b4059ecf39c"
+                },
+                {
+                  "name": "{userEmail}",
+                  "item": [
+                    {
+                      "name": "activate",
+                      "item": [
+                        {
+                          "name": "Activate a user",
+                          "id": "edd6d90c-8238-445c-8e61-b67960300fd8",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                ":userEmail",
+                                "activate"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "ac14ed2a-dc72-47e9-ba41-c39d5c04c258",
+                                  "key": "organizationId",
+                                  "value": "<string>",
+                                  "description": "(Required) ID of the organization."
+                                },
+                                {
+                                  "id": "b6d9399e-07d1-4712-a024-c4520fc7d685",
+                                  "key": "userEmail",
+                                  "value": "<email>",
+                                  "description": "(Required) User to act upon."
+                                }
+                              ]
+                            },
+                            "description": "Activates a deactivated user."
+                          },
+                          "response": [
+                            {
+                              "id": "9b2bcb09-c654-4ff3-9a87-08e369ffa32b",
+                              "name": "Response indicating the user activation request was successfully processed.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "activate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-9b2bcb09-c654-4ff3-9a87-08e369ffa32b"
+                            },
+                            {
+                              "id": "c98df559-0a5d-4d2b-9149-e80f4eb5a088",
+                              "name": "The request parameters did not conform to expectations.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "activate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-c98df559-0a5d-4d2b-9149-e80f4eb5a088"
+                            },
+                            {
+                              "id": "bc2a1e3b-e4aa-4661-a918-e0f599100115",
+                              "name": "The API token is invalid or has expired.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "activate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-bc2a1e3b-e4aa-4661-a918-e0f599100115"
+                            },
+                            {
+                              "id": "e7fc11df-668c-46c5-80bb-56d64008e7aa",
+                              "name": "The API token does not grant access to this resource.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "activate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-e7fc11df-668c-46c5-80bb-56d64008e7aa"
+                            },
+                            {
+                              "id": "6815d231-34ee-455e-875f-745ce767b091",
+                              "name": "The resource could not be located with the current API token.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "activate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-6815d231-34ee-455e-875f-745ce767b091"
+                            },
+                            {
+                              "id": "c4dfc90b-e79a-4b23-b2ec-8870c1f30731",
+                              "name": "The client has sent too many requests.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/activate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "activate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-c4dfc90b-e79a-4b23-b2ec-8870c1f30731"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-edd6d90c-8238-445c-8e61-b67960300fd8"
+                        }
+                      ],
+                      "id": "09704893-1033-468e-a26e-e6f96720fadf",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-09704893-1033-468e-a26e-e6f96720fadf"
+                    },
+                    {
+                      "name": "deactivate",
+                      "item": [
+                        {
+                          "name": "Deactivate a user",
+                          "id": "de06aa5a-a51a-4dc6-aa91-8e9864ad242f",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "users",
+                                ":userEmail",
+                                "deactivate"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "9e79ad16-c983-4f74-87f8-a37173ec3a52",
+                                  "key": "organizationId",
+                                  "value": "<string>",
+                                  "description": "(Required) ID of the organization."
+                                },
+                                {
+                                  "id": "ca36e5b8-5be9-4328-a2ec-a6b89ac0915a",
+                                  "key": "userEmail",
+                                  "value": "<email>",
+                                  "description": "(Required) User to act upon."
+                                }
+                              ]
+                            },
+                            "description": "Deactivates a user, ensuring the user is no longer paid and allowing their docs to be reassigned to a new owner.\n"
+                          },
+                          "response": [
+                            {
+                              "id": "41b9b521-48de-4f1a-b490-5bb61b2d090c",
+                              "name": "Response indicating the user deactivation request was successfully processed.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-41b9b521-48de-4f1a-b490-5bb61b2d090c"
+                            },
+                            {
+                              "id": "3be10ce7-6656-4888-bf5b-e5e65cabe87c",
+                              "name": "The request parameters did not conform to expectations.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-3be10ce7-6656-4888-bf5b-e5e65cabe87c"
+                            },
+                            {
+                              "id": "2013bd10-5cdc-469f-97de-6a4ab1dec127",
+                              "name": "The API token is invalid or has expired.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-2013bd10-5cdc-469f-97de-6a4ab1dec127"
+                            },
+                            {
+                              "id": "83e414e9-5d40-4029-b1f5-ad1c21c1c543",
+                              "name": "The API token does not grant access to this resource.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-83e414e9-5d40-4029-b1f5-ad1c21c1c543"
+                            },
+                            {
+                              "id": "74a125d7-8d51-47b6-b832-b272037a9d0c",
+                              "name": "The resource could not be located with the current API token.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-74a125d7-8d51-47b6-b832-b272037a9d0c"
+                            },
+                            {
+                              "id": "2344e93f-2f68-4ea3-851c-4c1c39bee30a",
+                              "name": "The client has sent too many requests.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"bypassScim\": \"<boolean>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/users/:userEmail/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "users",
+                                    ":userEmail",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "userEmail"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:14.000Z",
+                              "updatedAt": "2026-07-28T01:24:14.000Z",
+                              "uid": "35240-2344e93f-2f68-4ea3-851c-4c1c39bee30a"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:24:14.000Z",
+                          "updatedAt": "2026-07-28T01:24:14.000Z",
+                          "uid": "35240-de06aa5a-a51a-4dc6-aa91-8e9864ad242f"
+                        }
+                      ],
+                      "id": "c8c7b97b-6f85-4c3e-bb4d-833f33b6651b",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-c8c7b97b-6f85-4c3e-bb4d-833f33b6651b"
+                    }
+                  ],
+                  "id": "04ed23b9-57a4-4853-9ade-3cab4344d2e0",
+                  "createdAt": "2026-07-28T01:24:14.000Z",
+                  "updatedAt": "2026-07-28T01:24:14.000Z",
+                  "uid": "35240-04ed23b9-57a4-4853-9ade-3cab4344d2e0"
+                },
+                {
+                  "name": "List organization users",
+                  "id": "42bbf403-ca22-4b29-99c2-79bd2fa94ee7",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organizationId",
+                        "users"
+                      ],
+                      "query": [
+                        {
+                          "description": "Maximum number of results to return in this query.",
+                          "key": "limit",
+                          "value": "100"
+                        },
+                        {
+                          "description": "An opaque token used to fetch the next page of results.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter results to users based on their activation status.",
+                          "key": "isActivated",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "Search terms used to narrow down results.",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "List of emails of users to retrieve.",
+                          "key": "emails",
+                          "value": "<email>,<email>"
+                        },
+                        {
+                          "description": "Return users deactivated at or after the given Unix timestamp.",
+                          "key": "deactivatedAfter",
+                          "value": "<number>"
+                        },
+                        {
+                          "description": "Include the count of docs owned by each user.",
+                          "key": "includeOwnedDocCounts",
+                          "value": "<boolean>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "062a7e38-8be6-43aa-b140-5c13a5c33ab1",
+                          "key": "organizationId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the organization."
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of users within an organization, across all registered domains.\n"
+                  },
+                  "response": [
+                    {
+                      "id": "132836c2-07c0-4062-b3cb-f9372ae4e482",
+                      "name": "List of Superhuman Docs users matching the query.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Filter results to users based on their activation status.",
+                              "key": "isActivated",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "List of emails of users to retrieve.",
+                              "key": "emails",
+                              "value": "<email>,<email>"
+                            },
+                            {
+                              "description": "Return users deactivated at or after the given Unix timestamp.",
+                              "key": "deactivatedAfter",
+                              "value": "<number>"
+                            },
+                            {
+                              "description": "Include the count of docs owned by each user.",
+                              "key": "includeOwnedDocCounts",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"Active\",\n      \"registeredAt\": \"<dateTime>\",\n      \"id\": \"<number>\",\n      \"pictureUrl\": \"<string>\",\n      \"deactivatedAt\": \"<dateTime>\",\n      \"ownedDocCount\": \"<number>\"\n    },\n    {\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"Active\",\n      \"registeredAt\": \"<dateTime>\",\n      \"id\": \"<number>\",\n      \"pictureUrl\": \"<string>\",\n      \"deactivatedAt\": \"<dateTime>\",\n      \"ownedDocCount\": \"<number>\"\n    }\n  ],\n  \"href\": \"<string>\",\n  \"nextPageToken\": \"<string>\",\n  \"nextPageLink\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-132836c2-07c0-4062-b3cb-f9372ae4e482"
+                    },
+                    {
+                      "id": "61000938-849a-4ea2-b2dd-999895747281",
+                      "name": "The request parameters did not conform to expectations.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Filter results to users based on their activation status.",
+                              "key": "isActivated",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "List of emails of users to retrieve.",
+                              "key": "emails",
+                              "value": "<email>,<email>"
+                            },
+                            {
+                              "description": "Return users deactivated at or after the given Unix timestamp.",
+                              "key": "deactivatedAfter",
+                              "value": "<number>"
+                            },
+                            {
+                              "description": "Include the count of docs owned by each user.",
+                              "key": "includeOwnedDocCounts",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-61000938-849a-4ea2-b2dd-999895747281"
+                    },
+                    {
+                      "id": "d4a16eb3-395b-40c4-9735-75d01162e09a",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Filter results to users based on their activation status.",
+                              "key": "isActivated",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "List of emails of users to retrieve.",
+                              "key": "emails",
+                              "value": "<email>,<email>"
+                            },
+                            {
+                              "description": "Return users deactivated at or after the given Unix timestamp.",
+                              "key": "deactivatedAfter",
+                              "value": "<number>"
+                            },
+                            {
+                              "description": "Include the count of docs owned by each user.",
+                              "key": "includeOwnedDocCounts",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-d4a16eb3-395b-40c4-9735-75d01162e09a"
+                    },
+                    {
+                      "id": "4dc0c538-630a-45d8-9312-ed55b9282251",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Filter results to users based on their activation status.",
+                              "key": "isActivated",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "List of emails of users to retrieve.",
+                              "key": "emails",
+                              "value": "<email>,<email>"
+                            },
+                            {
+                              "description": "Return users deactivated at or after the given Unix timestamp.",
+                              "key": "deactivatedAfter",
+                              "value": "<number>"
+                            },
+                            {
+                              "description": "Include the count of docs owned by each user.",
+                              "key": "includeOwnedDocCounts",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-4dc0c538-630a-45d8-9312-ed55b9282251"
+                    },
+                    {
+                      "id": "d2940126-adaf-4efd-ad01-640031792799",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Filter results to users based on their activation status.",
+                              "key": "isActivated",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "List of emails of users to retrieve.",
+                              "key": "emails",
+                              "value": "<email>,<email>"
+                            },
+                            {
+                              "description": "Return users deactivated at or after the given Unix timestamp.",
+                              "key": "deactivatedAfter",
+                              "value": "<number>"
+                            },
+                            {
+                              "description": "Include the count of docs owned by each user.",
+                              "key": "includeOwnedDocCounts",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-d2940126-adaf-4efd-ad01-640031792799"
+                    },
+                    {
+                      "id": "be457f25-175f-48ec-9760-54faeee8e908",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/users?limit=100&pageToken=<string>&isActivated=<boolean>&query=<string>&emails=<email>,<email>&deactivatedAfter=<number>&includeOwnedDocCounts=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Filter results to users based on their activation status.",
+                              "key": "isActivated",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "List of emails of users to retrieve.",
+                              "key": "emails",
+                              "value": "<email>,<email>"
+                            },
+                            {
+                              "description": "Return users deactivated at or after the given Unix timestamp.",
+                              "key": "deactivatedAfter",
+                              "value": "<number>"
+                            },
+                            {
+                              "description": "Include the count of docs owned by each user.",
+                              "key": "includeOwnedDocCounts",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:14.000Z",
+                      "updatedAt": "2026-07-28T01:24:14.000Z",
+                      "uid": "35240-be457f25-175f-48ec-9760-54faeee8e908"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:14.000Z",
+                  "updatedAt": "2026-07-28T01:24:14.000Z",
+                  "uid": "35240-42bbf403-ca22-4b29-99c2-79bd2fa94ee7"
+                }
+              ],
+              "id": "44ca8aa7-4cbf-4bc4-87a8-b985d69207bb",
+              "createdAt": "2026-07-28T01:24:14.000Z",
+              "updatedAt": "2026-07-28T01:24:14.000Z",
+              "uid": "35240-44ca8aa7-4cbf-4bc4-87a8-b985d69207bb"
+            }
+          ],
+          "id": "f0811c62-6c1f-47aa-a0a9-d7f37da868a1",
+          "createdAt": "2026-07-28T01:24:14.000Z",
+          "updatedAt": "2026-07-28T01:24:14.000Z",
+          "uid": "35240-f0811c62-6c1f-47aa-a0a9-d7f37da868a1"
+        }
+      ],
+      "id": "dece01b1-80d4-447a-b2f5-c2dbe6d5f3ec",
+      "createdAt": "2026-07-28T01:24:14.000Z",
+      "updatedAt": "2026-07-28T01:24:14.000Z",
+      "uid": "35240-dece01b1-80d4-447a-b2f5-c2dbe6d5f3ec"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://docs.superhuman.com/apis/admin/v1"
+    }
+  ]
+}

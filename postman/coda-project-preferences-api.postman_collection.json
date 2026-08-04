@@ -1,0 +1,2357 @@
+{
+  "info": {
+    "_postman_id": "0c4a6f50-1155-4b41-834e-ecb36d2ec72c",
+    "name": "Superhuman Docs Admin Account Preferences API",
+    "description": "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n\n\nContact Support:\n Name: Developer Support\n Email: care@superhuman.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:24:43.000Z",
+    "updatedAt": "2026-07-28T01:24:43.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0c4a6f50-1155-4b41-834e-ecb36d2ec72c"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organizationId}",
+          "item": [
+            {
+              "name": "importers",
+              "item": [
+                {
+                  "name": "{importerId}",
+                  "item": [
+                    {
+                      "name": "preferences",
+                      "item": [
+                        {
+                          "name": "{importPreferenceId}",
+                          "item": [
+                            {
+                              "name": "Get an import preference",
+                              "id": "40a5ccfd-6465-4a7d-a1cb-8939a4bf6326",
+                              "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                              },
+                              "request": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences",
+                                    ":importPreferenceId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "id": "f365ef5b-de47-4879-900a-a43a08f9f0c5",
+                                      "key": "organizationId",
+                                      "value": "<string>",
+                                      "description": "(Required) ID of the organization."
+                                    },
+                                    {
+                                      "id": "2007bf9c-8c6d-49ed-bc3f-2fc64177dc0f",
+                                      "key": "importerId",
+                                      "value": "quip",
+                                      "description": "(Required) Importer id for the source system.\n"
+                                    },
+                                    {
+                                      "id": "60a683cb-b3c6-4b0f-aaf6-755831c69f49",
+                                      "key": "importPreferenceId",
+                                      "value": "<uuid>",
+                                      "description": "(Required) ID of the import preference."
+                                    }
+                                  ]
+                                },
+                                "description": "Returns the requested import preference."
+                              },
+                              "response": [
+                                {
+                                  "id": "5a127a03-7eb9-4824-a6cc-3aa3e0e37294",
+                                  "name": "The requested import preference.",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"type\": \"importPreference\",\n  \"id\": \"<uuid>\",\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\",\n  \"createdAt\": \"<dateTime>\",\n  \"createdBy\": \"<number>\",\n  \"preferenceDetail\": {\n    \"ownerEmail\": \"<email>\"\n  },\n  \"updatedAt\": \"<dateTime>\",\n  \"updatedBy\": \"<number>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-5a127a03-7eb9-4824-a6cc-3aa3e0e37294"
+                                },
+                                {
+                                  "id": "5359f819-aec3-4f70-a57b-e3db1f549a46",
+                                  "name": "The request parameters did not conform to expectations.",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Bad Request",
+                                  "code": 400,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-5359f819-aec3-4f70-a57b-e3db1f549a46"
+                                },
+                                {
+                                  "id": "8a60b2a3-73c8-470d-a3f5-fc1e00804c4b",
+                                  "name": "The API token is invalid or has expired.",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Unauthorized",
+                                  "code": 401,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-8a60b2a3-73c8-470d-a3f5-fc1e00804c4b"
+                                },
+                                {
+                                  "id": "8b923828-e3ec-4370-9b91-66e4b3959156",
+                                  "name": "The API token does not grant access to this resource.",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Forbidden",
+                                  "code": 403,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-8b923828-e3ec-4370-9b91-66e4b3959156"
+                                },
+                                {
+                                  "id": "465cd8c2-4d2e-46e6-b386-1057a8c0a216",
+                                  "name": "The resource could not be located with the current API token.",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-465cd8c2-4d2e-46e6-b386-1057a8c0a216"
+                                },
+                                {
+                                  "id": "441dd32c-ff0c-4176-afe6-ccf9b3e1f722",
+                                  "name": "The client has sent too many requests.",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Too Many Requests",
+                                  "code": 429,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-441dd32c-ff0c-4176-afe6-ccf9b3e1f722"
+                                }
+                              ],
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-40a5ccfd-6465-4a7d-a1cb-8939a4bf6326"
+                            },
+                            {
+                              "name": "Update an import preference",
+                              "id": "11959d41-33af-488f-9405-fc1d072348ae",
+                              "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                              },
+                              "request": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences",
+                                    ":importPreferenceId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "id": "8f7b8737-e65a-4a6e-8087-14fc7f49aa3a",
+                                      "key": "organizationId",
+                                      "value": "<string>",
+                                      "description": "(Required) ID of the organization."
+                                    },
+                                    {
+                                      "id": "a0376688-1e75-4f32-b4d2-783b98b0048e",
+                                      "key": "importerId",
+                                      "value": "quip",
+                                      "description": "(Required) Importer id for the source system.\n"
+                                    },
+                                    {
+                                      "id": "7ff45c94-b3f2-4e3a-b144-f88809fbd1cf",
+                                      "key": "importPreferenceId",
+                                      "value": "<uuid>",
+                                      "description": "(Required) ID of the import preference."
+                                    }
+                                  ]
+                                },
+                                "description": "Replaces the preference type and settings for the existing import preference. The request body must match the target `preferenceType` variant; omitted fields are not preserved across types.\n"
+                              },
+                              "response": [
+                                {
+                                  "id": "3fa9dd7e-7bb8-4298-8302-12a03b28b158",
+                                  "name": "Confirmation that the import preference was updated.",
+                                  "originalRequest": {
+                                    "method": "PUT",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"id\": \"<uuid>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-3fa9dd7e-7bb8-4298-8302-12a03b28b158"
+                                },
+                                {
+                                  "id": "c85e60c1-fe35-4494-b4be-bced633d4b58",
+                                  "name": "The request parameters did not conform to expectations.",
+                                  "originalRequest": {
+                                    "method": "PUT",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Bad Request",
+                                  "code": 400,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-c85e60c1-fe35-4494-b4be-bced633d4b58"
+                                },
+                                {
+                                  "id": "ae4e3a26-c471-4b70-baee-96e4a54acce1",
+                                  "name": "The API token is invalid or has expired.",
+                                  "originalRequest": {
+                                    "method": "PUT",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Unauthorized",
+                                  "code": 401,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-ae4e3a26-c471-4b70-baee-96e4a54acce1"
+                                },
+                                {
+                                  "id": "b2b02dab-be75-49b7-8edb-3559ffddf662",
+                                  "name": "The API token does not grant access to this resource.",
+                                  "originalRequest": {
+                                    "method": "PUT",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Forbidden",
+                                  "code": 403,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-b2b02dab-be75-49b7-8edb-3559ffddf662"
+                                },
+                                {
+                                  "id": "6181a0ee-89d0-4aaa-9a40-ae2c6b283d16",
+                                  "name": "The resource could not be located with the current API token.",
+                                  "originalRequest": {
+                                    "method": "PUT",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-6181a0ee-89d0-4aaa-9a40-ae2c6b283d16"
+                                },
+                                {
+                                  "id": "2ba31271-e391-4c8b-aec9-1db6294018dd",
+                                  "name": "The client has sent too many requests.",
+                                  "originalRequest": {
+                                    "method": "PUT",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"preferenceType\": \"exempt\"\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Too Many Requests",
+                                  "code": 429,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-2ba31271-e391-4c8b-aec9-1db6294018dd"
+                                }
+                              ],
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-11959d41-33af-488f-9405-fc1d072348ae"
+                            },
+                            {
+                              "name": "Delete an import preference",
+                              "id": "8a1efbdb-4efa-423a-b16d-bdfe223346f5",
+                              "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                              },
+                              "request": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences",
+                                    ":importPreferenceId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "id": "fca2ee19-4157-494b-a851-3271e7506125",
+                                      "key": "organizationId",
+                                      "value": "<string>",
+                                      "description": "(Required) ID of the organization."
+                                    },
+                                    {
+                                      "id": "ebdaeca0-c9c7-482d-bd1f-9e53eabc5d08",
+                                      "key": "importerId",
+                                      "value": "quip",
+                                      "description": "(Required) Importer id for the source system.\n"
+                                    },
+                                    {
+                                      "id": "74f92df6-5aa3-495b-aefe-ac2ba26ef5c6",
+                                      "key": "importPreferenceId",
+                                      "value": "<uuid>",
+                                      "description": "(Required) ID of the import preference."
+                                    }
+                                  ]
+                                },
+                                "description": "Deletes the import preference."
+                              },
+                              "response": [
+                                {
+                                  "id": "1185fab3-7fa5-400d-8ddb-fa4aa82066ef",
+                                  "name": "The import preference was deleted.",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-1185fab3-7fa5-400d-8ddb-fa4aa82066ef"
+                                },
+                                {
+                                  "id": "74a363f5-7faf-443f-877f-712009e731ab",
+                                  "name": "The request parameters did not conform to expectations.",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Bad Request",
+                                  "code": 400,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-74a363f5-7faf-443f-877f-712009e731ab"
+                                },
+                                {
+                                  "id": "bffd291c-6307-40ee-9f20-77f87be85d53",
+                                  "name": "The API token is invalid or has expired.",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Unauthorized",
+                                  "code": 401,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-bffd291c-6307-40ee-9f20-77f87be85d53"
+                                },
+                                {
+                                  "id": "2ab77201-50bb-42e2-b8f1-1063a7071c5e",
+                                  "name": "The API token does not grant access to this resource.",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Forbidden",
+                                  "code": 403,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-2ab77201-50bb-42e2-b8f1-1063a7071c5e"
+                                },
+                                {
+                                  "id": "64779d40-9d67-49d2-aa05-3e2fd1c063b5",
+                                  "name": "The resource could not be located with the current API token.",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-64779d40-9d67-49d2-aa05-3e2fd1c063b5"
+                                },
+                                {
+                                  "id": "c594691a-b069-4210-a41f-317c984675a6",
+                                  "name": "The client has sent too many requests.",
+                                  "originalRequest": {
+                                    "method": "DELETE",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "organizations",
+                                        ":organizationId",
+                                        "importers",
+                                        ":importerId",
+                                        "preferences",
+                                        ":importPreferenceId"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "organizationId"
+                                        },
+                                        {
+                                          "key": "importerId"
+                                        },
+                                        {
+                                          "key": "importPreferenceId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Too Many Requests",
+                                  "code": 429,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-07-28T01:24:43.000Z",
+                                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                                  "uid": "35240-c594691a-b069-4210-a41f-317c984675a6"
+                                }
+                              ],
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-8a1efbdb-4efa-423a-b16d-bdfe223346f5"
+                            }
+                          ],
+                          "id": "a51d4edc-0da2-4322-8cf5-e6ee8f86e37d",
+                          "createdAt": "2026-07-28T01:24:43.000Z",
+                          "updatedAt": "2026-07-28T01:24:43.000Z",
+                          "uid": "35240-a51d4edc-0da2-4322-8cf5-e6ee8f86e37d"
+                        },
+                        {
+                          "name": "List import preferences",
+                          "id": "ccd08b33-1ede-49fe-b8a4-cd7527d0c709",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "importers",
+                                ":importerId",
+                                "preferences"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                  "key": "importEntityIds",
+                                  "value": "<string>,<string>"
+                                },
+                                {
+                                  "description": "Maximum number of results to return in this query.",
+                                  "key": "limit",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "An opaque token used to fetch the next page of results.",
+                                  "key": "pageToken",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "id": "baf859bc-09c8-4fab-ad18-57d6db6c4b0f",
+                                  "key": "organizationId",
+                                  "value": "<string>",
+                                  "description": "(Required) ID of the organization."
+                                },
+                                {
+                                  "id": "ddafc100-7fee-4d7b-9efe-c37abd0d6fef",
+                                  "key": "importerId",
+                                  "value": "quip",
+                                  "description": "(Required) Importer id for the source system.\n"
+                                }
+                              ]
+                            },
+                            "description": "Returns import preferences for the importer."
+                          },
+                          "response": [
+                            {
+                              "id": "74779fb1-8877-4520-ba1e-197c326e6c25",
+                              "name": "List of import preferences.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                      "key": "importEntityIds",
+                                      "value": "<string>,<string>"
+                                    },
+                                    {
+                                      "description": "Maximum number of results to return in this query.",
+                                      "key": "limit",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "An opaque token used to fetch the next page of results.",
+                                      "key": "pageToken",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"items\": [\n    {\n      \"type\": \"importPreference\",\n      \"id\": \"<uuid>\",\n      \"externalEntity\": {\n        \"id\": \"<string>\",\n        \"type\": \"<string>\"\n      },\n      \"preferenceType\": \"owner\",\n      \"createdAt\": \"<dateTime>\",\n      \"createdBy\": \"<number>\",\n      \"preferenceDetail\": {\n        \"ownerEmail\": \"<email>\"\n      },\n      \"updatedAt\": \"<dateTime>\",\n      \"updatedBy\": \"<number>\"\n    },\n    {\n      \"type\": \"importPreference\",\n      \"id\": \"<uuid>\",\n      \"externalEntity\": {\n        \"id\": \"<string>\",\n        \"type\": \"<string>\"\n      },\n      \"preferenceType\": \"location\",\n      \"createdAt\": \"<dateTime>\",\n      \"createdBy\": \"<number>\",\n      \"preferenceDetail\": {\n        \"ownerEmail\": \"<email>\"\n      },\n      \"updatedAt\": \"<dateTime>\",\n      \"updatedBy\": \"<number>\"\n    }\n  ],\n  \"href\": \"<string>\",\n  \"nextPageToken\": \"<string>\",\n  \"nextPageLink\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-74779fb1-8877-4520-ba1e-197c326e6c25"
+                            },
+                            {
+                              "id": "9e8d8f1e-ce67-48ae-9365-df50b63d3bcb",
+                              "name": "The request parameters did not conform to expectations.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                      "key": "importEntityIds",
+                                      "value": "<string>,<string>"
+                                    },
+                                    {
+                                      "description": "Maximum number of results to return in this query.",
+                                      "key": "limit",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "An opaque token used to fetch the next page of results.",
+                                      "key": "pageToken",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-9e8d8f1e-ce67-48ae-9365-df50b63d3bcb"
+                            },
+                            {
+                              "id": "3c262bb5-9f59-4ce5-9a03-c09076f086fb",
+                              "name": "The API token is invalid or has expired.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                      "key": "importEntityIds",
+                                      "value": "<string>,<string>"
+                                    },
+                                    {
+                                      "description": "Maximum number of results to return in this query.",
+                                      "key": "limit",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "An opaque token used to fetch the next page of results.",
+                                      "key": "pageToken",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-3c262bb5-9f59-4ce5-9a03-c09076f086fb"
+                            },
+                            {
+                              "id": "110aaae7-4132-41af-a0ea-004c889a7b95",
+                              "name": "The API token does not grant access to this resource.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                      "key": "importEntityIds",
+                                      "value": "<string>,<string>"
+                                    },
+                                    {
+                                      "description": "Maximum number of results to return in this query.",
+                                      "key": "limit",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "An opaque token used to fetch the next page of results.",
+                                      "key": "pageToken",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-110aaae7-4132-41af-a0ea-004c889a7b95"
+                            },
+                            {
+                              "id": "4eaa54ba-de13-49b3-a0a4-0834be38faa0",
+                              "name": "The resource could not be located with the current API token.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                      "key": "importEntityIds",
+                                      "value": "<string>,<string>"
+                                    },
+                                    {
+                                      "description": "Maximum number of results to return in this query.",
+                                      "key": "limit",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "An opaque token used to fetch the next page of results.",
+                                      "key": "pageToken",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-4eaa54ba-de13-49b3-a0a4-0834be38faa0"
+                            },
+                            {
+                              "id": "3ebf7cd9-1cc7-458d-acba-ab8a92d9f107",
+                              "name": "The client has sent too many requests.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences?importEntityIds=<string>,<string>&limit=100&pageToken=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n",
+                                      "key": "importEntityIds",
+                                      "value": "<string>,<string>"
+                                    },
+                                    {
+                                      "description": "Maximum number of results to return in this query.",
+                                      "key": "limit",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "An opaque token used to fetch the next page of results.",
+                                      "key": "pageToken",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-3ebf7cd9-1cc7-458d-acba-ab8a92d9f107"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:24:43.000Z",
+                          "updatedAt": "2026-07-28T01:24:43.000Z",
+                          "uid": "35240-ccd08b33-1ede-49fe-b8a4-cd7527d0c709"
+                        },
+                        {
+                          "name": "Create an import preference",
+                          "id": "1c7bacf9-2e7a-4ee9-bd60-7a11bf099793",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "importers",
+                                ":importerId",
+                                "preferences"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "4643aaf1-7fe8-43bf-987d-7a3b49fb136c",
+                                  "key": "organizationId",
+                                  "value": "<string>",
+                                  "description": "(Required) ID of the organization."
+                                },
+                                {
+                                  "id": "9a69c399-3324-4cef-912e-fcb94f0bc955",
+                                  "key": "importerId",
+                                  "value": "quip",
+                                  "description": "(Required) Importer id for the source system.\n"
+                                }
+                              ]
+                            },
+                            "description": "Creates an import preference for the importer."
+                          },
+                          "response": [
+                            {
+                              "id": "33c29153-a3f4-4eb9-8ed8-51315a617808",
+                              "name": "Confirmation that the import preference was created.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"id\": \"<uuid>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-33c29153-a3f4-4eb9-8ed8-51315a617808"
+                            },
+                            {
+                              "id": "9721a795-1e05-4a45-9c2f-16499e8ccaa2",
+                              "name": "The request parameters did not conform to expectations.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-9721a795-1e05-4a45-9c2f-16499e8ccaa2"
+                            },
+                            {
+                              "id": "00799708-c37f-44b8-b82f-b39efb37dab1",
+                              "name": "The API token is invalid or has expired.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-00799708-c37f-44b8-b82f-b39efb37dab1"
+                            },
+                            {
+                              "id": "df810b1e-c510-4c1f-97f3-a98800ffc1c4",
+                              "name": "The API token does not grant access to this resource.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-df810b1e-c510-4c1f-97f3-a98800ffc1c4"
+                            },
+                            {
+                              "id": "e8f0800c-c926-40c9-8624-dd8229d0a74a",
+                              "name": "The resource could not be located with the current API token.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-e8f0800c-c926-40c9-8624-dd8229d0a74a"
+                            },
+                            {
+                              "id": "ec957e8c-1a3f-4939-851c-9f4c055bc9d8",
+                              "name": "The client has sent too many requests.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"externalEntity\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"preferenceType\": \"exempt\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/importers/:importerId/preferences",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "importers",
+                                    ":importerId",
+                                    "preferences"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "importerId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:43.000Z",
+                              "updatedAt": "2026-07-28T01:24:43.000Z",
+                              "uid": "35240-ec957e8c-1a3f-4939-851c-9f4c055bc9d8"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:24:43.000Z",
+                          "updatedAt": "2026-07-28T01:24:43.000Z",
+                          "uid": "35240-1c7bacf9-2e7a-4ee9-bd60-7a11bf099793"
+                        }
+                      ],
+                      "id": "b76831f8-737a-4291-a940-22bd7f8524ee",
+                      "createdAt": "2026-07-28T01:24:43.000Z",
+                      "updatedAt": "2026-07-28T01:24:43.000Z",
+                      "uid": "35240-b76831f8-737a-4291-a940-22bd7f8524ee"
+                    }
+                  ],
+                  "id": "6494b24c-3857-4bd9-92b4-78b05a09609e",
+                  "createdAt": "2026-07-28T01:24:43.000Z",
+                  "updatedAt": "2026-07-28T01:24:43.000Z",
+                  "uid": "35240-6494b24c-3857-4bd9-92b4-78b05a09609e"
+                }
+              ],
+              "id": "68aee19d-4adf-4f64-85aa-3de42d3ed0a0",
+              "createdAt": "2026-07-28T01:24:43.000Z",
+              "updatedAt": "2026-07-28T01:24:43.000Z",
+              "uid": "35240-68aee19d-4adf-4f64-85aa-3de42d3ed0a0"
+            }
+          ],
+          "id": "5a2b0c62-d75f-43ad-ae60-688b5cb9ba63",
+          "createdAt": "2026-07-28T01:24:43.000Z",
+          "updatedAt": "2026-07-28T01:24:43.000Z",
+          "uid": "35240-5a2b0c62-d75f-43ad-ae60-688b5cb9ba63"
+        }
+      ],
+      "id": "53439022-b48e-4c8b-8077-0dfedee00b3f",
+      "createdAt": "2026-07-28T01:24:43.000Z",
+      "updatedAt": "2026-07-28T01:24:43.000Z",
+      "uid": "35240-53439022-b48e-4c8b-8077-0dfedee00b3f"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://docs.superhuman.com/apis/admin/v1"
+    }
+  ]
+}

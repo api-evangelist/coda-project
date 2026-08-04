@@ -1,0 +1,984 @@
+{
+  "info": {
+    "_postman_id": "fb739a79-89a8-4910-8c2a-0e0d92249c12",
+    "name": "Superhuman Docs Admin Account Publishing API",
+    "description": "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n\n\nContact Support:\n Name: Developer Support\n Email: care@superhuman.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:24:44.000Z",
+    "updatedAt": "2026-07-28T01:24:44.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-fb739a79-89a8-4910-8c2a-0e0d92249c12"
+  },
+  "item": [
+    {
+      "name": "categories",
+      "item": [
+        {
+          "name": "Get doc categories",
+          "id": "ee1631fb-ca4a-43b5-94e1-d12906aa2cb9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "Gets all available doc categories."
+          },
+          "response": [
+            {
+              "id": "cba8f06e-f056-429b-a5b0-a3fa6ce9e835",
+              "name": "List of doc categories",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"items\": [\n    {\n      \"name\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T01:24:44.000Z",
+              "updatedAt": "2026-07-28T01:24:44.000Z",
+              "uid": "35240-cba8f06e-f056-429b-a5b0-a3fa6ce9e835"
+            },
+            {
+              "id": "e7e57184-e7f5-4501-bcf8-255dca042a8c",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:24:44.000Z",
+              "updatedAt": "2026-07-28T01:24:44.000Z",
+              "uid": "35240-e7e57184-e7f5-4501-bcf8-255dca042a8c"
+            },
+            {
+              "id": "de8266fb-da0f-4928-8e3e-f768211ed66a",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:24:44.000Z",
+              "updatedAt": "2026-07-28T01:24:44.000Z",
+              "uid": "35240-de8266fb-da0f-4928-8e3e-f768211ed66a"
+            },
+            {
+              "id": "d1a22ede-f884-4dca-8108-3e3318371a3e",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:24:44.000Z",
+              "updatedAt": "2026-07-28T01:24:44.000Z",
+              "uid": "35240-d1a22ede-f884-4dca-8108-3e3318371a3e"
+            }
+          ],
+          "createdAt": "2026-07-28T01:24:44.000Z",
+          "updatedAt": "2026-07-28T01:24:44.000Z",
+          "uid": "35240-ee1631fb-ca4a-43b5-94e1-d12906aa2cb9"
+        }
+      ],
+      "id": "79123e95-b47a-4bb1-95dd-8cc3763d0aae",
+      "createdAt": "2026-07-28T01:24:44.000Z",
+      "updatedAt": "2026-07-28T01:24:44.000Z",
+      "uid": "35240-79123e95-b47a-4bb1-95dd-8cc3763d0aae"
+    },
+    {
+      "name": "docs",
+      "item": [
+        {
+          "name": "{docId}",
+          "item": [
+            {
+              "name": "publish",
+              "item": [
+                {
+                  "name": "Publish doc",
+                  "id": "455ccc63-00db-4d0a-adcb-b9a4cab03f65",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/docs/:docId/publish",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "docs",
+                        ":docId",
+                        "publish"
+                      ],
+                      "variable": [
+                        {
+                          "id": "5394f601-b59b-4e7e-83f1-40ad5997e448",
+                          "key": "docId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the doc."
+                        }
+                      ]
+                    },
+                    "description": "Update publish settings for a doc."
+                  },
+                  "response": [
+                    {
+                      "id": "93cddb04-1430-42f4-b70a-439030bf9602",
+                      "name": "Confirmation that the publish request was accepted.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Accepted",
+                      "code": 202,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"requestId\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-93cddb04-1430-42f4-b70a-439030bf9602"
+                    },
+                    {
+                      "id": "1a1fedee-1b0a-4e76-8a1e-c99814b4c111",
+                      "name": "The request parameters did not conform to expectations.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-1a1fedee-1b0a-4e76-8a1e-c99814b4c111"
+                    },
+                    {
+                      "id": "bb1524cf-0473-4765-95aa-14281f41d7f0",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-bb1524cf-0473-4765-95aa-14281f41d7f0"
+                    },
+                    {
+                      "id": "1a21cd41-5e08-473a-97a7-2583eeebb7b7",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-1a21cd41-5e08-473a-97a7-2583eeebb7b7"
+                    },
+                    {
+                      "id": "19940cc2-b626-42c4-99d9-581782fb320e",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-19940cc2-b626-42c4-99d9-581782fb320e"
+                    },
+                    {
+                      "id": "989720b1-2938-4580-8a59-5264b2481b69",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"slug\": \"<string>\",\n  \"discoverable\": \"<boolean>\",\n  \"earnCredit\": \"<boolean>\",\n  \"categoryNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"mode\": \"view\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-989720b1-2938-4580-8a59-5264b2481b69"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:44.000Z",
+                  "updatedAt": "2026-07-28T01:24:44.000Z",
+                  "uid": "35240-455ccc63-00db-4d0a-adcb-b9a4cab03f65"
+                },
+                {
+                  "name": "Unpublish doc",
+                  "id": "f019b1b0-bc68-4d2c-8a5a-6a0f0e782b72",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/docs/:docId/publish",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "docs",
+                        ":docId",
+                        "publish"
+                      ],
+                      "variable": [
+                        {
+                          "id": "b6722d1f-c297-4ce4-9ac3-69c082d9a425",
+                          "key": "docId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the doc."
+                        }
+                      ]
+                    },
+                    "description": "Unpublishes a doc."
+                  },
+                  "response": [
+                    {
+                      "id": "78c821e1-fc82-4db1-8d73-b096625d5151",
+                      "name": "A result indicating that the doc was unpublished.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-78c821e1-fc82-4db1-8d73-b096625d5151"
+                    },
+                    {
+                      "id": "4f5a26f6-207d-40dd-991d-e2a6a153ee06",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-4f5a26f6-207d-40dd-991d-e2a6a153ee06"
+                    },
+                    {
+                      "id": "a27f663d-b5d6-4609-8ece-a24c08466cb1",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-a27f663d-b5d6-4609-8ece-a24c08466cb1"
+                    },
+                    {
+                      "id": "e7cd0e48-226f-40aa-b9b4-2d935c99c7cc",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-e7cd0e48-226f-40aa-b9b4-2d935c99c7cc"
+                    },
+                    {
+                      "id": "8a49c57e-f1be-4596-8335-a61b708b26db",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/docs/:docId/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "docs",
+                            ":docId",
+                            "publish"
+                          ],
+                          "variable": [
+                            {
+                              "key": "docId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:44.000Z",
+                      "updatedAt": "2026-07-28T01:24:44.000Z",
+                      "uid": "35240-8a49c57e-f1be-4596-8335-a61b708b26db"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:44.000Z",
+                  "updatedAt": "2026-07-28T01:24:44.000Z",
+                  "uid": "35240-f019b1b0-bc68-4d2c-8a5a-6a0f0e782b72"
+                }
+              ],
+              "id": "7741e897-f56b-423d-81c9-d6a2e4c9c2c7",
+              "createdAt": "2026-07-28T01:24:44.000Z",
+              "updatedAt": "2026-07-28T01:24:44.000Z",
+              "uid": "35240-7741e897-f56b-423d-81c9-d6a2e4c9c2c7"
+            }
+          ],
+          "id": "c28fbd41-3ba8-4114-a2e7-90d21349fee8",
+          "createdAt": "2026-07-28T01:24:44.000Z",
+          "updatedAt": "2026-07-28T01:24:44.000Z",
+          "uid": "35240-c28fbd41-3ba8-4114-a2e7-90d21349fee8"
+        }
+      ],
+      "id": "18b6d13c-b0c2-4de8-9e95-0354fb61ca41",
+      "createdAt": "2026-07-28T01:24:44.000Z",
+      "updatedAt": "2026-07-28T01:24:44.000Z",
+      "uid": "35240-18b6d13c-b0c2-4de8-9e95-0354fb61ca41"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://docs.superhuman.com/apis/admin/v1"
+    }
+  ]
+}

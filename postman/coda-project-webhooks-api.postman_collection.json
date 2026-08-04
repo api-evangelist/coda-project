@@ -1,0 +1,2496 @@
+{
+  "info": {
+    "_postman_id": "8771a387-f109-4c92-8934-7b63972834ee",
+    "name": "Superhuman Docs Admin Account Webhooks API",
+    "description": "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n\n\nContact Support:\n Name: Developer Support\n Email: care@superhuman.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:24:47.000Z",
+    "updatedAt": "2026-07-28T01:24:48.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-8771a387-f109-4c92-8934-7b63972834ee"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organizationId}",
+          "item": [
+            {
+              "name": "webhooks",
+              "item": [
+                {
+                  "name": "{webhookId}",
+                  "item": [
+                    {
+                      "name": "reset",
+                      "item": [
+                        {
+                          "name": "Reset a webhook subscription",
+                          "id": "54ebe728-d583-4d40-9080-5f6e63607e16",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId",
+                                "reset"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "e8a35f15-059d-4200-a96b-ad9d3378be93",
+                                  "key": "organizationId",
+                                  "value": "<string>",
+                                  "description": "(Required) ID of the organization."
+                                },
+                                {
+                                  "id": "e1fee901-d158-40de-9796-460f95015c10",
+                                  "key": "webhookId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) ID of the webhook subscription."
+                                }
+                              ]
+                            },
+                            "description": "Resets a webhook subscription. Will force re-initialization of the webhook subscription, including the initial handshake process. Used to re-start a webhook that previously failed the initial handshake or that has become disabled due to the target failing too many consecutive webhook payloads.\n"
+                          },
+                          "response": [
+                            {
+                              "id": "cae82561-30e3-41c9-8bc0-5fb4ad6ed352",
+                              "name": "Response indicating the webhook was reset.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "webhooks",
+                                    ":webhookId",
+                                    "reset"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "webhookId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"webhook\",\n  \"id\": \"<string>\",\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"state\": \"<string>\",\n  \"name\": \"<string>\",\n  \"signatureKey\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  },\n  \"lastFailureAt\": \"<dateTime>\",\n  \"lastFailureContent\": \"<string>\",\n  \"lastSuccessAt\": \"<dateTime>\"\n}",
+                              "createdAt": "2026-07-28T01:24:48.000Z",
+                              "updatedAt": "2026-07-28T01:24:48.000Z",
+                              "uid": "35240-cae82561-30e3-41c9-8bc0-5fb4ad6ed352"
+                            },
+                            {
+                              "id": "17cda013-3757-46e7-826e-aa07e18fd9b5",
+                              "name": "The request parameters did not conform to expectations.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "webhooks",
+                                    ":webhookId",
+                                    "reset"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "webhookId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:48.000Z",
+                              "updatedAt": "2026-07-28T01:24:48.000Z",
+                              "uid": "35240-17cda013-3757-46e7-826e-aa07e18fd9b5"
+                            },
+                            {
+                              "id": "975298fd-879f-42ee-9a83-5d94dd59a202",
+                              "name": "The API token is invalid or has expired.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "webhooks",
+                                    ":webhookId",
+                                    "reset"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "webhookId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:48.000Z",
+                              "updatedAt": "2026-07-28T01:24:48.000Z",
+                              "uid": "35240-975298fd-879f-42ee-9a83-5d94dd59a202"
+                            },
+                            {
+                              "id": "0f7a17bf-7d99-48d7-946f-b94bcbd7a94d",
+                              "name": "The API token does not grant access to this resource.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "webhooks",
+                                    ":webhookId",
+                                    "reset"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "webhookId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:48.000Z",
+                              "updatedAt": "2026-07-28T01:24:48.000Z",
+                              "uid": "35240-0f7a17bf-7d99-48d7-946f-b94bcbd7a94d"
+                            },
+                            {
+                              "id": "e00b5ec4-8f52-49bc-8a55-e55224a32155",
+                              "name": "The resource could not be located with the current API token.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "webhooks",
+                                    ":webhookId",
+                                    "reset"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "webhookId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:48.000Z",
+                              "updatedAt": "2026-07-28T01:24:48.000Z",
+                              "uid": "35240-e00b5ec4-8f52-49bc-8a55-e55224a32155"
+                            },
+                            {
+                              "id": "033d4ed4-8585-46fd-85ae-448953056406",
+                              "name": "The client has sent too many requests.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId/reset",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organizationId",
+                                    "webhooks",
+                                    ":webhookId",
+                                    "reset"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organizationId"
+                                    },
+                                    {
+                                      "key": "webhookId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:24:48.000Z",
+                              "updatedAt": "2026-07-28T01:24:48.000Z",
+                              "uid": "35240-033d4ed4-8585-46fd-85ae-448953056406"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-54ebe728-d583-4d40-9080-5f6e63607e16"
+                        }
+                      ],
+                      "id": "c7410a38-7b64-42d8-a8ac-4893e243e856",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-c7410a38-7b64-42d8-a8ac-4893e243e856"
+                    },
+                    {
+                      "name": "Get a webhook subscription",
+                      "id": "7bc4dbe9-880d-49d6-a065-c6ec30699faa",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks",
+                            ":webhookId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "400ac1a2-9bfa-4069-912f-50a4bde42b8a",
+                              "key": "organizationId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the organization."
+                            },
+                            {
+                              "id": "009f2af8-d266-4a0b-8381-635b6d1a1ada",
+                              "key": "webhookId",
+                              "value": "<uuid>",
+                              "description": "(Required) ID of the webhook subscription."
+                            }
+                          ]
+                        },
+                        "description": "Returns the requested webhook subscription.\n"
+                      },
+                      "response": [
+                        {
+                          "id": "e8ae9a53-2240-4ebb-aaff-f0d16829c648",
+                          "name": "The requested Superhuman Docs webhook subscription.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"webhook\",\n  \"id\": \"<string>\",\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"state\": \"<string>\",\n  \"name\": \"<string>\",\n  \"signatureKey\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  },\n  \"lastFailureAt\": \"<dateTime>\",\n  \"lastFailureContent\": \"<string>\",\n  \"lastSuccessAt\": \"<dateTime>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-e8ae9a53-2240-4ebb-aaff-f0d16829c648"
+                        },
+                        {
+                          "id": "3a0d1212-ac6a-461d-9040-880e558a495f",
+                          "name": "The request parameters did not conform to expectations.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-3a0d1212-ac6a-461d-9040-880e558a495f"
+                        },
+                        {
+                          "id": "e7efc682-2823-44bf-8905-c77126d7a028",
+                          "name": "The API token is invalid or has expired.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-e7efc682-2823-44bf-8905-c77126d7a028"
+                        },
+                        {
+                          "id": "44612f70-eac3-4b91-acc4-5432f68e23ce",
+                          "name": "The API token does not grant access to this resource.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-44612f70-eac3-4b91-acc4-5432f68e23ce"
+                        },
+                        {
+                          "id": "009a7b16-2f96-41b3-bcad-8d72d9042465",
+                          "name": "The resource could not be located with the current API token.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-009a7b16-2f96-41b3-bcad-8d72d9042465"
+                        },
+                        {
+                          "id": "571176e2-11d5-4731-9c9e-460579164d52",
+                          "name": "The client has sent too many requests.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-571176e2-11d5-4731-9c9e-460579164d52"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-7bc4dbe9-880d-49d6-a065-c6ec30699faa"
+                    },
+                    {
+                      "name": "Update a webhook subscription",
+                      "id": "e80fa223-f8e1-4276-92db-7d1376f94279",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks",
+                            ":webhookId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "eef0261d-f6b2-4730-9d74-51ab04def8bf",
+                              "key": "organizationId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the organization."
+                            },
+                            {
+                              "id": "006b7a01-f124-40d4-ab35-d78555bcb416",
+                              "key": "webhookId",
+                              "value": "<uuid>",
+                              "description": "(Required) ID of the webhook subscription."
+                            }
+                          ]
+                        },
+                        "description": "Updates parameters for an existing webhook subscription."
+                      },
+                      "response": [
+                        {
+                          "id": "d92a61a9-55c8-424f-b2dd-bb921e8943ad",
+                          "name": "The webhook subscription was updated.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"webhook\",\n  \"id\": \"<string>\",\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"state\": \"<string>\",\n  \"name\": \"<string>\",\n  \"signatureKey\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  },\n  \"lastFailureAt\": \"<dateTime>\",\n  \"lastFailureContent\": \"<string>\",\n  \"lastSuccessAt\": \"<dateTime>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-d92a61a9-55c8-424f-b2dd-bb921e8943ad"
+                        },
+                        {
+                          "id": "0d2868cc-b8a0-40ec-b126-100bf00e770c",
+                          "name": "The request parameters did not conform to expectations.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-0d2868cc-b8a0-40ec-b126-100bf00e770c"
+                        },
+                        {
+                          "id": "43ee9bac-0bf9-4664-af26-5b56162968da",
+                          "name": "The API token is invalid or has expired.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-43ee9bac-0bf9-4664-af26-5b56162968da"
+                        },
+                        {
+                          "id": "dc908133-beb2-4ebd-b8e2-dda6e882828a",
+                          "name": "The API token does not grant access to this resource.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-dc908133-beb2-4ebd-b8e2-dda6e882828a"
+                        },
+                        {
+                          "id": "a0c2ec65-9a53-4ce7-8ae6-6f9261166ec3",
+                          "name": "The resource could not be located with the current API token.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-a0c2ec65-9a53-4ce7-8ae6-6f9261166ec3"
+                        },
+                        {
+                          "id": "e42cdaeb-491d-4278-a638-fabc284e94b2",
+                          "name": "The client has sent too many requests.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"target\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-e42cdaeb-491d-4278-a638-fabc284e94b2"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-e80fa223-f8e1-4276-92db-7d1376f94279"
+                    },
+                    {
+                      "name": "Deletes a webhook subscription",
+                      "id": "697367ba-2c75-4c3d-b9f2-2ce5afd04070",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks",
+                            ":webhookId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "2b1f2854-7d9b-4791-a65b-7bbc4eac3f01",
+                              "key": "organizationId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the organization."
+                            },
+                            {
+                              "id": "0245dca5-58b7-49ec-b6c6-7ed2108182c1",
+                              "key": "webhookId",
+                              "value": "<uuid>",
+                              "description": "(Required) ID of the webhook subscription."
+                            }
+                          ]
+                        },
+                        "description": "Deletes a webhook subscription."
+                      },
+                      "response": [
+                        {
+                          "id": "1b9114a9-70a7-4452-8392-1714573a4437",
+                          "name": "Response indicating the webhook was deleted.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-1b9114a9-70a7-4452-8392-1714573a4437"
+                        },
+                        {
+                          "id": "bad1b1ef-e1dd-4d20-98dc-4cf76b965a69",
+                          "name": "The request parameters did not conform to expectations.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-bad1b1ef-e1dd-4d20-98dc-4cf76b965a69"
+                        },
+                        {
+                          "id": "54f2854c-a06f-4c20-9ed4-fd0bd6aa2961",
+                          "name": "The API token is invalid or has expired.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-54f2854c-a06f-4c20-9ed4-fd0bd6aa2961"
+                        },
+                        {
+                          "id": "3b043058-3202-4068-808e-d297968aae02",
+                          "name": "The API token does not grant access to this resource.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-3b043058-3202-4068-808e-d297968aae02"
+                        },
+                        {
+                          "id": "40d81357-7e57-4b3b-9468-ac9650a7e672",
+                          "name": "The resource could not be located with the current API token.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-40d81357-7e57-4b3b-9468-ac9650a7e672"
+                        },
+                        {
+                          "id": "c4b8e816-e6c7-4cd5-ad07-b0b8471dd3ea",
+                          "name": "The client has sent too many requests.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/webhooks/:webhookId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "webhooks",
+                                ":webhookId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "webhookId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:48.000Z",
+                          "updatedAt": "2026-07-28T01:24:48.000Z",
+                          "uid": "35240-c4b8e816-e6c7-4cd5-ad07-b0b8471dd3ea"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-697367ba-2c75-4c3d-b9f2-2ce5afd04070"
+                    }
+                  ],
+                  "id": "6e5cb449-9777-4dbe-ac69-14198b2e9dc1",
+                  "createdAt": "2026-07-28T01:24:48.000Z",
+                  "updatedAt": "2026-07-28T01:24:48.000Z",
+                  "uid": "35240-6e5cb449-9777-4dbe-ac69-14198b2e9dc1"
+                },
+                {
+                  "name": "List webhooks",
+                  "id": "9f31b373-6158-4d7c-a8ea-8adf223acdbe",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organizationId",
+                        "webhooks"
+                      ],
+                      "query": [
+                        {
+                          "description": "Maximum number of results to return in this query.",
+                          "key": "limit",
+                          "value": "100"
+                        },
+                        {
+                          "description": "An opaque token used to fetch the next page of results.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "8f3aa0b9-0e8a-42e4-847c-692ccd099978",
+                          "key": "organizationId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the organization."
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of webhooks in the organization\n"
+                  },
+                  "response": [
+                    {
+                      "id": "337ff8e9-3cf3-4e5a-bbbe-5ee30fdf8f24",
+                      "name": "List of Superhuman Docs webhook subscriptions.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"type\": \"webhook\",\n      \"id\": \"<string>\",\n      \"resource\": \"auditEvents\",\n      \"target\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"state\": \"<string>\",\n      \"name\": \"<string>\",\n      \"signatureKey\": \"<string>\",\n      \"filters\": {\n        \"or\": [\n          {\n            \"action\": \"<string>\"\n          },\n          {\n            \"action\": \"<string>\"\n          }\n        ]\n      },\n      \"lastFailureAt\": \"<dateTime>\",\n      \"lastFailureContent\": \"<string>\",\n      \"lastSuccessAt\": \"<dateTime>\"\n    },\n    {\n      \"type\": \"webhook\",\n      \"id\": \"<string>\",\n      \"resource\": \"auditEvents\",\n      \"target\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"state\": \"<string>\",\n      \"name\": \"<string>\",\n      \"signatureKey\": \"<string>\",\n      \"filters\": {\n        \"or\": [\n          {\n            \"action\": \"<string>\"\n          },\n          {\n            \"action\": \"<string>\"\n          }\n        ]\n      },\n      \"lastFailureAt\": \"<dateTime>\",\n      \"lastFailureContent\": \"<string>\",\n      \"lastSuccessAt\": \"<dateTime>\"\n    }\n  ],\n  \"href\": \"<string>\",\n  \"nextPageToken\": \"<string>\",\n  \"nextPageLink\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-337ff8e9-3cf3-4e5a-bbbe-5ee30fdf8f24"
+                    },
+                    {
+                      "id": "e8ad6735-3b93-49bd-a5dc-4300e73501f8",
+                      "name": "The request parameters did not conform to expectations.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-e8ad6735-3b93-49bd-a5dc-4300e73501f8"
+                    },
+                    {
+                      "id": "f4ee2fbb-fa61-4576-af28-49b09b7ea825",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-f4ee2fbb-fa61-4576-af28-49b09b7ea825"
+                    },
+                    {
+                      "id": "584b7613-ebc7-4b71-a59b-32e7c12b76f5",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-584b7613-ebc7-4b71-a59b-32e7c12b76f5"
+                    },
+                    {
+                      "id": "0d712b28-21a9-4cfa-ac73-eda502cf9c82",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-0d712b28-21a9-4cfa-ac73-eda502cf9c82"
+                    },
+                    {
+                      "id": "670ab9ed-c9d2-47d8-96c0-ee08b0783dc5",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks?limit=100&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "query": [
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-670ab9ed-c9d2-47d8-96c0-ee08b0783dc5"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:48.000Z",
+                  "updatedAt": "2026-07-28T01:24:48.000Z",
+                  "uid": "35240-9f31b373-6158-4d7c-a8ea-8adf223acdbe"
+                },
+                {
+                  "name": "Create new webhook subscription",
+                  "id": "d78a263d-05f6-4f8c-9bdb-16d7e3db4dad",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organizationId",
+                        "webhooks"
+                      ],
+                      "variable": [
+                        {
+                          "id": "8b28b01c-2acd-4132-afa7-77ef7837199f",
+                          "key": "organizationId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the organization."
+                        }
+                      ]
+                    },
+                    "description": "Creates a new webhook subscription for the organization."
+                  },
+                  "response": [
+                    {
+                      "id": "97542946-1bce-4650-82d4-1476c2005bc5",
+                      "name": "Confirmation that the webhook subscription was created.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"webhook\",\n  \"id\": \"<string>\",\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"state\": \"<string>\",\n  \"name\": \"<string>\",\n  \"signatureKey\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  },\n  \"lastFailureAt\": \"<dateTime>\",\n  \"lastFailureContent\": \"<string>\",\n  \"lastSuccessAt\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-97542946-1bce-4650-82d4-1476c2005bc5"
+                    },
+                    {
+                      "id": "9455f67a-6897-4b57-b7cd-5cb547773662",
+                      "name": "The request parameters did not conform to expectations.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-9455f67a-6897-4b57-b7cd-5cb547773662"
+                    },
+                    {
+                      "id": "8bfc225a-db92-4b2c-b4c6-3146e47e0fbc",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-8bfc225a-db92-4b2c-b4c6-3146e47e0fbc"
+                    },
+                    {
+                      "id": "1221edb7-e02b-49af-9fd0-b10876ceefec",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-1221edb7-e02b-49af-9fd0-b10876ceefec"
+                    },
+                    {
+                      "id": "c725f53e-6b79-436e-b266-ae021232a8cb",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-c725f53e-6b79-436e-b266-ae021232a8cb"
+                    },
+                    {
+                      "id": "d2970165-0891-42d8-add2-5a60036f3779",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"resource\": \"auditEvents\",\n  \"target\": \"<string>\",\n  \"name\": \"<string>\",\n  \"filters\": {\n    \"or\": [\n      {\n        \"action\": \"<string>\"\n      },\n      {\n        \"action\": \"<string>\"\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/webhooks",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "webhooks"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:48.000Z",
+                      "updatedAt": "2026-07-28T01:24:48.000Z",
+                      "uid": "35240-d2970165-0891-42d8-add2-5a60036f3779"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:48.000Z",
+                  "updatedAt": "2026-07-28T01:24:48.000Z",
+                  "uid": "35240-d78a263d-05f6-4f8c-9bdb-16d7e3db4dad"
+                }
+              ],
+              "id": "f911adb3-fec6-4c9b-ad09-e52209f0f5f9",
+              "createdAt": "2026-07-28T01:24:48.000Z",
+              "updatedAt": "2026-07-28T01:24:48.000Z",
+              "uid": "35240-f911adb3-fec6-4c9b-ad09-e52209f0f5f9"
+            }
+          ],
+          "id": "ce6e9880-087a-46f5-a180-9a0d42e2f8fa",
+          "createdAt": "2026-07-28T01:24:48.000Z",
+          "updatedAt": "2026-07-28T01:24:48.000Z",
+          "uid": "35240-ce6e9880-087a-46f5-a180-9a0d42e2f8fa"
+        }
+      ],
+      "id": "32843a35-2b52-4cb3-8d1e-bc69a74ce782",
+      "createdAt": "2026-07-28T01:24:48.000Z",
+      "updatedAt": "2026-07-28T01:24:48.000Z",
+      "uid": "35240-32843a35-2b52-4cb3-8d1e-bc69a74ce782"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://docs.superhuman.com/apis/admin/v1"
+    }
+  ]
+}

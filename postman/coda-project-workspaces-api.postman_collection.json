@@ -1,0 +1,2021 @@
+{
+  "info": {
+    "_postman_id": "f3572e48-a9ed-4b78-a5e6-15c3cd6f1fbe",
+    "name": "Superhuman Docs Admin Account Workspaces API",
+    "description": "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n\n\nContact Support:\n Name: Developer Support\n Email: care@superhuman.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:24:50.000Z",
+    "updatedAt": "2026-07-28T01:24:50.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f3572e48-a9ed-4b78-a5e6-15c3cd6f1fbe"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organizationId}",
+          "item": [
+            {
+              "name": "workspaces",
+              "item": [
+                {
+                  "name": "{workspaceId}",
+                  "item": [
+                    {
+                      "name": "Get workspace",
+                      "id": "80f0ba28-9147-45b5-bf7c-f2126b6b1860",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces",
+                            ":workspaceId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "db2fb67b-f433-41c4-b0f6-ca4c056b1089",
+                              "key": "organizationId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the organization."
+                            },
+                            {
+                              "id": "ac43eef3-e728-4a08-a4ad-884ddff14345",
+                              "key": "workspaceId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the workspace."
+                            }
+                          ]
+                        },
+                        "description": "Returns the requested workspace.\n"
+                      },
+                      "response": [
+                        {
+                          "id": "878f8cd1-15b3-4c33-aa6c-e2e053d4df29",
+                          "name": "The requested Superhuman Docs workspace.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "workspaces",
+                                ":workspaceId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"workspace\",\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"featureSet\": \"Free\",\n  \"autoJoinDomains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"truncatedAutoJoinDomains\": \"<boolean>\",\n  \"numDocMakerAdmins\": \"<integer>\",\n  \"numDocMakers\": \"<integer>\",\n  \"numEditors\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-878f8cd1-15b3-4c33-aa6c-e2e053d4df29"
+                        },
+                        {
+                          "id": "5cd9f050-19f5-4c68-96e5-8b136e39a112",
+                          "name": "The request parameters did not conform to expectations.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "workspaces",
+                                ":workspaceId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-5cd9f050-19f5-4c68-96e5-8b136e39a112"
+                        },
+                        {
+                          "id": "3640333c-255a-4c42-a737-d8d78676846f",
+                          "name": "The API token is invalid or has expired.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "workspaces",
+                                ":workspaceId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-3640333c-255a-4c42-a737-d8d78676846f"
+                        },
+                        {
+                          "id": "7b71612b-beda-4265-9165-5e28572e0756",
+                          "name": "The API token does not grant access to this resource.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "workspaces",
+                                ":workspaceId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-7b71612b-beda-4265-9165-5e28572e0756"
+                        },
+                        {
+                          "id": "4bd32169-9838-4063-b898-1f67ea0d45b4",
+                          "name": "The resource could not be located with the current API token.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "workspaces",
+                                ":workspaceId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-4bd32169-9838-4063-b898-1f67ea0d45b4"
+                        },
+                        {
+                          "id": "5152e4d8-f853-4338-9096-2f379189a8c6",
+                          "name": "The client has sent too many requests.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organizationId/workspaces/:workspaceId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organizationId",
+                                "workspaces",
+                                ":workspaceId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organizationId"
+                                },
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-5152e4d8-f853-4338-9096-2f379189a8c6"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-80f0ba28-9147-45b5-bf7c-f2126b6b1860"
+                    }
+                  ],
+                  "id": "b6d3426e-8c04-4d79-8e65-85e6f5a67e4c",
+                  "createdAt": "2026-07-28T01:24:50.000Z",
+                  "updatedAt": "2026-07-28T01:24:50.000Z",
+                  "uid": "35240-b6d3426e-8c04-4d79-8e65-85e6f5a67e4c"
+                },
+                {
+                  "name": "List workspaces",
+                  "id": "c2ca19c4-5775-4a75-956a-b3b173583a12",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organizationId",
+                        "workspaces"
+                      ],
+                      "query": [
+                        {
+                          "description": "Comma-separated list of workspace IDs",
+                          "key": "workspaceIds",
+                          "value": "<string>,<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return in this query.",
+                          "key": "limit",
+                          "value": "100"
+                        },
+                        {
+                          "description": "An opaque token used to fetch the next page of results.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Search terms used to narrow down results.",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Include optional workspace data in the response.",
+                          "key": "includeAllWorkspaceData",
+                          "value": "<boolean>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "56a2d82e-ed81-4ac4-87dc-f420b2449c9e",
+                          "key": "organizationId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the organization."
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of workspaces in the organization\n"
+                  },
+                  "response": [
+                    {
+                      "id": "35f687df-45c5-4105-ac00-7cba9f758dc8",
+                      "name": "List of Superhuman Docs workspaces.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of workspace IDs",
+                              "key": "workspaceIds",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Include optional workspace data in the response.",
+                              "key": "includeAllWorkspaceData",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"type\": \"workspace\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"featureSet\": \"Pro\",\n      \"autoJoinDomains\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"truncatedAutoJoinDomains\": \"<boolean>\",\n      \"numDocMakerAdmins\": \"<integer>\",\n      \"numDocMakers\": \"<integer>\",\n      \"numEditors\": \"<integer>\"\n    },\n    {\n      \"type\": \"workspace\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"featureSet\": \"Team\",\n      \"autoJoinDomains\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"truncatedAutoJoinDomains\": \"<boolean>\",\n      \"numDocMakerAdmins\": \"<integer>\",\n      \"numDocMakers\": \"<integer>\",\n      \"numEditors\": \"<integer>\"\n    }\n  ],\n  \"href\": \"<string>\",\n  \"nextPageToken\": \"<string>\",\n  \"nextPageLink\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-35f687df-45c5-4105-ac00-7cba9f758dc8"
+                    },
+                    {
+                      "id": "e3043c42-f656-404e-b269-bbb75bcaab6c",
+                      "name": "The request parameters did not conform to expectations.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of workspace IDs",
+                              "key": "workspaceIds",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Include optional workspace data in the response.",
+                              "key": "includeAllWorkspaceData",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-e3043c42-f656-404e-b269-bbb75bcaab6c"
+                    },
+                    {
+                      "id": "ab197bab-ede0-4e91-94cc-f9f081f201b5",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of workspace IDs",
+                              "key": "workspaceIds",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Include optional workspace data in the response.",
+                              "key": "includeAllWorkspaceData",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-ab197bab-ede0-4e91-94cc-f9f081f201b5"
+                    },
+                    {
+                      "id": "3cf72a7a-4c48-4e0d-a022-db7fa5fe66b1",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of workspace IDs",
+                              "key": "workspaceIds",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Include optional workspace data in the response.",
+                              "key": "includeAllWorkspaceData",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-3cf72a7a-4c48-4e0d-a022-db7fa5fe66b1"
+                    },
+                    {
+                      "id": "0029353a-5a50-4555-bf9f-4ddccfc0dfae",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of workspace IDs",
+                              "key": "workspaceIds",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Include optional workspace data in the response.",
+                              "key": "includeAllWorkspaceData",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-0029353a-5a50-4555-bf9f-4ddccfc0dfae"
+                    },
+                    {
+                      "id": "d8e841ca-080f-4863-bf72-1f6c702a2061",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organizationId/workspaces?workspaceIds=<string>,<string>&limit=100&pageToken=<string>&query=<string>&includeAllWorkspaceData=<boolean>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organizationId",
+                            "workspaces"
+                          ],
+                          "query": [
+                            {
+                              "description": "Comma-separated list of workspace IDs",
+                              "key": "workspaceIds",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return in this query.",
+                              "key": "limit",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Search terms used to narrow down results.",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Include optional workspace data in the response.",
+                              "key": "includeAllWorkspaceData",
+                              "value": "<boolean>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organizationId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-d8e841ca-080f-4863-bf72-1f6c702a2061"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:50.000Z",
+                  "updatedAt": "2026-07-28T01:24:50.000Z",
+                  "uid": "35240-c2ca19c4-5775-4a75-956a-b3b173583a12"
+                }
+              ],
+              "id": "c2531636-4bad-4b29-9eb7-bb0396888bca",
+              "createdAt": "2026-07-28T01:24:50.000Z",
+              "updatedAt": "2026-07-28T01:24:50.000Z",
+              "uid": "35240-c2531636-4bad-4b29-9eb7-bb0396888bca"
+            }
+          ],
+          "id": "646c6fa6-41e8-4457-a9f2-f38274e428ba",
+          "createdAt": "2026-07-28T01:24:50.000Z",
+          "updatedAt": "2026-07-28T01:24:50.000Z",
+          "uid": "35240-646c6fa6-41e8-4457-a9f2-f38274e428ba"
+        }
+      ],
+      "id": "22f5a584-a720-44a0-a388-e51956f5ea27",
+      "createdAt": "2026-07-28T01:24:50.000Z",
+      "updatedAt": "2026-07-28T01:24:50.000Z",
+      "uid": "35240-22f5a584-a720-44a0-a388-e51956f5ea27"
+    },
+    {
+      "name": "workspaces",
+      "item": [
+        {
+          "name": "{workspaceId}",
+          "item": [
+            {
+              "name": "users",
+              "item": [
+                {
+                  "name": "role",
+                  "item": [
+                    {
+                      "name": "Updates user role",
+                      "id": "a2988d5b-8f12-40e8-b546-d7ea699c2d89",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"<string>\",\n  \"newRole\": \"DocMaker\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users/role",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users",
+                            "role"
+                          ],
+                          "variable": [
+                            {
+                              "id": "7431629c-e7b6-42df-abce-8d32cfeb2077",
+                              "key": "workspaceId",
+                              "value": "<string>",
+                              "description": "(Required) ID of the workspace."
+                            }
+                          ]
+                        },
+                        "description": "Updates the workspace user role of a user that matches the parameters. Only succeeds if the requesting user has admin permissions in the workspace.\n"
+                      },
+                      "response": [
+                        {
+                          "id": "2f344d1f-5d51-4746-9839-5a2097fa0451",
+                          "name": "User's info that was updated.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"<string>\",\n  \"newRole\": \"DocMaker\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/workspaces/:workspaceId/users/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "workspaces",
+                                ":workspaceId",
+                                "users",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"roleChangedAt\": \"<dateTime>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-2f344d1f-5d51-4746-9839-5a2097fa0451"
+                        },
+                        {
+                          "id": "76e8fe97-f222-4d11-b8af-ce4d8f9f68bc",
+                          "name": "The API token is invalid or has expired.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"<string>\",\n  \"newRole\": \"DocMaker\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/workspaces/:workspaceId/users/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "workspaces",
+                                ":workspaceId",
+                                "users",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-76e8fe97-f222-4d11-b8af-ce4d8f9f68bc"
+                        },
+                        {
+                          "id": "414dc271-0a35-40e5-9c84-b9b26c469731",
+                          "name": "The API token does not grant access to this resource.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"<string>\",\n  \"newRole\": \"DocMaker\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/workspaces/:workspaceId/users/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "workspaces",
+                                ":workspaceId",
+                                "users",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-414dc271-0a35-40e5-9c84-b9b26c469731"
+                        },
+                        {
+                          "id": "f5e5ca70-18ab-40fe-b42b-8ddb18fd0f0e",
+                          "name": "The resource could not be located with the current API token.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"<string>\",\n  \"newRole\": \"DocMaker\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/workspaces/:workspaceId/users/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "workspaces",
+                                ":workspaceId",
+                                "users",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-f5e5ca70-18ab-40fe-b42b-8ddb18fd0f0e"
+                        },
+                        {
+                          "id": "2a040087-fd6a-4352-b9be-9dc3d574cf4c",
+                          "name": "The client has sent too many requests.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"<string>\",\n  \"newRole\": \"DocMaker\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/workspaces/:workspaceId/users/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "workspaces",
+                                ":workspaceId",
+                                "users",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "workspaceId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:24:50.000Z",
+                          "updatedAt": "2026-07-28T01:24:50.000Z",
+                          "uid": "35240-2a040087-fd6a-4352-b9be-9dc3d574cf4c"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-a2988d5b-8f12-40e8-b546-d7ea699c2d89"
+                    }
+                  ],
+                  "id": "f8fb4b17-55c5-4860-8736-5bda63a8d9e3",
+                  "createdAt": "2026-07-28T01:24:50.000Z",
+                  "updatedAt": "2026-07-28T01:24:50.000Z",
+                  "uid": "35240-f8fb4b17-55c5-4860-8736-5bda63a8d9e3"
+                },
+                {
+                  "name": "List workspace users",
+                  "id": "b314629d-7fc8-484f-b9eb-18017aca95d2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId/users?includedRoles=Admin,DocMaker&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId",
+                        "users"
+                      ],
+                      "query": [
+                        {
+                          "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list.",
+                          "key": "includedRoles",
+                          "value": "Admin,DocMaker"
+                        },
+                        {
+                          "description": "An opaque token used to fetch the next page of results.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "263192ab-4aa9-48a3-a85b-40aaca85d3e1",
+                          "key": "workspaceId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the workspace."
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of members in the given workspace. This list will be ordered with the requesting user first and then ordered by role.\n"
+                  },
+                  "response": [
+                    {
+                      "id": "80deec0f-00bf-492d-9a27-f9e49ce21cd2",
+                      "name": "List of workspace members matching the query.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users?includedRoles=Admin,DocMaker&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list.",
+                              "key": "includedRoles",
+                              "value": "Admin,DocMaker"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"role\": \"Admin\",\n      \"registeredAt\": \"<dateTime>\",\n      \"pictureUrl\": \"<string>\",\n      \"roleChangedAt\": \"<dateTime>\",\n      \"lastActiveAt\": \"<date>\",\n      \"ownedDocs\": \"<number>\",\n      \"docsLastActiveAt\": \"<date>\",\n      \"docCollaboratorCount\": \"<number>\",\n      \"totalDocs\": \"<number>\",\n      \"totalDocsLastActiveAt\": \"<date>\",\n      \"totalDocCollaboratorsLast90Days\": \"<number>\"\n    },\n    {\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"role\": \"Editor\",\n      \"registeredAt\": \"<dateTime>\",\n      \"pictureUrl\": \"<string>\",\n      \"roleChangedAt\": \"<dateTime>\",\n      \"lastActiveAt\": \"<date>\",\n      \"ownedDocs\": \"<number>\",\n      \"docsLastActiveAt\": \"<date>\",\n      \"docCollaboratorCount\": \"<number>\",\n      \"totalDocs\": \"<number>\",\n      \"totalDocsLastActiveAt\": \"<date>\",\n      \"totalDocCollaboratorsLast90Days\": \"<number>\"\n    }\n  ],\n  \"nextPageToken\": \"<string>\",\n  \"nextPageLink\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-80deec0f-00bf-492d-9a27-f9e49ce21cd2"
+                    },
+                    {
+                      "id": "09733976-7724-4d3a-95da-d21980e55189",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users?includedRoles=Admin,DocMaker&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list.",
+                              "key": "includedRoles",
+                              "value": "Admin,DocMaker"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-09733976-7724-4d3a-95da-d21980e55189"
+                    },
+                    {
+                      "id": "4893b404-8d3f-4cfc-9c5b-a629ddd7b089",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users?includedRoles=Admin,DocMaker&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list.",
+                              "key": "includedRoles",
+                              "value": "Admin,DocMaker"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-4893b404-8d3f-4cfc-9c5b-a629ddd7b089"
+                    },
+                    {
+                      "id": "a05f2954-89fd-4047-b954-345525d6cd67",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users?includedRoles=Admin,DocMaker&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list.",
+                              "key": "includedRoles",
+                              "value": "Admin,DocMaker"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-a05f2954-89fd-4047-b954-345525d6cd67"
+                    },
+                    {
+                      "id": "63bd48ec-9cc5-43d9-a64b-c3b4d445c825",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users?includedRoles=Admin,DocMaker&pageToken=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list.",
+                              "key": "includedRoles",
+                              "value": "Admin,DocMaker"
+                            },
+                            {
+                              "description": "An opaque token used to fetch the next page of results.",
+                              "key": "pageToken",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-63bd48ec-9cc5-43d9-a64b-c3b4d445c825"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:50.000Z",
+                  "updatedAt": "2026-07-28T01:24:50.000Z",
+                  "uid": "35240-b314629d-7fc8-484f-b9eb-18017aca95d2"
+                }
+              ],
+              "id": "6069361d-cc05-40d7-a913-34fca07e968b",
+              "createdAt": "2026-07-28T01:24:50.000Z",
+              "updatedAt": "2026-07-28T01:24:50.000Z",
+              "uid": "35240-6069361d-cc05-40d7-a913-34fca07e968b"
+            },
+            {
+              "name": "roles",
+              "item": [
+                {
+                  "name": "List workspace roles",
+                  "id": "a114d207-99c4-42e9-afec-58d03af1ce89",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId/roles",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId",
+                        "roles"
+                      ],
+                      "variable": [
+                        {
+                          "id": "32b170f3-3a77-4b34-a41c-46a6b8f43f0f",
+                          "key": "workspaceId",
+                          "value": "<string>",
+                          "description": "(Required) ID of the workspace."
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of the counts of users over time by role for the workspace.\n"
+                  },
+                  "response": [
+                    {
+                      "id": "0e86b2c7-5f12-474a-8c2d-e83ce633606e",
+                      "name": "List of role activity over time for the workspace.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/roles",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "roles"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"month\": \"<string>\",\n      \"activeAdminCount\": \"<number>\",\n      \"activeDocMakerCount\": \"<number>\",\n      \"activeEditorCount\": \"<number>\",\n      \"inactiveAdminCount\": \"<number>\",\n      \"inactiveDocMakerCount\": \"<number>\",\n      \"inactiveEditorCount\": \"<number>\"\n    },\n    {\n      \"month\": \"<string>\",\n      \"activeAdminCount\": \"<number>\",\n      \"activeDocMakerCount\": \"<number>\",\n      \"activeEditorCount\": \"<number>\",\n      \"inactiveAdminCount\": \"<number>\",\n      \"inactiveDocMakerCount\": \"<number>\",\n      \"inactiveEditorCount\": \"<number>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-0e86b2c7-5f12-474a-8c2d-e83ce633606e"
+                    },
+                    {
+                      "id": "9ada5caa-dc26-4e8c-8d62-f5691efec0c9",
+                      "name": "The API token is invalid or has expired.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/roles",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "roles"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-9ada5caa-dc26-4e8c-8d62-f5691efec0c9"
+                    },
+                    {
+                      "id": "1f6135d7-e020-4d28-83f2-bbecd576f1db",
+                      "name": "The API token does not grant access to this resource.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/roles",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "roles"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-1f6135d7-e020-4d28-83f2-bbecd576f1db"
+                    },
+                    {
+                      "id": "6a6c1ed5-da31-426f-bab2-45265bf9e6b7",
+                      "name": "The resource could not be located with the current API token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/roles",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "roles"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-6a6c1ed5-da31-426f-bab2-45265bf9e6b7"
+                    },
+                    {
+                      "id": "2a413e11-cbe6-4c1f-9f19-2c581d47a79c",
+                      "name": "The client has sent too many requests.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/roles",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "roles"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<number>\",\n  \"statusMessage\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:24:50.000Z",
+                      "updatedAt": "2026-07-28T01:24:50.000Z",
+                      "uid": "35240-2a413e11-cbe6-4c1f-9f19-2c581d47a79c"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:24:50.000Z",
+                  "updatedAt": "2026-07-28T01:24:50.000Z",
+                  "uid": "35240-a114d207-99c4-42e9-afec-58d03af1ce89"
+                }
+              ],
+              "id": "6b6a50ec-b1ab-43ff-b3bf-2ef37108ed0a",
+              "createdAt": "2026-07-28T01:24:50.000Z",
+              "updatedAt": "2026-07-28T01:24:50.000Z",
+              "uid": "35240-6b6a50ec-b1ab-43ff-b3bf-2ef37108ed0a"
+            }
+          ],
+          "id": "5ffabced-3665-41e3-a156-55231e11336a",
+          "createdAt": "2026-07-28T01:24:50.000Z",
+          "updatedAt": "2026-07-28T01:24:50.000Z",
+          "uid": "35240-5ffabced-3665-41e3-a156-55231e11336a"
+        }
+      ],
+      "id": "757c6e35-b864-49c4-9ea7-2b7c7c0519e9",
+      "createdAt": "2026-07-28T01:24:50.000Z",
+      "updatedAt": "2026-07-28T01:24:50.000Z",
+      "uid": "35240-757c6e35-b864-49c4-9ea7-2b7c7c0519e9"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://docs.superhuman.com/apis/admin/v1"
+    }
+  ]
+}
