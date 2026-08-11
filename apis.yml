@@ -401,6 +401,8 @@ apis:
   - type: OpenAPI
     url: openapi/coda-project-workspaces-api-openapi.yml
 common:
+- type: Overlay
+  url: overlays/coda-project-admin-overlay.yaml
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/coda-project/overview
 - type: VulnerabilityDisclosure
