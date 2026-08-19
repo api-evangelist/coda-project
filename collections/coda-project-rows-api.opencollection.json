@@ -1,0 +1,313 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Rows API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List table rows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "query",
+                "value": "c-tuVwxYz:\"Apple\"",
+                "type": "query",
+                "description": "Query used to filter returned rows, specified as `<column_id_or_name>:<value>`. If you'd like to use a column name instead of an ID, you must quote it (e.g., `\"My Column\":123`). Also note that `value` is a JSON value; if you'd like to use a string, you must surround it in quotes (e.g., `\"groceries\"`).\n"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the sort order of the rows returned. If left unspecified, rows are returned by creation time ascending. \"UpdatedAt\" sort ordering is the order of rows based upon when they were last updated. This does not include updates to calculated values. \"Natural\" sort ordering is the order that the rows appear in the table view in the application. This ordering is only meaningfully defined for rows that are visible (unfiltered). Because of this, using this sort order will imply visibleOnly=true, that is, to only return visible rows. If you pass sortBy=natural and visibleOnly=false explicitly, this will result in a Bad Request error as this condition cannot be satisfied.\n"
+              },
+              {
+                "name": "useColumnNames",
+                "value": "true",
+                "type": "query",
+                "description": "Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.\n"
+              },
+              {
+                "name": "valueFormat",
+                "value": "",
+                "type": "query",
+                "description": "The format that cell values are returned as."
+              },
+              {
+                "name": "visibleOnly",
+                "value": "true",
+                "type": "query",
+                "description": "If true, returns only visible rows and columns for the table."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "syncToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token returned from a previous call that can be used to return results that are relevant to the query since the call where the syncToken was generated.\n"
+              }
+            ]
+          },
+          "docs": "Returns a list of rows in a table.\n### Value results\nThe `valueFormat` parameter dictates in what format the API should return values for individual cells.\n* `simple` (default): Returns cell values as the following JSON values: `string`, `number`, or `boolean`. Array values (like multiselects) are returned as comma-delimited strings.\n* `simpleWithArrays`: Singleton values are returned as `simple`. Array values are returned as JSON arrays and the values within are `simple` values (including neste"
+        },
+        {
+          "info": {
+            "name": "Insert/upsert rows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "disableParsing",
+                "value": "true",
+                "type": "query",
+                "description": "If true, the API will not attempt to parse the data in any way."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Inserts rows into a table, optionally updating existing rows if any upsert key columns are provided. This endpoint will always return a 202, so long as the doc and table exist and are accessible (and the update is structurally valid). Row inserts/upserts are generally processed within several seconds. Note: this endpoint only works for base tables, not views.\nWhen upserting, if multiple rows match the specified key column(s), they will all be updated with the specified value.\n"
+        },
+        {
+          "info": {
+            "name": "Delete multiple rows",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes the specified rows from the table or view. This endpoint will always return a 202. Row deletions are generally processed within several seconds.\n"
+        },
+        {
+          "info": {
+            "name": "Get a row",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "useColumnNames",
+                "value": "true",
+                "type": "query",
+                "description": "Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.\n"
+              },
+              {
+                "name": "valueFormat",
+                "value": "",
+                "type": "query",
+                "description": "The format that cell values are returned as."
+              }
+            ]
+          },
+          "docs": "Returns details about a row in a table."
+        },
+        {
+          "info": {
+            "name": "Update row",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "disableParsing",
+                "value": "true",
+                "type": "query",
+                "description": "If true, the API will not attempt to parse the data in any way."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the specified row in the table. This endpoint will always return a 202, so long as the row exists and is accessible (and the update is structurally valid). Row updates are generally processed within several seconds. When updating using a name as opposed to an ID, an arbitrary row will be affected.\n"
+        },
+        {
+          "info": {
+            "name": "Delete row",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Deletes the specified row from the table or view. This endpoint will always return a 202, so long as the row exists and is accessible (and the update is structurally valid). Row deletions are generally processed within several seconds. When deleting using a name as opposed to an ID, an arbitrary row will be removed.\n"
+        },
+        {
+          "info": {
+            "name": "Push a button",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName/buttons/:columnIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "columnIdOrName",
+                "value": "c-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ]
+          },
+          "docs": "Pushes a button on a row in a table.\nAuthorization note: This action is available to API tokens that are authorized to write to the table. However, the underlying button can perform any action on the document, including writing to other tables and performing Pack actions.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

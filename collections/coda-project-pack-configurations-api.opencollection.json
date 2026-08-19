@@ -1,0 +1,411 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Pack Configurations API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pack Configurations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Pack requests for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/requests",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packIds",
+                "value": "123,456",
+                "type": "query",
+                "description": "Comma-separated list of Pack IDs"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Pack requests for the organization\n"
+        },
+        {
+          "info": {
+            "name": "List Pack configurations for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "query",
+                "description": "ID of a Pack. Deprecated, use packIds instead."
+              },
+              {
+                "name": "packIds",
+                "value": "123,456",
+                "type": "query",
+                "description": "Comma-separated list of Pack IDs"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Pack configurations for the organization\n"
+        },
+        {
+          "info": {
+            "name": "Adds Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a Pack configuration for a Pack to an organization\n"
+        },
+        {
+          "info": {
+            "name": "Get a Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ]
+          },
+          "docs": "Returns a Pack configuration\n"
+        },
+        {
+          "info": {
+            "name": "Updates a Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a Pack configuration and asynchronously applies to the organization by updating any existing Pack installations using the now updated Pack configuration.\n"
+        },
+        {
+          "info": {
+            "name": "Delete the given Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ]
+          },
+          "docs": "Deletes the given Pack configuration and asynchronously applies to the organization by updating any existing Pack installations using the deleted Pack configuration.\n"
+        },
+        {
+          "info": {
+            "name": "List permissions assigned to a Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/permissions",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Pack configuration permissions\n"
+        },
+        {
+          "info": {
+            "name": "Adds a permission to use a Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/permissions",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a permission to use a Pack configuration\n"
+        },
+        {
+          "info": {
+            "name": "Replaces the permissions to use a Pack configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/permissions",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Replaces the permissions to use a Pack configuration\n"
+        },
+        {
+          "info": {
+            "name": "Delete the given Pack configuration permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/permissions/:packConfigurationPermissionId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              },
+              {
+                "name": "packConfigurationPermissionId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration permission."
+              }
+            ]
+          },
+          "docs": "Deletes the given Pack configuration and triggers necessarily workflows to update docs with the policy\n"
+        },
+        {
+          "info": {
+            "name": "Gets OAuth configuration metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/oauth",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ]
+          },
+          "docs": "Returns OAuth configuration metadata associated with the Pack configuration\n"
+        },
+        {
+          "info": {
+            "name": "Sets OAuth configuration metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/oauth",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets OAuth configuration metadata associated with the Pack configuration\n"
+        },
+        {
+          "info": {
+            "name": "Removes OAuth configuration metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/configurations/:packConfigurationId/oauth",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packConfigurationId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the Pack configuration."
+              }
+            ]
+          },
+          "docs": "Removes any OAuth configuration metadata associated with the Pack configuration\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

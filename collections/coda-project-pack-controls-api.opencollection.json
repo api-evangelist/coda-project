@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Pack Controls API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pack Controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Pack controls for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/controls",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packIds",
+                "value": "123,456",
+                "type": "query",
+                "description": "Comma-separated list of Pack IDs"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Pack controls for the organization\n"
+        },
+        {
+          "info": {
+            "name": "Sets Pack control for an Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/packs/controls/:packId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets Pack control for an Pack\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,562 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Admin Account Docs API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Docs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List docs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              },
+              {
+                "name": "docIds",
+                "value": "Wd6s6JvqOg,2D3VqCFAyt",
+                "type": "query",
+                "description": "List of IDs of docs to retrieve."
+              },
+              {
+                "name": "folderIds",
+                "value": "fl-AbCDeFGHIj",
+                "type": "query",
+                "description": "Comma-separated list of folder IDs"
+              },
+              {
+                "name": "workspaceIds",
+                "value": "ws-AbCDeFGHIj",
+                "type": "query",
+                "description": "Comma-separated list of workspace IDs"
+              },
+              {
+                "name": "docAvailabilityState",
+                "value": "",
+                "type": "query",
+                "description": "If specified, filter docs by availability state."
+              },
+              {
+                "name": "docTypes",
+                "value": "doc,template",
+                "type": "query",
+                "description": "Comma-separated list of doc types to include in results. If omitted, defaults to Doc."
+              },
+              {
+                "name": "dateActivity",
+                "value": "",
+                "type": "query",
+                "description": "Activity type to apply the date range filter to. Only available if a search query is provided."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Return docs with the specified date activity on or after the given date. Only available if a search query is provided."
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Return docs with the specified date activity on or before the given date. Only available if a search query is provided."
+              },
+              {
+                "name": "ownerUserEmails",
+                "value": "april@example.com,june@example.com",
+                "type": "query",
+                "description": "List of emails of doc owners whose docs to retrieve."
+              },
+              {
+                "name": "title",
+                "value": "",
+                "type": "query",
+                "description": "If specified, filter docs whose title contains this string."
+              },
+              {
+                "name": "sharedWithWorkspace",
+                "value": "",
+                "type": "query",
+                "description": "If true, filter docs shared with their workspace. All sharedWith params are ORed together."
+              },
+              {
+                "name": "sharedWithDomains",
+                "value": "example.com",
+                "type": "query",
+                "description": "Filter docs shared with the specified domains. All sharedWith params are ORed together."
+              },
+              {
+                "name": "sharedWithAnyone",
+                "value": "",
+                "type": "query",
+                "description": "Filter docs shared publicly if specified. All sharedWith params are ORed together."
+              },
+              {
+                "name": "sharedWithExternalDomain",
+                "value": "",
+                "type": "query",
+                "description": "Filter docs shared with a user external to the organization. All sharedWith params are ORed together."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort the list of docs by the specified field."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort by the specified direction."
+              },
+              {
+                "name": "includeInstalledPackCount",
+                "value": "",
+                "type": "query",
+                "description": "Include the count of installed Packs in the response."
+              },
+              {
+                "name": "fetchPermissionsMode",
+                "value": "",
+                "type": "query",
+                "description": "How to fetch permissions for a doc. Defaults to list all permissions."
+              }
+            ]
+          },
+          "docs": "Returns a list of docs in the organization\n"
+        },
+        {
+          "info": {
+            "name": "Get doc metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "fetchPermissionsMode",
+                "value": "",
+                "type": "query",
+                "description": "How to fetch permissions for a doc. Defaults to list all permissions."
+              }
+            ]
+          },
+          "docs": "Returns metadata for a specific doc\n"
+        },
+        {
+          "info": {
+            "name": "Delete doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Deletes an existing doc"
+        },
+        {
+          "info": {
+            "name": "Revive doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/revive",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Revives a deleted doc in the organization"
+        },
+        {
+          "info": {
+            "name": "Move doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/move",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Moves a doc to another folder within the organization"
+        },
+        {
+          "info": {
+            "name": "Get doc metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "fetchPermissionsMode",
+                "value": "",
+                "type": "query",
+                "description": "How to fetch permissions for a doc. Defaults to list all permissions."
+              }
+            ]
+          },
+          "docs": "Returns metadata for a specific doc\n"
+        },
+        {
+          "info": {
+            "name": "Delete doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Deletes an existing doc"
+        },
+        {
+          "info": {
+            "name": "Revive doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/revive",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Revives a deleted doc in the organization"
+        },
+        {
+          "info": {
+            "name": "Move doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/move",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Moves a doc to another folder within the organization"
+        },
+        {
+          "info": {
+            "name": "List available docs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs",
+            "params": [
+              {
+                "name": "isOwner",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs owned by the user."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Show only published docs."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              },
+              {
+                "name": "sourceDoc",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs copied from the specified doc ID."
+              },
+              {
+                "name": "isStarred",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns docs that are starred. If false, returns docs that are not starred."
+              },
+              {
+                "name": "inGallery",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs visible within the gallery."
+              },
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs belonging to the given workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs belonging to the given folder."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of documents accessible by the user, and which they have opened at least once. These are returned in the same order as on the docs page: reverse chronological by the latest event relevant to the user (last viewed, edited, or shared).\n"
+        },
+        {
+          "info": {
+            "name": "Create doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new document, optionally copying an existing document. Note that creating a document requires you to be a Doc Maker in the applicable workspace (or be auto-promoted to one).\n"
+        },
+        {
+          "info": {
+            "name": "Get info about a doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Returns metadata for the specified doc."
+        },
+        {
+          "info": {
+            "name": "Update doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates metadata for a doc. Note that updating a doc title requires you to be a Doc Maker in the applicable workspace."
+        },
+        {
+          "info": {
+            "name": "Delete doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Deletes a doc."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,2091 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Packs API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Packs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List doc Pack connections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/packConnections",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "Filter down connections to docs within this workspace."
+              },
+              {
+                "name": "readAccess",
+                "value": "Anyone",
+                "type": "query",
+                "description": "Filter down connections to those with the specified access to pull in data."
+              },
+              {
+                "name": "writeAccess",
+                "value": "Anyone",
+                "type": "query",
+                "description": "Filter down connections to those with the specified access to perform actions."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Pack connections linked to docs across the organization.\n"
+        },
+        {
+          "info": {
+            "name": "List Packs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs",
+            "params": [
+              {
+                "name": "accessType",
+                "value": "edit",
+                "type": "query",
+                "description": "Deprecated, use accessTypes instead. Filter to only return the Packs for which the current user has this access type"
+              },
+              {
+                "name": "accessTypes",
+                "value": "edit",
+                "type": "query",
+                "description": "Filter to only return the Packs for which the current user has these access types."
+              },
+              {
+                "name": "sortBy",
+                "value": "true",
+                "type": "query",
+                "description": "The sort order of the Packs returned."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "onlyWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "Use only this workspace (not all of a user's workspaces) to check for Packs shared via workspace ACL."
+              },
+              {
+                "name": "parentWorkspaceIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only Packs whose parent workspace is one of the given IDs."
+              },
+              {
+                "name": "excludePublicPacks",
+                "value": "",
+                "type": "query",
+                "description": "Only get Packs shared with users/workspaces, not publicly."
+              },
+              {
+                "name": "packEntrypoint",
+                "value": "",
+                "type": "query",
+                "description": "Entrypoint for which this Pack call is being made. Used to filter non relevant Packs"
+              }
+            ]
+          },
+          "docs": "Get the list of accessible Packs.\n"
+        },
+        {
+          "info": {
+            "name": "Create Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Pack, essentially registering a new Pack ID. The contents of the Pack will be uploaded separately.\n"
+        },
+        {
+          "info": {
+            "name": "Get a single Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Returns a single Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Update Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Pack for non-versioned fields.\n"
+        },
+        {
+          "info": {
+            "name": "Delete Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Delete a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Gets the JSON Schema for Pack configuration.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/configurations/schema",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Returns a JSON Schema applicable for customizing the Pack using Pack configurations.\n"
+        },
+        {
+          "info": {
+            "name": "List the versions for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/versions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get the list of versions of a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Get the next valid version for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/nextVersion",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get the next valid version based on the proposed metadata.\n"
+        },
+        {
+          "info": {
+            "name": "Get the difference between two Pack versions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/versions/:basePackVersion/diff/:targetPackVersion",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "basePackVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of the previous Pack version."
+              },
+              {
+                "name": "targetPackVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of the new Pack version."
+              }
+            ]
+          },
+          "docs": "Gets information about the difference between the specified previous version and next version of a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Register Pack version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/versions/:packVersion/register",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a new Pack version. This simply returns a signed URL to use for uploading the Pack version definition. Following the completion of the upload, POST to /apis/v1/packs/{packId}/versions/{packVersion} trigger the rest of the creation process.\n"
+        },
+        {
+          "info": {
+            "name": "Pack version upload complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/versions/:packVersion/uploadComplete",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Note the completion of the upload of a Pack version bundle in order to create that Pack version.\n"
+        },
+        {
+          "info": {
+            "name": "List the releases for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/releases",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get the list of releases of a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new Pack release.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/releases",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Pack release based on an existing Pack version.\n"
+        },
+        {
+          "info": {
+            "name": "Update an existing Pack release.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/releases/:packReleaseId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packReleaseId",
+                "value": "2",
+                "type": "path",
+                "description": "ID of a Pack release"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update details of a Pack release.\n"
+        },
+        {
+          "info": {
+            "name": "List Pack reviews",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/reviews",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter reviews by status."
+              }
+            ]
+          },
+          "docs": "List reviews for a specific Pack."
+        },
+        {
+          "info": {
+            "name": "Create Pack review",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/reviews",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a Pack for review in Superhuman GO."
+        },
+        {
+          "info": {
+            "name": "Cancel pending Pack review",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/reviews/pending/cancel",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Cancel the pending Pack review for this Pack. Any user with edit permission on the Pack can cancel the review."
+        },
+        {
+          "info": {
+            "name": "Get Pack listing draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/listingDraft",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Get the current listing draft for a Pack."
+        },
+        {
+          "info": {
+            "name": "Upsert Pack listing draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/listingDraft",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update the listing draft for a Pack."
+        },
+        {
+          "info": {
+            "name": "Delete Pack listing draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/listingDraft",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Delete the listing draft for a Pack, discarding any unsaved changes."
+        },
+        {
+          "info": {
+            "name": "Retrieve the OAuth configuration of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/oauthConfig",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Retrieve the OAuth configuration of the Pack for display purpose. Secrets will be returned with masks.\n"
+        },
+        {
+          "info": {
+            "name": "Set the OAuth configurations of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/oauthConfig",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the OAuth configurations of the Pack, including client id and secret.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the system connection metadata of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/systemConnection",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Retrieve the system connection metadata of the Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Set the system connection credentials of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/systemConnection",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the system connection credentials of the Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Patch the system connection credentials of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/systemConnection",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch the system connection credentials of the Pack.\n"
+        },
+        {
+          "info": {
+            "name": "List permissions for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/permissions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Get user, workspace, and/or global permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Add a permission for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/permissions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or modify user, workspace, organization, group, or global permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a user's own permissions for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/permissions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Delete a user's own permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a permission for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/permissions/:permissionId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "permissionId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of a permission on a doc."
+              }
+            ]
+          },
+          "docs": "Delete user, workspace, or global permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "List pending Pack invitations for the current user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/invitations",
+            "params": [
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get pending Pack invitations for the authenticated user.\n"
+        },
+        {
+          "info": {
+            "name": "List invitations for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/invitations",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get pending invitations for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Create an invitation for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/invitations",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an invitation for a user to access a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Update an invitation for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/invitations/:invitationId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "invitationId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of a Pack invitation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the access level of an existing Pack invitation.\n"
+        },
+        {
+          "info": {
+            "name": "Revoke an invitation for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/invitations/:invitationId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "invitationId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of a Pack invitation"
+              }
+            ]
+          },
+          "docs": "Revoke a pending Pack invitation.\n"
+        },
+        {
+          "info": {
+            "name": "Reply to a Pack invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/invitations/:invitationId/reply",
+            "params": [
+              {
+                "name": "invitationId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of a Pack invitation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reply to a Pack invitation (accept or reject). Requires authentication as the invited user.\n"
+        },
+        {
+          "info": {
+            "name": "List makers for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/makers",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "List makers for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Add a maker for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/maker",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set a maker for a given Pack. Used to display makers for a Pack in the corresponding Packs page.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a maker for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/maker/:loginId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "loginId",
+                "value": "api@example.com",
+                "type": "path",
+                "description": "Email of a Superhuman Docs user."
+              }
+            ]
+          },
+          "docs": "Delete a maker for a given Pack, who will not be displayed in the corresponding Packs page.\n"
+        },
+        {
+          "info": {
+            "name": "List categories for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/categories",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "List publishing categories for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Add a category for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/category",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a publishing category for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a category for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/category/:categoryName",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "categoryName",
+                "value": "Project management",
+                "type": "path",
+                "description": "Name of a publishing category"
+              }
+            ]
+          },
+          "docs": "Delete a publishing category for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Upload a Pack asset.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/uploadAsset",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a signed s3 URL to upload your Pack asset.\n"
+        },
+        {
+          "info": {
+            "name": "Upload Pack source code.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/uploadSourceCode",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a signed s3 URL to upload your Pack source code.\n"
+        },
+        {
+          "info": {
+            "name": "Pack asset upload complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/assets/:packAssetId/assetType/:packAssetType/uploadComplete",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packAssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a Pack asset."
+              },
+              {
+                "name": "packAssetType",
+                "value": "",
+                "type": "path",
+                "description": "Pack asset type."
+              }
+            ]
+          },
+          "docs": "Note the completion of the upload of a Pack asset.\n"
+        },
+        {
+          "info": {
+            "name": "Pack source code upload complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/versions/:packVersion/sourceCode/uploadComplete",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Note the completion of the upload of a Pack source code.\n"
+        },
+        {
+          "info": {
+            "name": "get the source code for a Pack version.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/versions/:packVersion/sourceCode",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ]
+          },
+          "docs": "Get temporary links used to download the source code for the given packId and version\n"
+        },
+        {
+          "info": {
+            "name": "List the Pack listings accessible to a user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/listings",
+            "params": [
+              {
+                "name": "packAccessTypes",
+                "value": "",
+                "type": "query",
+                "description": "Pack access types."
+              },
+              {
+                "name": "packIds",
+                "value": "",
+                "type": "query",
+                "description": "Which Pack IDs to fetch."
+              },
+              {
+                "name": "onlyWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "Use only this workspace (not all of a user's workspaces) to check for Packs shared via workspace ACL."
+              },
+              {
+                "name": "parentWorkspaceIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only Packs whose parent workspace is one of the given IDs."
+              },
+              {
+                "name": "excludePublicPacks",
+                "value": "",
+                "type": "query",
+                "description": "Only get Packs shared with users/workspaces, not publicly."
+              },
+              {
+                "name": "packEntrypoint",
+                "value": "",
+                "type": "query",
+                "description": "Entrypoint for which this Pack call is being made. Used to filter non relevant Packs"
+              },
+              {
+                "name": "certifiedAgentsOnly",
+                "value": "",
+                "type": "query",
+                "description": "Only include Packs that are certified for agent use. Depending on server configuration, may also include Packs that the user is an admin of.\n"
+              },
+              {
+                "name": "packCategories",
+                "value": "",
+                "type": "query",
+                "description": "Filter Packs by one or more category types."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Specify a sort order for the returned Pack listings returned."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated: use sortBy instead."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "installContext",
+                "value": "workspace",
+                "type": "query",
+                "description": "Type of installation context for which Pack information is being requested."
+              }
+            ]
+          },
+          "docs": "Get listings of public Packs and Packs created by you.\n"
+        },
+        {
+          "info": {
+            "name": "Get detailed listing information for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/listing",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the target workspace (if applicable) for checking installation privileges."
+              },
+              {
+                "name": "docId",
+                "value": "fleHfrkw3L",
+                "type": "query",
+                "description": "ID of the target document for checking installation privileges"
+              },
+              {
+                "name": "ingestionId",
+                "value": "uuid-uuid-uuid-uuid",
+                "type": "query",
+                "description": "ID of the target ingestion for checking limit settings"
+              },
+              {
+                "name": "installContext",
+                "value": "workspace",
+                "type": "query",
+                "description": "Type of installation context for which Pack information is being requested."
+              },
+              {
+                "name": "releaseChannel",
+                "value": "LIVE",
+                "type": "query",
+                "description": "Release channel for which Pack information is being requested."
+              }
+            ]
+          },
+          "docs": "Get detailed listing information for a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the logs of a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/docs/:docId/logs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the logs of a Pack for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the logs of a Ingestion.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/logs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the ingestion execution."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "ingestionStatus",
+                "value": "",
+                "type": "query",
+                "description": "Only fetch logs with the given ingestion status. This only works in combination with the onlyExecutionCompletions parameter.\n"
+              },
+              {
+                "name": "onlyExecutionCompletions",
+                "value": "",
+                "type": "query",
+                "description": "Only fetch logs that represent the completion of a child execution."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the logs of a Ingestion for debugging purpose."
+        },
+        {
+          "info": {
+            "name": "Retrieve the grouped logs of a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/docs/:docId/groupedLogs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the grouped logs of a Pack for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the grouped logs of a Pack for a specific ingestionExecutionId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/groupedLogs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the ingestion execution."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the grouped logs of a Pack for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of ingestion batch executions for the given root ingestion id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/ingestionBatchExecutions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "datasource",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions for this datasource (sync table)."
+              },
+              {
+                "name": "executionType",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions with this execution type."
+              },
+              {
+                "name": "includeDeletedIngestions",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted ingestion executions in the response"
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "",
+                "type": "query",
+                "description": "Only retrieve this single batch execution."
+              },
+              {
+                "name": "ingestionId",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions for this sync table ingestion."
+              },
+              {
+                "name": "ingestionStatus",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions with this status."
+              }
+            ]
+          },
+          "docs": "Retrieve the ingestion batch executions of a root ingestion for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of parent items for the given ingestion batch execution id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/ingestionBatchExecutions/:ingestionExecutionId/parentItems",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "",
+                "type": "path",
+                "description": "Only show parent items for this ingestion batch execution."
+              },
+              {
+                "name": "ingestionId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the sync table ingestion. Enables faster lookup."
+              },
+              {
+                "name": "ingestionStatus",
+                "value": "",
+                "type": "query",
+                "description": "Only show parent items with this status."
+              }
+            ]
+          },
+          "docs": "Retrieve the parent items of a ingestion batch execution for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the information for a specific log.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/logs/:logId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "logId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the log to retrieve.\n"
+              },
+              {
+                "name": "detailsKey",
+                "value": "",
+                "type": "query",
+                "description": "The key of the details to retrieve.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the ingestion execution ids of a root ingestion for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "List featured docs for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/featuredDocs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Returns a list of featured doc ids for a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Update featured docs for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/packs/:packId/featuredDocs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or replace the featured docs for a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the chat sessions of an agent instance.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/go/tenants/:tenantId/agentInstances/:agentInstanceId/agentSessionIds",
+            "params": [
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "agentInstanceId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the agent instance."
+              },
+              {
+                "name": "agentSessionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the agent chat session."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "trace.id:\"a4e293c4-4a85-45a4-b2ba-7f305cba2703\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the chat sessions of an agent instance for debugging purpose."
+        },
+        {
+          "info": {
+            "name": "Retrieve the logs of an agent instance.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/go/tenants/:tenantId/agentInstances/:agentInstanceId/logs",
+            "params": [
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "agentInstanceId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the agent instance."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "agentSessionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the agent chat session."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "trace.id:\"a4e293c4-4a85-45a4-b2ba-7f305cba2703\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the logs of an agent instance for debugging purpose."
+        },
+        {
+          "info": {
+            "name": "Retrieve the information for a specific log.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/go/tenants/:tenantId/agentInstances/:agentInstanceId/logs/:logId",
+            "params": [
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "agentInstanceId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the agent instance."
+              },
+              {
+                "name": "logId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the log to retrieve.\n"
+              },
+              {
+                "name": "detailsKey",
+                "value": "",
+                "type": "query",
+                "description": "The key of the details to retrieve.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the log details of given logId.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Folder Permissions API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Folder Permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List folder permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/folders/:folderId/acl/permissions",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "fl-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the folder."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of permissions for this folder"
+        },
+        {
+          "info": {
+            "name": "Add permission to a folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/folders/:folderId/acl/permissions",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "fl-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a new permission to the folder."
+        },
+        {
+          "info": {
+            "name": "Delete folder permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/folders/:folderId/acl/permissions/:permissionId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "fl-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the folder."
+              },
+              {
+                "name": "permissionId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of a permission on an object."
+              }
+            ]
+          },
+          "docs": "Deletes an existing permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

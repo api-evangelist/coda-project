@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Columns API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Columns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List columns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/columns",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "visibleOnly",
+                "value": "true",
+                "type": "query",
+                "description": "If true, returns only visible columns for the table. This parameter only applies to base tables, and not views."
+              }
+            ]
+          },
+          "docs": "Returns a list of columns in a table."
+        },
+        {
+          "info": {
+            "name": "Get a column",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName/columns/:columnIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "columnIdOrName",
+                "value": "c-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ]
+          },
+          "docs": "Returns details about a column in a table."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Publishing API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Publishing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get doc categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/categories"
+          },
+          "docs": "Gets all available doc categories."
+        },
+        {
+          "info": {
+            "name": "Publish doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/publish",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update publish settings for a doc."
+        },
+        {
+          "info": {
+            "name": "Unpublish doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/publish",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Unpublishes a doc."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

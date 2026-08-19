@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Workspaces API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceIds",
+                "value": "ws-AbCDeFGHIj",
+                "type": "query",
+                "description": "Comma-separated list of workspace IDs"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              },
+              {
+                "name": "includeAllWorkspaceData",
+                "value": "",
+                "type": "query",
+                "description": "Include optional workspace data in the response."
+              }
+            ]
+          },
+          "docs": "Returns a list of workspaces in the organization\n"
+        },
+        {
+          "info": {
+            "name": "Get workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              }
+            ]
+          },
+          "docs": "Returns the requested workspace.\n"
+        },
+        {
+          "info": {
+            "name": "List workspace users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/workspaces/:workspaceId/users",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "includedRoles",
+                "value": "Editor,DocMaker",
+                "type": "query",
+                "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of members in the given workspace. This list will be ordered with the requesting user first and then ordered by role.\n"
+        },
+        {
+          "info": {
+            "name": "Updates user role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/workspaces/:workspaceId/users/role",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "path",
+                "description": "ID of the workspace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the workspace user role of a user that matches the parameters. Only succeeds if the requesting user has admin permissions in the workspace.\n"
+        },
+        {
+          "info": {
+            "name": "List workspace roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/workspaces/:workspaceId/roles",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "path",
+                "description": "ID of the workspace."
+              }
+            ]
+          },
+          "docs": "Returns a list of the counts of users over time by role for the workspace.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

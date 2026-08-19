@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Preferences API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Preferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List import preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/importers/:importerId/preferences",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "importerId",
+                "value": "quip",
+                "type": "path",
+                "description": "Importer id for the source system.\n"
+              },
+              {
+                "name": "importEntityIds",
+                "value": "folder-abc123,thread-def456",
+                "type": "query",
+                "description": "Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.\n"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns import preferences for the importer."
+        },
+        {
+          "info": {
+            "name": "Create an import preference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/importers/:importerId/preferences",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "importerId",
+                "value": "quip",
+                "type": "path",
+                "description": "Importer id for the source system.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an import preference for the importer."
+        },
+        {
+          "info": {
+            "name": "Get an import preference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "importerId",
+                "value": "quip",
+                "type": "path",
+                "description": "Importer id for the source system.\n"
+              },
+              {
+                "name": "importPreferenceId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the import preference."
+              }
+            ]
+          },
+          "docs": "Returns the requested import preference."
+        },
+        {
+          "info": {
+            "name": "Update an import preference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "importerId",
+                "value": "quip",
+                "type": "path",
+                "description": "Importer id for the source system.\n"
+              },
+              {
+                "name": "importPreferenceId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the import preference."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Replaces the preference type and settings for the existing import preference. The request body must match the target `preferenceType` variant; omitted fields are not preserved across types.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an import preference",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/importers/:importerId/preferences/:importPreferenceId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "importerId",
+                "value": "quip",
+                "type": "path",
+                "description": "Importer id for the source system.\n"
+              },
+              {
+                "name": "importPreferenceId",
+                "value": "afe84ebf-4d06-44c5-b545-a8af5036bebf",
+                "type": "path",
+                "description": "ID of the import preference."
+              }
+            ]
+          },
+          "docs": "Deletes the import preference."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

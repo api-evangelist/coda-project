@@ -1,0 +1,266 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Folders API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Folders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List folders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/folders",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "folderIds",
+                "value": "fl-AbCDeFGHIj",
+                "type": "query",
+                "description": "Comma-separated list of folder IDs"
+              },
+              {
+                "name": "folderType",
+                "value": "Standard",
+                "type": "query",
+                "description": "Type of the folder"
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              },
+              {
+                "name": "includeAcl",
+                "value": "",
+                "type": "query",
+                "description": "Include permissions metadata on each folder."
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted folders"
+              }
+            ]
+          },
+          "docs": "Returns a list of folders in the workspace\n"
+        },
+        {
+          "info": {
+            "name": "Get folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/folders/:folderId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "fl-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ]
+          },
+          "docs": "Returns the requested folder.\n"
+        },
+        {
+          "info": {
+            "name": "Delete folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/folders/:folderId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "fl-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ]
+          },
+          "docs": "Deletes the specified folder. The folder must be empty (contain no documents). Personal folders cannot be deleted.\n"
+        },
+        {
+          "info": {
+            "name": "List folders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/folders",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "Show only folders belonging to the given workspace."
+              },
+              {
+                "name": "isStarred",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns folders that are starred. If false, returns folders that are not starred. If not specified, returns all folders."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of folders the user has access to.\n"
+        },
+        {
+          "info": {
+            "name": "Create folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/folders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new folder.\n"
+        },
+        {
+          "info": {
+            "name": "Get folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "fl-1Ab234",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ]
+          },
+          "docs": "Returns the requested folder.\n"
+        },
+        {
+          "info": {
+            "name": "Update folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://docs.superhuman.com/apis/admin/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "fl-1Ab234",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates metadata for a folder.\n"
+        },
+        {
+          "info": {
+            "name": "Delete folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "fl-1Ab234",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ]
+          },
+          "docs": "Deletes a folder. The folder must be empty (contain no docs).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

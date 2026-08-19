@@ -1,0 +1,2077 @@
+{
+  "item": [
+    {
+      "id": "c78a2699-9bdb-4fe1-b295-3c75f2890b04",
+      "name": "Analytics",
+      "description": {
+        "content": "This API offers analytics data for your docs and Packs over time.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ae3f7752-ca03-4283-a461-8259f885daf4",
+          "name": "List doc analytics",
+          "request": {
+            "name": "List doc analytics",
+            "description": {
+              "content": "Returns analytics data for available docs per day.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "docs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "docIds",
+                  "value": "<string>,<string>",
+                  "description": "List of docIds to fetch."
+                },
+                {
+                  "disabled": false,
+                  "key": "workspaceId",
+                  "value": "<string>",
+                  "description": "ID of the workspace."
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Search term used to filter down results."
+                },
+                {
+                  "disabled": false,
+                  "key": "isPublished",
+                  "value": "<boolean>",
+                  "description": "Limit results to only published items."
+                },
+                {
+                  "disabled": false,
+                  "key": "sinceDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or before this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "scale",
+                  "value": "<string>",
+                  "description": "Quantization period over which to view analytics. Defaults to daily."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "orderBy",
+                  "value": "<string>",
+                  "description": "Use this parameter to order the doc analytics returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Direction to sort results in."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "1000",
+                  "description": "Maximum number of results to return in this query."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d0698e6b-d4a0-440a-8adb-f4d6c8af6eed",
+              "name": "List of document analytics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "docIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"doc\": {\n        \"browserLink\": \"https://docs.superhuman.com/d/_dAbCDeFGH\",\n        \"createdAt\": \"2022-04-11T00:18:57.946Z\",\n        \"href\": \"https://docs.superhuman.com/apis/v1/docs/AbCDeFGH\",\n        \"id\": \"AbCDeFGH\",\n        \"title\": \"Cool Geometry Formulas\",\n        \"type\": \"doc\",\n        \"icon\": {\n          \"name\": \"string\",\n          \"type\": \"string\",\n          \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n        },\n        \"publishedAt\": \"2022-04-12T00:18:57.946Z\"\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2020-09-02\",\n          \"views\": 980,\n          \"copies\": 24,\n          \"likes\": 342,\n          \"sessionsMobile\": 530,\n          \"sessionsDesktop\": 212,\n          \"sessionsOther\": 10,\n          \"totalSessions\": 1000,\n          \"aiCreditsChat\": 10,\n          \"aiCreditsBlock\": 10,\n          \"aiCreditsColumn\": 10,\n          \"aiCreditsAssistant\": 10,\n          \"aiCreditsReviewer\": 10,\n          \"aiCredits\": 50\n        },\n        {\n          \"date\": \"2020-09-02\",\n          \"views\": 980,\n          \"copies\": 24,\n          \"likes\": 342,\n          \"sessionsMobile\": 530,\n          \"sessionsDesktop\": 212,\n          \"sessionsOther\": 10,\n          \"totalSessions\": 1000,\n          \"aiCreditsChat\": 10,\n          \"aiCreditsBlock\": 10,\n          \"aiCreditsColumn\": 10,\n          \"aiCreditsAssistant\": 10,\n          \"aiCreditsReviewer\": 10,\n          \"aiCredits\": 50\n        }\n      ]\n    },\n    {\n      \"doc\": {\n        \"browserLink\": \"https://docs.superhuman.com/d/_dAbCDeFGH\",\n        \"createdAt\": \"2022-04-11T00:18:57.946Z\",\n        \"href\": \"https://docs.superhuman.com/apis/v1/docs/AbCDeFGH\",\n        \"id\": \"AbCDeFGH\",\n        \"title\": \"Cool Geometry Formulas\",\n        \"type\": \"doc\",\n        \"icon\": {\n          \"name\": \"string\",\n          \"type\": \"string\",\n          \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n        },\n        \"publishedAt\": \"2022-04-12T00:18:57.946Z\"\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2020-09-02\",\n          \"views\": 980,\n          \"copies\": 24,\n          \"likes\": 342,\n          \"sessionsMobile\": 530,\n          \"sessionsDesktop\": 212,\n          \"sessionsOther\": 10,\n          \"totalSessions\": 1000,\n          \"aiCreditsChat\": 10,\n          \"aiCreditsBlock\": 10,\n          \"aiCreditsColumn\": 10,\n          \"aiCreditsAssistant\": 10,\n          \"aiCreditsReviewer\": 10,\n          \"aiCredits\": 50\n        },\n        {\n          \"date\": \"2020-09-02\",\n          \"views\": 980,\n          \"copies\": 24,\n          \"likes\": 342,\n          \"sessionsMobile\": 530,\n          \"sessionsDesktop\": 212,\n          \"sessionsOther\": 10,\n          \"totalSessions\": 1000,\n          \"aiCreditsChat\": 10,\n          \"aiCreditsBlock\": 10,\n          \"aiCreditsColumn\": 10,\n          \"aiCreditsAssistant\": 10,\n          \"aiCreditsReviewer\": 10,\n          \"aiCredits\": 50\n        }\n      ]\n    }\n  ],\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://docs.superhuman.com/apis/v1/analytics/docs?pageToken=xyz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf0d8454-43e9-4669-ab55-529300857b1a",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "docIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e5d2333-78c3-4f3a-94c3-3b6f25d4afb6",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "docIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d6006a5-b85b-479a-aa67-d72cfa22afe7",
+          "name": "List page analytics",
+          "request": {
+            "name": "List page analytics",
+            "description": {
+              "content": "Returns analytics data for a given doc within the day.\nThis method will return a 401 if the given doc is not in an Enterprise workspace.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "docs",
+                ":docId",
+                "pages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sinceDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or before this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "1000",
+                  "description": "Maximum number of results to return in this query."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0e0166bf-be9b-439f-b928-ca2d675dcf5c",
+              "name": "List of page analytics for the given document.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs",
+                    ":docId",
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"page\": {\n        \"id\": \"section-IjkLmnO\",\n        \"name\": \"Launch Status\",\n        \"icon\": {\n          \"name\": \"string\",\n          \"type\": \"string\",\n          \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n        }\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2022-06-03\",\n          \"views\": 980,\n          \"sessions\": 24,\n          \"users\": 42,\n          \"averageSecondsViewed\": 42,\n          \"medianSecondsViewed\": 42,\n          \"tabs\": 10\n        },\n        {\n          \"date\": \"2022-06-03\",\n          \"views\": 980,\n          \"sessions\": 24,\n          \"users\": 42,\n          \"averageSecondsViewed\": 42,\n          \"medianSecondsViewed\": 42,\n          \"tabs\": 10\n        }\n      ]\n    },\n    {\n      \"page\": {\n        \"id\": \"section-IjkLmnO\",\n        \"name\": \"Launch Status\",\n        \"icon\": {\n          \"name\": \"string\",\n          \"type\": \"string\",\n          \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n        }\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2022-06-03\",\n          \"views\": 980,\n          \"sessions\": 24,\n          \"users\": 42,\n          \"averageSecondsViewed\": 42,\n          \"medianSecondsViewed\": 42,\n          \"tabs\": 10\n        },\n        {\n          \"date\": \"2022-06-03\",\n          \"views\": 980,\n          \"sessions\": 24,\n          \"users\": 42,\n          \"averageSecondsViewed\": 42,\n          \"medianSecondsViewed\": 42,\n          \"tabs\": 10\n        }\n      ]\n    }\n  ],\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://docs.superhuman.com/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb3c4d7b-52e5-4c2f-be16-694cbfbe462a",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs",
+                    ":docId",
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3839dc8a-b778-4782-990c-5a123e65d182",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs",
+                    ":docId",
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5709bfb2-8235-4937-a793-8d7af0179c21",
+          "name": "Get doc analytics summary",
+          "request": {
+            "name": "Get doc analytics summary",
+            "description": {
+              "content": "Returns summarized analytics data for available docs.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "docs",
+                "summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "isPublished",
+                  "value": "<boolean>",
+                  "description": "Limit results to only published items."
+                },
+                {
+                  "disabled": false,
+                  "key": "sinceDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or before this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "workspaceId",
+                  "value": "<string>",
+                  "description": "ID of the workspace."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a0d5cd8c-b69f-454e-b916-1078b9ff1654",
+              "name": "Response of document summary analytics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalSessions\": 1337\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a32143fd-e158-4cc4-b87f-39872052a105",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46704a49-1627-439a-840f-86653bb445b8",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "docs",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d42fe2ef-f2b4-4e35-9a80-24cba84e14a4",
+          "name": "List Pack analytics",
+          "request": {
+            "name": "List Pack analytics",
+            "description": {
+              "content": "Returns analytics data for Packs the user can edit.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "packs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "packIds",
+                  "value": "<integer>,<integer>",
+                  "description": "Which Pack IDs to fetch."
+                },
+                {
+                  "disabled": false,
+                  "key": "workspaceId",
+                  "value": "<string>",
+                  "description": "ID of the workspace."
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Search term used to filter down results."
+                },
+                {
+                  "disabled": false,
+                  "key": "sinceDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or before this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "scale",
+                  "value": "<string>",
+                  "description": "Quantization period over which to view analytics. Defaults to daily."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "orderBy",
+                  "value": "<string>",
+                  "description": "Use this parameter to order the Pack analytics returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Direction to sort results in."
+                },
+                {
+                  "disabled": false,
+                  "key": "isPublished",
+                  "value": "<boolean>",
+                  "description": "Limit results to only published items. If false or unspecified, returns all items including published ones.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "1000",
+                  "description": "Maximum number of results to return in this query."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "37369dda-1e85-4303-b10b-dd57971a6972",
+              "name": "Response of Superhuman Pack analytics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"pack\": {\n        \"id\": 1003,\n        \"name\": \"Cool Geometry Formulas\",\n        \"createdAt\": \"2022-04-11T00:18:57.946Z\",\n        \"logoUrl\": \"string\"\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2020-09-02\",\n          \"docInstalls\": 100,\n          \"workspaceInstalls\": 10,\n          \"numFormulaInvocations\": 100,\n          \"numActionInvocations\": 100,\n          \"numSyncInvocations\": 100,\n          \"numMetadataInvocations\": 100,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"workspacesActivelyTrialing\": 641,\n          \"workspacesActivelyTrialing7Day\": 7441,\n          \"workspacesActivelyTrialing30Day\": 9861,\n          \"workspacesActivelyTrialing90Day\": 762,\n          \"workspacesActivelyTrialingAllTime\": 1868,\n          \"workspacesNewlySubscribed\": 1915,\n          \"workspacesWithActiveSubscriptions\": 9923,\n          \"workspacesWithSuccessfulTrials\": 5797,\n          \"revenueUsd\": \"string\"\n        },\n        {\n          \"date\": \"2020-09-02\",\n          \"docInstalls\": 100,\n          \"workspaceInstalls\": 10,\n          \"numFormulaInvocations\": 100,\n          \"numActionInvocations\": 100,\n          \"numSyncInvocations\": 100,\n          \"numMetadataInvocations\": 100,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"workspacesActivelyTrialing\": 1649,\n          \"workspacesActivelyTrialing7Day\": 140,\n          \"workspacesActivelyTrialing30Day\": 2814,\n          \"workspacesActivelyTrialing90Day\": 9084,\n          \"workspacesActivelyTrialingAllTime\": 4665,\n          \"workspacesNewlySubscribed\": 9121,\n          \"workspacesWithActiveSubscriptions\": 2171,\n          \"workspacesWithSuccessfulTrials\": 8454,\n          \"revenueUsd\": \"string\"\n        }\n      ]\n    },\n    {\n      \"pack\": {\n        \"id\": 1003,\n        \"name\": \"Cool Geometry Formulas\",\n        \"createdAt\": \"2022-04-11T00:18:57.946Z\",\n        \"logoUrl\": \"string\"\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2020-09-02\",\n          \"docInstalls\": 100,\n          \"workspaceInstalls\": 10,\n          \"numFormulaInvocations\": 100,\n          \"numActionInvocations\": 100,\n          \"numSyncInvocations\": 100,\n          \"numMetadataInvocations\": 100,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"workspacesActivelyTrialing\": 3257,\n          \"workspacesActivelyTrialing7Day\": 272,\n          \"workspacesActivelyTrialing30Day\": 1480,\n          \"workspacesActivelyTrialing90Day\": 5651,\n          \"workspacesActivelyTrialingAllTime\": 3210,\n          \"workspacesNewlySubscribed\": 349,\n          \"workspacesWithActiveSubscriptions\": 5406,\n          \"workspacesWithSuccessfulTrials\": 6239,\n          \"revenueUsd\": \"string\"\n        },\n        {\n          \"date\": \"2020-09-02\",\n          \"docInstalls\": 100,\n          \"workspaceInstalls\": 10,\n          \"numFormulaInvocations\": 100,\n          \"numActionInvocations\": 100,\n          \"numSyncInvocations\": 100,\n          \"numMetadataInvocations\": 100,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"workspacesActivelyTrialing\": 7939,\n          \"workspacesActivelyTrialing7Day\": 9586,\n          \"workspacesActivelyTrialing30Day\": 3688,\n          \"workspacesActivelyTrialing90Day\": 7041,\n          \"workspacesActivelyTrialingAllTime\": 6195,\n          \"workspacesNewlySubscribed\": 6166,\n          \"workspacesWithActiveSubscriptions\": 9373,\n          \"workspacesWithSuccessfulTrials\": 2423,\n          \"revenueUsd\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://docs.superhuman.com/apis/v1/analytics/packs?pageToken=xyz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4baded7-b054-4cf7-b5db-a0f376eb2dad",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b065aeda-f4a3-489b-bed4-ba43601aba47",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "acd1cf98-9c9a-48ac-9874-c1efbfea9bc6",
+          "name": "Get Pack analytics summary",
+          "request": {
+            "name": "Get Pack analytics summary",
+            "description": {
+              "content": "Returns summarized analytics data for Packs the user can edit.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "packs",
+                "summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "packIds",
+                  "value": "<integer>,<integer>",
+                  "description": "Which Pack IDs to fetch."
+                },
+                {
+                  "disabled": false,
+                  "key": "workspaceId",
+                  "value": "<string>",
+                  "description": "ID of the workspace."
+                },
+                {
+                  "disabled": false,
+                  "key": "isPublished",
+                  "value": "<boolean>",
+                  "description": "Limit results to only published items. If false or unspecified, returns all items including published ones.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sinceDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or before this date."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4ce43ce8-f0bb-462d-90ac-2dffeecabb45",
+              "name": "Response of Superhuman Pack summary analytics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalDocInstalls\": 1865,\n  \"totalWorkspaceInstalls\": 9601,\n  \"totalInvocations\": 617\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48fe0e2b-9064-48e2-851d-c85fda3555c0",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25613a9b-dda1-48a8-97ce-2bdedf52a9ca",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isPublished",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c2ad025-f615-489e-b507-cc5788ab0809",
+          "name": "List Pack formula analytics",
+          "request": {
+            "name": "List Pack formula analytics",
+            "description": {
+              "content": "Returns analytics data for Pack formulas.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "packs",
+                ":packId",
+                "formulas"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "packFormulaNames",
+                  "value": "<string>,<string>",
+                  "description": "A list of Pack formula names (case-sensitive) for which to retrieve analytics."
+                },
+                {
+                  "disabled": false,
+                  "key": "packFormulaTypes",
+                  "value": "<string>,<string>",
+                  "description": "A list of Pack formula types corresponding to the `packFormulaNames`. If specified, this must have the same length as `packFormulaNames`."
+                },
+                {
+                  "disabled": false,
+                  "key": "sinceDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or after this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Limit results to activity on or before this date."
+                },
+                {
+                  "disabled": false,
+                  "key": "scale",
+                  "value": "<string>",
+                  "description": "Quantization period over which to view analytics. Defaults to daily."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "orderBy",
+                  "value": "<string>",
+                  "description": "Use this parameter to order the Pack formula analytics returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Direction to sort results in."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "1000",
+                  "description": "Maximum number of results to return in this query."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "packId",
+                  "description": "(Required) ID of a Pack"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8c31dfb8-3515-4be8-9b78-c4db5484a8bd",
+              "name": "Response of Superhuman Pack formula analytics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs",
+                    ":packId",
+                    "formulas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packFormulaNames",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "packFormulaTypes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "packId",
+                      "description": "(Required) ID of a Pack"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"formula\": {\n        \"name\": \"SquareRoot\",\n        \"type\": \"<string>\"\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2020-09-02\",\n          \"formulaInvocations\": 123,\n          \"errors\": 5,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"medianLatencyMs\": 500,\n          \"medianResponseSizeBytes\": 300,\n          \"workspacesActivelyTrialing\": 6400,\n          \"workspacesActivelyTrialing7Day\": 5239,\n          \"workspacesActivelyTrialing30Day\": 331,\n          \"workspacesActivelyTrialing90Day\": 9588,\n          \"workspacesActivelyTrialingAllTime\": 6372,\n          \"workspacesNewlySubscribed\": 7224,\n          \"workspacesWithActiveSubscriptions\": 5464,\n          \"workspacesWithSuccessfulTrials\": 6159,\n          \"revenueUsd\": \"string\"\n        },\n        {\n          \"date\": \"2020-09-02\",\n          \"formulaInvocations\": 123,\n          \"errors\": 5,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"medianLatencyMs\": 500,\n          \"medianResponseSizeBytes\": 300,\n          \"workspacesActivelyTrialing\": 2473,\n          \"workspacesActivelyTrialing7Day\": 785,\n          \"workspacesActivelyTrialing30Day\": 2966,\n          \"workspacesActivelyTrialing90Day\": 8102,\n          \"workspacesActivelyTrialingAllTime\": 2794,\n          \"workspacesNewlySubscribed\": 1612,\n          \"workspacesWithActiveSubscriptions\": 4574,\n          \"workspacesWithSuccessfulTrials\": 7006,\n          \"revenueUsd\": \"string\"\n        }\n      ]\n    },\n    {\n      \"formula\": {\n        \"name\": \"SquareRoot\",\n        \"type\": \"<string>\"\n      },\n      \"metrics\": [\n        {\n          \"date\": \"2020-09-02\",\n          \"formulaInvocations\": 123,\n          \"errors\": 5,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"medianLatencyMs\": 500,\n          \"medianResponseSizeBytes\": 300,\n          \"workspacesActivelyTrialing\": 2952,\n          \"workspacesActivelyTrialing7Day\": 8894,\n          \"workspacesActivelyTrialing30Day\": 5206,\n          \"workspacesActivelyTrialing90Day\": 5220,\n          \"workspacesActivelyTrialingAllTime\": 9646,\n          \"workspacesNewlySubscribed\": 702,\n          \"workspacesWithActiveSubscriptions\": 3527,\n          \"workspacesWithSuccessfulTrials\": 9448,\n          \"revenueUsd\": \"string\"\n        },\n        {\n          \"date\": \"2020-09-02\",\n          \"formulaInvocations\": 123,\n          \"errors\": 5,\n          \"docsActivelyUsing\": 50,\n          \"docsActivelyUsing7Day\": 100,\n          \"docsActivelyUsing30Day\": 200,\n          \"docsActivelyUsing90Day\": 300,\n          \"docsActivelyUsingAllTime\": 500,\n          \"workspacesActivelyUsing\": 10,\n          \"workspacesActivelyUsing7Day\": 15,\n          \"workspacesActivelyUsing30Day\": 20,\n          \"workspacesActivelyUsing90Day\": 30,\n          \"workspacesActivelyUsingAllTime\": 50,\n          \"medianLatencyMs\": 500,\n          \"medianResponseSizeBytes\": 300,\n          \"workspacesActivelyTrialing\": 6112,\n          \"workspacesActivelyTrialing7Day\": 2189,\n          \"workspacesActivelyTrialing30Day\": 1674,\n          \"workspacesActivelyTrialing90Day\": 151,\n          \"workspacesActivelyTrialingAllTime\": 966,\n          \"workspacesNewlySubscribed\": 814,\n          \"workspacesWithActiveSubscriptions\": 5964,\n          \"workspacesWithSuccessfulTrials\": 6430,\n          \"revenueUsd\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://docs.superhuman.com/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1221319a-cdd5-4ba1-999a-9e1e8b6a8e5e",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs",
+                    ":packId",
+                    "formulas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packFormulaNames",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "packFormulaTypes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "packId",
+                      "description": "(Required) ID of a Pack"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d06c24e-154d-4027-823f-c56c8c50b254",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "packs",
+                    ":packId",
+                    "formulas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "packFormulaNames",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "packFormulaTypes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sinceDate",
+                      "value": "2020-08-01"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "2020-08-05"
+                    },
+                    {
+                      "key": "scale",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "packId",
+                      "description": "(Required) ID of a Pack"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b47e4bfc-7e37-499e-b0dc-45df1884a157",
+          "name": "Get analytics last updated day",
+          "request": {
+            "name": "Get analytics last updated day",
+            "description": {
+              "content": "Returns days based on Pacific Standard Time when analytics were last updated.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "updated"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "af421102-7081-4a3d-ab79-7ed0877b4c3c",
+              "name": "Response of analytics last updated days.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "updated"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"docAnalyticsLastUpdated\": \"2022-05-01\",\n  \"packAnalyticsLastUpdated\": \"2022-05-01\",\n  \"packFormulaAnalyticsLastUpdated\": \"2022-05-01\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11542a97-20c4-438f-9372-28cf5d19bad9",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "updated"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://docs.superhuman.com/apis/admin/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "75b1de1c-7407-46a8-a23c-40fb0b1cf796",
+    "name": "Superhuman Docs Admin Account Analytics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe Superhuman Docs Admin API is a RESTful API that allows programmatic access to administrative reports & capabilities within Superhuman Docs (formerly Coda).\n\nAccess to the Admin API is limited to enterprise organizations.\nOnly organization admins can use the Admin API for resources related to their organization.\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://connect.superhuman.com/c/developers-central) section of our Community,\nand update the [API updates](https://docs.superhuman.com/api-updates) doc.\n\n# Using the Admin API\n\nThe Superhuman Docs Admin REST API is designed to be straightforward to use. You can use the language and platform of your choice\nto make requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://docs.superhuman.com/apis/admin/v1`.\n\n## Object Hierarchy\n\n### Organizations\n\nEnterprise customers have access to the Organization, an object that contains policy, rules, and audit events\nfor a set of workspaces and one or more domains.  Users accessing Superhuman Docs via an Organization-registered domain are\nsubject to that Organization's policies including allowed forms of authentication,\ndoc & Pack sharing restrictions, etc.\n\n### Workspaces\n\nA workspace is your home base for all things Superhuman Docs. It will store your documents in an organized way, and you'll invite\nmembers into the workspace to help you get the job done. A workspace can be free or paid (depending on your plan),\nand as the workspace's Doc Maker or Doc Maker (Admin), you'll be able to dictate the rules for how it works.\n\n[Learn more about Workspaces in our help center](https://help.coda.io/hc/en-us/articles/39555775119117-Create-and-manage-your-Coda-workspace).\n\n### Folders\n\nWe use folders to keep docs organized in the workspace (think departments, teams, and projects). Your docs are\nwhere the true work gets done with all of your tables, text, and app-like solutions. Folders contain docs within\nthe workspace.\n\n[Learn more about Folders in our help center](https://help.coda.io/hc/en-us/articles/39555852126605-Create-and-share-folders).\n\n### Docs\n\nDocuments are foundational, top-level collaborative projects that contain pages.\n\n### Pack configurations\n\nPack configurations are the settings that define how a Pack may be used within an organization.\n\n### Pack configuration permissions\n\nPack configuration permissions are the settings that define which principals may use a Pack configuration.\n\n### Pack requests\n\nWhen Pack configurations are turned on inside an organization. Pack requests are requests to use a Pack submitted by\nusers in the organization.\n\n### Pages\n\nIndividual pages within a doc offer canvases containing rich text, tables, controls, and other objects.\n\n## Audit events\n\nAudit events contain records of user login/logout activities and other operations performed within a Superhuman Docs organization.\nAudit events are critical to an enterprise's Security Monitoring efforts. It enables Security professionals to proactively\nanalyze the audit events for any suspicious behavior within a Superhuman Docs organization and help them in forensic investigations\nin case of a security breach. Audit events also enable administrators to write their own applications to understand their\nusers' usage of Superhuman Docs.\n\n### Audit event actions\n\nThe following entity types and actions are audited.\n\n| Entity Type | Action Name | Description |\n| ----------- | ----------- | ----------- |\n| agentInstance | AcceptCustomAgentInvitation | Accept an invitation to access a custom agent |\n| agentInstance | AgentScheduleTriggerFired | A scheduled agent trigger fired |\n| agentInstance | CreateAgentInstance | Create a new agent instance |\n| agentInstance | CreateCustomAgentInvitation | Send an invitation to share a custom agent |\n| agentInstance | DeclineCustomAgentInvitation | Decline an invitation to access a custom agent |\n| agentInstance | DeleteAgentInstance | Delete an agent instance |\n| agentInstance | DeleteCustomAgentInvitation | Revoke a pending invitation to a custom agent |\n| agentInstance | StartAgentChat | Start a new agent chat session |\n| agentInstance | UpdateAgentInstance | Update an agent instance |\n| agentInstance | UpdateAgentInstanceSharing | Update sharing permissions on an agent instance |\n| agentToolCall | ApproveAgentToolCall | Approve a tool call during an agent instance session |\n| agentToolCall | ExecuteAgentToolCall | Execute a tool call during an agent instance session |\n| agentToolCall | IgnoreAgentToolCall | Ignore a tool call during an agent instance session |\n| agentToolCall | RejectAgentToolCall | Reject a tool call during an agent instance session |\n| apiToken | DeleteApiToken | Delete an API token |\n| apiToken | GenerateApiToken | Generate an API token |\n| billingAccount | AddBillingGroup | Add a billing group to a billing account |\n| billingAccount | AddBillingGroupAdmin | Assign a billing group admin |\n| billingAccount | DeleteBillingGroup | Delete a billing group from a billing account |\n| billingAccount | RemoveBillingGroupAdmin | Remove a billing group admin |\n| billingAccount | UpdateBillingAccountSettings | Update settings for a billing account |\n| brainQuery | BrainStructuredQuery | Query Coda Brain for structured data |\n| brainQuery | BrainUnstructuredQuery | Query Coda Brain for unstructured data |\n| doc | AddDocPack | Install a Pack within a doc |\n| doc | CopyDoc | Copy a doc to a new location |\n| doc | CopyPages | Copy pages and sub pages within a doc to a new location |\n| doc | CopyTemplate | Copy template to an existing doc |\n| doc | CreateDoc | Create a new doc |\n| doc | DeleteAllReferencingSyncPageTunnels | Delete all sync page tunnels referencing a doc |\n| doc | DeleteDoc | Delete a doc |\n| doc | DeleteDocPack | Remove usage of a Pack from a doc |\n| doc | EditDoc | Edit a doc |\n| doc | ExportDocContent | Export doc content |\n| doc | MoveDoc | Move a doc to a different folder |\n| doc | OpenDoc | Opening a doc for reading, commenting or editing. |\n| doc | ReviveDoc | Revive a deleted doc |\n| doc | SubmitForm | Submit through a form |\n| doc | UpdateDocPermissions | Update sharing permissions on a doc |\n| docPackConnection | CreateExternalConnection | Create a new Pack connection |\n| docPackConnection | DeleteExternalConnection | Delete a Pack connection |\n| docPackConnection | UpdateExternalConnection | Update a Pack connection |\n| folder | CreateFolder | Create a new folder |\n| folder | DeleteFolder | Delete a folder |\n| folder | MoveFolder | Move a folder to a different parent |\n| folder | UpdateFolderMembership | Update membership on a folder |\n| folder | UpdateFolderPermissions | Update sharing permissions on a folder |\n| folder | UpdateFolderSettings | Update folder settings |\n| group | CreateGroup | Create a new group |\n| group | DeleteGroup | Delete a group |\n| group | UpdateGroup | Update group properties |\n| import | CompleteImport | Complete an import |\n| import | FailImport | Fail an import |\n| import | OnboardItem | Onboard a single source item during an import |\n| import | StartImport | Start an import |\n| importPreference | AddImportPreference | Add an import preference for an importer |\n| importPreference | DeleteImportPreference | Delete an import preference for an importer |\n| importPreference | UpdateImportPreference | Update an import preference for an importer |\n| ingestion | CreateIngestion | Create a new Coda Brain ingestion |\n| ingestion | CreateIngestionPermissions | Create Coda Brain ingestion permissions |\n| ingestion | DeleteIngestion | Delete a Coda Brain ingestion |\n| ingestion | DeleteIngestionPermissions | Delete Coda Brain ingestion permissions |\n| ingestion | UpdateIngestion | Update a Coda Brain ingestion |\n| legalHold | CreateLegalHold | Create a new legal hold |\n| legalHold | DeleteLegalHold | Delete a legal hold |\n| legalHold | UpdateLegalHold | Update legal hold |\n| legalHoldExport | CreateLegalHoldExport | Create a new legal hold export |\n| legalHoldExport | DeleteLegalHoldExport | Delete a legal hold export |\n| organization | AddBlockedDomains | Add domains to the blocked domains list |\n| organization | AddTrustedDomains | Add domains to the trusted domains list |\n| organization | ClaimDocOwnership | Claim ownership of a doc after the owner is deactivated |\n| organization | OrganizationPackAccessRequestBlocked | A user attempted to request Pack access while the organization administrator has disabled Pack access requests |\n| organization | OrganizationPackAccessRequested | A user requested access to a Pack |\n| organization | RemoveBlockedDomains | Remove domains from the blocked domains list |\n| organization | RemoveTrustedDomains | Remove domains from the trusted domains list |\n| organization | TransferDocs | Transfer docs from one user to another |\n| organization | UpdateOrganizationSettings | Update organization settings |\n| organization | UpdateOrganizationUserActivation | Update a user's activation status in an organization |\n| organization | UpdateOrganizationUserRole | Add or remove user from organization roles |\n| organization | UpdateWorkspaceAiControls | Update workspace AI controls |\n| pack | AddPackConfigurationPermission | Add a Pack configuration permission |\n| pack | AllowPackAccessRequest | A user was granted access to a Pack |\n| pack | AutoApprovePack | A Pack was auto-approved upon creation per the organization policy |\n| pack | CancelPackReview | Cancel a pending Pack review |\n| pack | CreatePack | Create a new Pack |\n| pack | CreatePackConfiguration | Create a new Pack configuration |\n| pack | CreatePackInvitation | Create a Pack invitation |\n| pack | CreatePackReview | Submit a Pack for Superhuman GO review |\n| pack | DeleteAllConfigurationsOnPack | Delete all configurations for a Pack |\n| pack | DeletePack | Delete a Pack |\n| pack | DeletePackConfiguration | Delete a Pack configuration |\n| pack | DeletePackConfigurationOAuth | Delete OAuth configuration metadata associated with a Pack configuration |\n| pack | DenyPackAccessRequest | A user was denied access to a Pack |\n| pack | RemovePackConfigurationPermission | Delete a Pack configuration permission |\n| pack | SetPackConfigurationOAuth | Set OAuth configuration metadata associated with the Pack configuration |\n| pack | SetPackConfigurationPermissions | Set permissions for a Pack configuration |\n| pack | UpdatePackConfiguration | Update a Pack configuration |\n| pack | UpdatePackListingDraft | Update a Pack listing draft |\n| pack | UpdatePackPermissions | Update Pack permissions |\n| packControl | SetPackControl | Set Pack control for an organization |\n| syncPage | OpenSyncPage | Opening a sync page for reading. |\n| syncPageTunnel | CreateSyncPageTunnel | Create a sync page tunnel |\n| syncPageTunnel | DeleteSyncPageTunnel | Delete a sync page tunnel |\n| syncPageTunnel | UpdateSyncPageTunnel | Update a sync page tunnel |\n| user | CreateUser | Create a new user |\n| user | DeleteUser | Delete an existing user |\n| user | ExportUserData | Export own personal data |\n| user | IssueOAuthToken | Issue an OAuth access/refresh token for a user |\n| user | LogInUser | Login activity of a user |\n| user | LogOutUser | Logout activity of a user |\n| user | RenewOAuthToken | Renew an OAuth access token for a user |\n| user | ResetUserPassword | Reset a user's password |\n| user | RevokeAllOAuthTokens | Revoke all OAuth tokens for a user |\n| user | RevokeOAuthToken | Revoke a single OAuth refresh token for a user |\n| user | UpdateUserAccount | Update a user's account details |\n| user | UpdateUserPassword | Update a user's password |\n| webhook | CreateWebhook | Create a new webhook subscription |\n| webhook | DeleteWebhook | Delete a webhook subscription |\n| webhook | ResetWebhook | Resets a webhook subscription |\n| webhook | UpdateWebhook | Updates parameters for an existing webhook subscription |\n| workspace | CreateCustomIcon | Create a custom icon in a workspace |\n| workspace | CreateWorkspace | Create a new workspace |\n| workspace | DeleteCustomIcon | Delete a custom icon in a workspace |\n| workspace | DeleteWorkspace | Delete a workspace |\n| workspace | ExportWorkspaceMembers | Export workspace members roster |\n| workspace | OffboardWorkspaceUser | Offboard a removed user from a workspace |\n| workspace | PinDocToWorkspace | Pin a doc to a workspace |\n| workspace | ReinstateWorkspaceUser | Allow a user to be re-added to a workspace |\n| workspace | UnpinDocFromWorkspace | Unpin a doc from a workspace |\n| workspace | UpdateWorkspaceSettings | Update workspace settings |\n| workspace | UpdateWorkspaceUserBrainRole | Update a user's Brain role in a workspace |\n| workspace | UpdateWorkspaceUserRole | Update a user's role in a workspace |\n\n### More information\nFor more information about the Superhuman Docs Admin API and these events,\n[detailed information and examples are available](https://docs.superhuman.com/@documentation/admin-audit-api-events-and-documentation).\n\n## Webhooks\n\nWebhooks enable an application to receive notifications of audit events in Superhuman Docs as they occur.\n\nRather than having to \"poll\" repeatedly for new audit events, a webhook will \"push\" events to your internet-accessible\nendpoint via HTTP `POST` requests. This can be much more efficient and convenient for an internet-accessible service.\n\nIt is important to note that webhooks do require a server or server-like endpoint accesible on the internet at all times\nto receive these notifications. For simpler scenarios, it may be easier to just poll for audit events rather than host\nand maintain a server on the internet.\n\n### Webhook Considerations\n\nThis webhook implementation aims to deliver events within a few minutes of occurring under normal operating conditions.\n\nThe system will attempt retries when it detects failures, so it will be possible for you to receive the same events\nmore than once depending on errors or timeouts occurring in your server or in the network infrastructure between Superhuman Docs\nand your server.  Once delivered successfully, it is not possible to replay webhook notifications.\n\nTargets are expected to respond within 10 seconds before delivery times out and is considered a failure.\n\nFailures are retried using exponential backoff timing; after 8 hours of consecutive failures, Superhuman Docs will give up and\nplace the webhook into a disabled state.\n\n### Webhook Setup\n\nOnce a new webhook connection is established, an initial handshake will be attempted in order to prove that the target\nis available on the internet and is owned by the registering entity. In addition, any time the webhook is updated\nto point to a new target URL, the handshake procedure will be kicked off.\n\nAfter the initial handshake completes successfully, new audit events will immediately begin to flow to the target.\n\nIn the event that the handshake fails, the `reset` API can be used to force the webhook to retry the handshake process.\n\n### Webhook Handshake details\n\nTo prove that the target URL is available on the internet and is a valid webhook target, a handshake process is\nstarted anytime a new target URL is set on on a webhook.  This process is asynchronous to the webhook setup API call.\n\nSuperhuman Docs will send a HTTP `GET` request to the registered target URL with a HTTP header named `X-Webhook-Code`. The\ntarget must respond with a standard `200` or `204` HTTP response code and echo back the same header key and its value.\n\n### Webhook Payload details\n\nOnce the webhook handshake has completed successfully, Superhuman Docs will send batches of audit events to the target URL using\nHTTP `POST` requests.\n\nEach notifications the target receives will include:\n\n* A `X-Webhook-Signature` header which enables the server to verify the payload is genuine and originated from Superhuman Docs.\nThis code is a SHA-256 HMAC of the stringified body of the POST request using the Superhuman Docs-generated secret key available\non the webhook object.\n* A JSON body with key `events` which contains an array of audit events using the same format as\nreturned by the `listEvents` endpoint detailed below.\n\n### Payload verification\n\nSample javascript code fragment for verifying a webhook payload originated from Superhuman Docs:\n\n```javascript\nconst crypto = require('crypto');\n\n// This field is available on the Superhuman Docs webhook object.\nconst signatureKey = 'some value';\n\n// These come from the webhook `POST` request to your server\nconst headers = {'X-Webhook-Signature': 'abc123'};\nconst body = {events: []};\n\nconst calculatedSignature = crypto\n  .createHmac('SHA256', signatureKey)\n  .update(JSON.stringify(body))\n  .digest(\"hex\");\n\nconst isValidSignature = crypto.timingSafeEqual(\n  Buffer.from(calculatedSignature),\n  Buffer.from(headers['X-Webhook-Signature']),\n);\n```\n\n## List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n## Rate Limiting\n\nThe Superhuman Docs Admin API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://docs.superhuman.com/apis/admin/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://docs.superhuman.com/apis/admin/v1/openapi.json)\n\n\nContact Support:\n Name: Developer Support\n Email: care@superhuman.com",
+      "type": "text/plain"
+    }
+  }
+}

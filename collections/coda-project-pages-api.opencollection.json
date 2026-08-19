@@ -1,0 +1,565 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Pages API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/pages",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of pages in the doc\n"
+        },
+        {
+          "info": {
+            "name": "Get page information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/pages/:pageId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageId",
+                "value": "canvas-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the page."
+              },
+              {
+                "name": "outputFormat",
+                "value": "LossyPlainText",
+                "type": "query",
+                "description": "If specified, the format of the page or doc content to be returned. See export APIs for more output format options."
+              }
+            ]
+          },
+          "docs": "Returns information for a specific page\n"
+        },
+        {
+          "info": {
+            "name": "List page viewers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/pageViewers",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageViewersLimit",
+                "value": "",
+                "type": "query",
+                "description": "Limit number of users returned per page."
+              }
+            ]
+          },
+          "docs": "Returns users who viewed the pages in a doc in a given time range\n"
+        },
+        {
+          "info": {
+            "name": "List pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/pages",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of pages in the doc\n"
+        },
+        {
+          "info": {
+            "name": "Get page information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/pages/:pageId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageId",
+                "value": "canvas-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the page."
+              },
+              {
+                "name": "outputFormat",
+                "value": "LossyPlainText",
+                "type": "query",
+                "description": "If specified, the format of the page or doc content to be returned. See export APIs for more output format options."
+              }
+            ]
+          },
+          "docs": "Returns information for a specific page\n"
+        },
+        {
+          "info": {
+            "name": "List page viewers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/pageViewers",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageViewersLimit",
+                "value": "",
+                "type": "query",
+                "description": "Limit number of users returned per page."
+              }
+            ]
+          },
+          "docs": "Returns users who viewed the pages in a doc in a given time range\n"
+        },
+        {
+          "info": {
+            "name": "List pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of pages in a document."
+        },
+        {
+          "info": {
+            "name": "Create a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new page in a doc. Note that creating a page requires you to be a Doc Maker in the applicable workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Get a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Returns details about a page."
+        },
+        {
+          "info": {
+            "name": "Update a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update properties for a page. Note that updating a page title or icon requires you to be a Doc Maker in the applicable workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Deletes the specified page."
+        },
+        {
+          "info": {
+            "name": "List page content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName/content",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "limit",
+                "value": "50",
+                "type": "query",
+                "description": "Maximum number of content items to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "contentFormat",
+                "value": "plainText",
+                "type": "query",
+                "description": "The format to return content in. Defaults to plainText."
+              }
+            ]
+          },
+          "docs": "Returns a list of content elements in a page."
+        },
+        {
+          "info": {
+            "name": "Delete page content",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName/content",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete content from a page. You can delete specific elements by providing their IDs, or delete all content from the page.\n"
+        },
+        {
+          "info": {
+            "name": "Begin content export",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName/export",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate an export of content for the given page."
+        },
+        {
+          "info": {
+            "name": "Content export status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/pages/:pageIdOrName/export/:requestId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "requestId",
+                "value": "abc-123-def-456",
+                "type": "path",
+                "description": "ID of the request."
+              }
+            ]
+          },
+          "docs": "Check the status of a page content export"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

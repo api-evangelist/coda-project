@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Events API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/audit/events",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Return audit events created on or after the given Unix timestamp."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "Return audit events created on or before the given Unix timestamp."
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query",
+                "description": "Name of the action(s) performed."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The Superhuman Docs ID of the user who initiated the action."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The email address(es) of the user(s) who initiated the action."
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Target entity type of the action."
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Target entity ID of the action."
+              },
+              {
+                "name": "containerWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the workspace that contained the entity at the time the event was generated."
+              },
+              {
+                "name": "containerFolderId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the folder that contained the entity at the time the event was generated."
+              },
+              {
+                "name": "containerBillingAccountId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the billing account that contained the entity at the time the event was generated."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Defines the ordering of results. If unspecified, will default to 'asc' (ascending) order from oldest to most recent events."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of audit events within an organization.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

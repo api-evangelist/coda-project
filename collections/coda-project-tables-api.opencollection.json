@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Tables API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "sortBy",
+                "value": "name",
+                "type": "query",
+                "description": "Determines how to sort the given objects."
+              },
+              {
+                "name": "tableTypes",
+                "value": "table,view",
+                "type": "query",
+                "description": "Comma-separated list of table types to include in results. If omitted, includes both tables and views."
+              }
+            ]
+          },
+          "docs": "Returns a list of tables in a document."
+        },
+        {
+          "info": {
+            "name": "Get a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/tables/:tableIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "useUpdatedTableLayouts",
+                "value": "",
+                "type": "query",
+                "description": "Return \"detail\" and \"form\" for the `layout` field of detail and form layouts respectively (instead of \"masterDetail\" for both)"
+              }
+            ]
+          },
+          "docs": "Returns details about a specific table or view."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

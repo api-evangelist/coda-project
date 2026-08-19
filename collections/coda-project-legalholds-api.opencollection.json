@@ -1,0 +1,406 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account LegalHolds API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "LegalHolds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List legal holds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              }
+            ]
+          },
+          "docs": "Returns a list of legal holds in the organization\n"
+        },
+        {
+          "info": {
+            "name": "Create a new legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new legal hold in the Organization."
+        },
+        {
+          "info": {
+            "name": "Get legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              }
+            ]
+          },
+          "docs": "Returns metadata for a specific legal hold\n"
+        },
+        {
+          "info": {
+            "name": "Update legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the legal hold.\n"
+        },
+        {
+          "info": {
+            "name": "Delete the legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              }
+            ]
+          },
+          "docs": "Deletes an existing legal hold."
+        },
+        {
+          "info": {
+            "name": "List docs covered by the legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/docs",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              }
+            ]
+          },
+          "docs": "Returns a list of docs held by the legal hold\n"
+        },
+        {
+          "info": {
+            "name": "List exports for the legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/exports",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              }
+            ]
+          },
+          "docs": "Returns a list of exports created for the legal hold\n"
+        },
+        {
+          "info": {
+            "name": "Create a new legal hold export",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/exports",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new legal hold export for the hold."
+        },
+        {
+          "info": {
+            "name": "Get legal hold export",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/exports/:legalHoldExportId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              },
+              {
+                "name": "legalHoldExportId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold export."
+              }
+            ]
+          },
+          "docs": "Returns metadata for a specific legal hold export\n"
+        },
+        {
+          "info": {
+            "name": "Delete the legal hold export",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/exports/:legalHoldExportId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              },
+              {
+                "name": "legalHoldExportId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold export."
+              }
+            ]
+          },
+          "docs": "Deletes an existing legal hold export."
+        },
+        {
+          "info": {
+            "name": "List users included in the legal hold",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/users",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of users included in the legal hold\n"
+        },
+        {
+          "info": {
+            "name": "Update legal hold users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/legalHolds/:legalHoldId/users",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "legalHoldId",
+                "value": "0d470e5b-d145-4440-a897-df57f4d72dfb",
+                "type": "path",
+                "description": "ID of the legal hold."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the users included in the legal hold.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

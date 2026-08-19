@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Go Links API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Go Links",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a go link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/goLinks",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a new go link for the organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

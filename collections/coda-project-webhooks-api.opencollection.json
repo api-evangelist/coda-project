@@ -1,0 +1,182 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Webhooks API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/webhooks",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of webhooks in the organization\n"
+        },
+        {
+          "info": {
+            "name": "Create new webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/webhooks",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new webhook subscription for the organization."
+        },
+        {
+          "info": {
+            "name": "Get a webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/webhooks/:webhookId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "webhookId",
+                "value": "f88ba9d9-037d-41df-a49c-49798701ed41",
+                "type": "path",
+                "description": "ID of the webhook subscription."
+              }
+            ]
+          },
+          "docs": "Returns the requested webhook subscription.\n"
+        },
+        {
+          "info": {
+            "name": "Update a webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/webhooks/:webhookId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "webhookId",
+                "value": "f88ba9d9-037d-41df-a49c-49798701ed41",
+                "type": "path",
+                "description": "ID of the webhook subscription."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates parameters for an existing webhook subscription."
+        },
+        {
+          "info": {
+            "name": "Deletes a webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/webhooks/:webhookId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "webhookId",
+                "value": "f88ba9d9-037d-41df-a49c-49798701ed41",
+                "type": "path",
+                "description": "ID of the webhook subscription."
+              }
+            ]
+          },
+          "docs": "Deletes a webhook subscription."
+        },
+        {
+          "info": {
+            "name": "Reset a webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/webhooks/:webhookId/reset",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "webhookId",
+                "value": "f88ba9d9-037d-41df-a49c-49798701ed41",
+                "type": "path",
+                "description": "ID of the webhook subscription."
+              }
+            ]
+          },
+          "docs": "Resets a webhook subscription. Will force re-initialization of the webhook subscription, including the initial handshake process. Used to re-start a webhook that previously failed the initial handshake or that has become disabled due to the target failing too many consecutive webhook payloads.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

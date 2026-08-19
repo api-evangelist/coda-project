@@ -1,0 +1,156 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Doc Export API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Doc Export",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Launch request to export a doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/export",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Begins the export process for a doc; the response carries the request ID that can be polled for status & used to download the exported file once ready."
+        },
+        {
+          "info": {
+            "name": "Determine the status of a doc export request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/workspaces/:workspaceId/docs/:docId/export/:exportId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "exportId",
+                "value": "85d2fb03-2747-44c4-8b3b-7a05d37eec04",
+                "type": "path",
+                "description": "ID of the doc export request."
+              }
+            ]
+          },
+          "docs": "Returns the status of a previous doc export request, including a file download link once ready. Download links are valid for 5 minutes and a new download link is returned on each call to this API once the export has completed.\n"
+        },
+        {
+          "info": {
+            "name": "Launch request to export a doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/export",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Begins the export process for a doc; the response carries the request ID that can be polled for status & used to download the exported file once ready."
+        },
+        {
+          "info": {
+            "name": "Determine the status of a doc export request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/docs/:docId/export/:exportId",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "docId",
+                "value": "d-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "exportId",
+                "value": "85d2fb03-2747-44c4-8b3b-7a05d37eec04",
+                "type": "path",
+                "description": "ID of the doc export request."
+              }
+            ]
+          },
+          "docs": "Returns the status of a previous doc export request, including a file download link once ready. Download links are valid for 5 minutes and a new download link is returned on each call to this API once the export has completed.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

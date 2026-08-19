@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account CustomDocDomains API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CustomDocDomains",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List custom doc domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/$:docId/domains",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "List all custom domains for a published doc."
+        },
+        {
+          "info": {
+            "name": "Add custom domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/$:docId/domains",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a custom domain to a published doc."
+        },
+        {
+          "info": {
+            "name": "Updates a custom domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/domains/:customDocDomain",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "customDocDomain",
+                "value": "",
+                "type": "path",
+                "description": "A custom domain for a published doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates properties of a document's custom domain."
+        },
+        {
+          "info": {
+            "name": "Deletes a custom domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/domains/:customDocDomain",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "customDocDomain",
+                "value": "",
+                "type": "path",
+                "description": "A custom domain for a published doc."
+              }
+            ]
+          },
+          "docs": "Deletes a custom domain from a published doc."
+        },
+        {
+          "info": {
+            "name": "Gets custom doc domains providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/domains/provider/:customDocDomain",
+            "params": [
+              {
+                "name": "customDocDomain",
+                "value": "",
+                "type": "path",
+                "description": "A custom domain for a published doc."
+              }
+            ]
+          },
+          "docs": "Gets the provider (ie. GoDaddy) of a custom domain."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

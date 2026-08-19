@@ -1,0 +1,166 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Organization Users API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organization Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List organization users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/users",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "isActivated",
+                "value": "",
+                "type": "query",
+                "description": "Filter results to users based on their activation status."
+              },
+              {
+                "name": "query",
+                "value": "feature%parity",
+                "type": "query",
+                "description": "Search terms used to narrow down results."
+              },
+              {
+                "name": "emails",
+                "value": "april@example.com,june@example.com",
+                "type": "query",
+                "description": "List of emails of users to retrieve."
+              },
+              {
+                "name": "deactivatedAfter",
+                "value": "",
+                "type": "query",
+                "description": "Return users deactivated at or after the given Unix timestamp."
+              },
+              {
+                "name": "includeOwnedDocCounts",
+                "value": "",
+                "type": "query",
+                "description": "Include the count of docs owned by each user."
+              }
+            ]
+          },
+          "docs": "Returns a list of users within an organization, across all registered domains.\n"
+        },
+        {
+          "info": {
+            "name": "Transfer user resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/users/transferResources",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transfers resources such as docs and workspace membership from a deactivated user to an active user.\n"
+        },
+        {
+          "info": {
+            "name": "Activate a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/users/:userEmail/activate",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "userEmail",
+                "value": "april@example.com",
+                "type": "path",
+                "description": "User to act upon."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Activates a deactivated user."
+        },
+        {
+          "info": {
+            "name": "Deactivate a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/organizations/:organizationId/users/:userEmail/deactivate",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-AbCDeFGHIj",
+                "type": "path",
+                "description": "ID of the organization."
+              },
+              {
+                "name": "userEmail",
+                "value": "april@example.com",
+                "type": "path",
+                "description": "User to act upon."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deactivates a user, ensuring the user is no longer paid and allowing their docs to be reassigned to a new owner.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,389 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Analytics API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Analytics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List doc analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/docs",
+            "params": [
+              {
+                "name": "docIds",
+                "value": "",
+                "type": "query",
+                "description": "List of docIds to fetch."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "scale",
+                "value": "daily",
+                "type": "query",
+                "description": "Quantization period over which to view analytics. Defaults to daily."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Use this parameter to order the doc analytics returned."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for available docs per day.\n"
+        },
+        {
+          "info": {
+            "name": "List page analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for a given doc within the day.\nThis method will return a 401 if the given doc is not in an Enterprise workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Get doc analytics summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/docs/summary",
+            "params": [
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              }
+            ]
+          },
+          "docs": "Returns summarized analytics data for available docs.\n"
+        },
+        {
+          "info": {
+            "name": "List Pack analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/packs",
+            "params": [
+              {
+                "name": "packIds",
+                "value": "",
+                "type": "query",
+                "description": "Which Pack IDs to fetch."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "scale",
+                "value": "daily",
+                "type": "query",
+                "description": "Quantization period over which to view analytics. Defaults to daily."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Use this parameter to order the Pack analytics returned."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items. If false or unspecified, returns all items including published ones.\n"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for Packs the user can edit.\n"
+        },
+        {
+          "info": {
+            "name": "Get Pack analytics summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/packs/summary",
+            "params": [
+              {
+                "name": "packIds",
+                "value": "",
+                "type": "query",
+                "description": "Which Pack IDs to fetch."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items. If false or unspecified, returns all items including published ones.\n"
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              }
+            ]
+          },
+          "docs": "Returns summarized analytics data for Packs the user can edit.\n"
+        },
+        {
+          "info": {
+            "name": "List Pack formula analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/packs/:packId/formulas",
+            "params": [
+              {
+                "name": "packFormulaNames",
+                "value": "SquareRoot,CubeRoot",
+                "type": "query",
+                "description": "A list of Pack formula names (case-sensitive) for which to retrieve analytics."
+              },
+              {
+                "name": "packFormulaTypes",
+                "value": "action,formula",
+                "type": "query",
+                "description": "A list of Pack formula types corresponding to the `packFormulaNames`. If specified, this must have the same length as `packFormulaNames`."
+              },
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "scale",
+                "value": "daily",
+                "type": "query",
+                "description": "Quantization period over which to view analytics. Defaults to daily."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Use this parameter to order the Pack formula analytics returned."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for Pack formulas.\n"
+        },
+        {
+          "info": {
+            "name": "Get analytics last updated day",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/analytics/updated"
+          },
+          "docs": "Returns days based on Pacific Standard Time when analytics were last updated.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

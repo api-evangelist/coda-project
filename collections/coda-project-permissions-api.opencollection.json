@@ -1,0 +1,189 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Superhuman Docs Admin Account Permissions API",
+    "version": "0.0.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get sharing metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/metadata",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Returns metadata associated with sharing for this document."
+        },
+        {
+          "info": {
+            "name": "List permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/permissions",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of permissions for this document."
+        },
+        {
+          "info": {
+            "name": "Add permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/permissions",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a new permission to the doc.\n"
+        },
+        {
+          "info": {
+            "name": "Delete permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/permissions/:permissionId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "permissionId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of a permission on a doc."
+              }
+            ]
+          },
+          "docs": "Deletes an existing permission.\n"
+        },
+        {
+          "info": {
+            "name": "Search principals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/principals/search",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              }
+            ]
+          },
+          "docs": "Searches for user and group principals matching the query that this doc can be shared with.\nAt most 20 results will be returned for both users and groups. If no query is given then no results are returned.\n"
+        },
+        {
+          "info": {
+            "name": "Get ACL settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/settings",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Returns settings associated with ACLs for this document."
+        },
+        {
+          "info": {
+            "name": "Update ACL settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://docs.superhuman.com/apis/admin/v1/docs/:docId/acl/settings",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update settings associated with ACLs for this document."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

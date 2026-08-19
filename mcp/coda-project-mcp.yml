@@ -4,10 +4,9 @@ status: published
 source: https://help.coda.io/hc/en-us/articles/44722661982989-Connect-to-the-Coda-MCP
 server:
   name: coda
-  description: >-
-    Official Coda (Superhuman Docs) remote MCP server. Lets AI clients (Claude, Cursor, and
-    other MCP hosts) read and write Coda docs using natural-language prompts. In beta —
-    tools and behavior are subject to change.
+  description: Official Coda (Superhuman Docs) remote MCP server. Lets AI clients (Claude, Cursor, and
+    other MCP hosts) read and write Coda docs using natural-language prompts. In beta — tools and behavior
+    are subject to change.
   transport: http
   url: https://coda.io/apis/mcp
   probe:
@@ -28,3 +27,10 @@ docs:
   url: https://help.coda.io/hc/en-us/articles/44722661982989-Connect-to-the-Coda-MCP
 - title: Using the Coda MCP
   url: https://help.coda.io/hc/en-us/articles/44722756780173-Using-the-Coda-MCP
+deployment:
+  mode: remote
+  endpoint: https://coda.io/apis/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census
