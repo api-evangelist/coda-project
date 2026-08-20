@@ -43,6 +43,17 @@ tags:
 - Collaboration
 - No-Code
 - Workspace
+- Artificial Intelligence
+- Content Management
+- Software-as-a-Service
+tags_raw:
+- Company
+- Productivity
+- Documents
+- Spreadsheets
+- Collaboration
+- No-Code
+- Workspace
 - AI
 - Content Management
 - SaaS
@@ -168,6 +179,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -220,6 +233,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -232,6 +247,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Legal Holds
+  tags_raw:
   - LegalHolds
   properties:
   - type: OpenAPI
@@ -243,7 +260,8 @@ apis:
     Docs.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
-  tags:
+  tags: []
+  tags_raw:
   - Miscellaneous
   properties:
   - type: OpenAPI
@@ -264,6 +282,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -374,6 +394,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
