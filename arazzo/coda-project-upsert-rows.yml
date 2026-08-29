@@ -4,8 +4,14 @@ info:
   version: 1.0.0
   summary: Resolve key columns, upsert rows idempotently, await the mutation, and verify.
 sourceDescriptions:
-- name: codaDocs
-  url: ../openapi/coda-project-openapi-original.json
+- name: columnsApi
+  url: ../openapi/coda-project-columns-api-openapi.yml
+  type: openapi
+- name: miscellaneousApi
+  url: ../openapi/coda-project-miscellaneous-api-openapi.yml
+  type: openapi
+- name: rowsApi
+  url: ../openapi/coda-project-rows-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: upsert-rows

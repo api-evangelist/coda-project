@@ -4,8 +4,20 @@ info:
   version: 1.0.0
   summary: Create a doc, add a page, then upsert rows and wait for the async mutation to complete.
 sourceDescriptions:
-- name: codaDocs
-  url: ../openapi/coda-project-openapi-original.json
+- name: docsApi
+  url: ../openapi/coda-project-docs-api-openapi.yml
+  type: openapi
+- name: miscellaneousApi
+  url: ../openapi/coda-project-miscellaneous-api-openapi.yml
+  type: openapi
+- name: pagesApi
+  url: ../openapi/coda-project-pages-api-openapi.yml
+  type: openapi
+- name: rowsApi
+  url: ../openapi/coda-project-rows-api-openapi.yml
+  type: openapi
+- name: tablesApi
+  url: ../openapi/coda-project-tables-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: create-doc-and-populate

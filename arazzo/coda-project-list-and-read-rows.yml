@@ -4,8 +4,17 @@ info:
   version: 1.0.0
   summary: Validate the token, find a doc and table, and read its rows.
 sourceDescriptions:
-- name: codaDocs
-  url: ../openapi/coda-project-openapi-original.json
+- name: accountApi
+  url: ../openapi/coda-project-account-api-openapi.yml
+  type: openapi
+- name: docsApi
+  url: ../openapi/coda-project-docs-api-openapi.yml
+  type: openapi
+- name: rowsApi
+  url: ../openapi/coda-project-rows-api-openapi.yml
+  type: openapi
+- name: tablesApi
+  url: ../openapi/coda-project-tables-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: list-and-read-rows
