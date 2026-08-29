@@ -1,0 +1,57 @@
+slug: coda-project
+provider: Coda Project
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Webhooks
+  spec_file: coda-project-webhooks-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.85
+  evidence: POST /organizations/{organizationId}/webhooks addWebhook 'Create new webhook subscription';
+    schemas WebhookWatchedResource, WebhookFilterPredicate, WebhookList
+  reason: Full lifecycle of outbound webhook subscriptions (create, update, delete, reset) with watched
+    resources and filters — exactly the Webhook & Event Subscription Management capability in this frame.
+- tag: Permissions
+  spec_file: coda-project-permissions-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: GET /docs/{docId}/acl/permissions getPermissions 'List permissions'; POST addPermission 'Add
+    permission'; GET /docs/{docId}/acl/principals/search 'Search principals'; schemas AccessType, DomainPrincipal,
+    AclSettings
+  reason: Access control lists, principals and sharing settings on documents — this is access management
+    (authorisation and entitlement to resources), the clearest fit being Identity & Access Management.
+- tag: Doc Permissions
+  spec_file: coda-project-doc-permissions-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: addDocPermission  Add permission to a doc; deleteDocPermission  Delete doc permission; schemas
+    Acl, Permission, AccessType, Principal, GroupPrincipal
+  reason: Operations administer access-control lists and principals (user, group, domain, workspace) over
+    documents — access rights administration, i.e. Identity & Access Management.
+- tag: Workspace Users
+  spec_file: coda-project-workspace-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: POST /organizations/{organizationId}/workspaces/{workspaceId}/users addWorkspaceUser 'Add
+    workspace user'; PUT .../users/{userEmail} updateWorkspaceUserRole 'Update workspace user role'; schema
+    WorkspaceUserRole
+  reason: Adding, removing and re-roling user accounts within a workspace is user account and role administration
+    (joiner-mover-leaver on the platform), i.e. access management rather than HR employee records.

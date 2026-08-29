@@ -435,6 +435,9 @@ apis:
   - type: OpenAPI
     url: openapi/coda-project-workspaces-api-openapi.yml
 common:
+- type: CapabilityMap
+  url: capabilities/coda-project-capability-edges.yml
+  name: Coda Project Business Capability Map
 - type: Overlay
   url: overlays/coda-project-admin-overlay.yaml
 - type: PostmanWorkspace
