@@ -74,8 +74,9 @@ maintainers:
 apis:
 - aid: coda-project:coda-project-account-api
   name: Coda Project Account API
-  description: At this time, the API exposes some limited information about your account. However, `/whoami`
-    is a good endpoint to hit to verify that you're hitting the API correctly and that your token is working
+  description: >-
+    At this time, the API exposes some limited information about your account. However, `/whoami` is a
+    good endpoint to hit to verify that you're hitting the API correctly and that your token is working
     as expected.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
@@ -116,9 +117,10 @@ apis:
     url: openapi/coda-project-automations-api-openapi.yml
 - aid: coda-project:coda-project-columns-api
   name: Coda Project Columns API
-  description: While columns in Superhuman Docs have user-friendly names, they also have immutable IDs
-    that are used when reading and writing rows. These endpoints let you query the columns in a table
-    and get basic information about them.
+  description: >-
+    While columns in Superhuman Docs have user-friendly names, they also have immutable IDs that are used
+    when reading and writing rows. These endpoints let you query the columns in a table and get basic
+    information about them.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -128,8 +130,9 @@ apis:
     url: openapi/coda-project-columns-api-openapi.yml
 - aid: coda-project:coda-project-controls-api
   name: Coda Project Controls API
-  description: Controls provide a user-friendly way to input a value that can affect other parts of the
-    doc. This API lets you list controls and get their current values.
+  description: >-
+    Controls provide a user-friendly way to input a value that can affect other parts of the doc. This
+    API lets you list controls and get their current values.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -169,8 +172,9 @@ apis:
     url: openapi/coda-project-doc-permissions-api-openapi.yml
 - aid: coda-project:coda-project-docs-api
   name: Coda Project Docs API
-  description: Documents are foundational, top-level collaborative projects that contain pages. The API
-    lets you list and search your documents.
+  description: >-
+    Documents are foundational, top-level collaborative projects that contain pages. The API lets you
+    list and search your documents.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -212,9 +216,9 @@ apis:
     url: openapi/coda-project-folders-api-openapi.yml
 - aid: coda-project:coda-project-formulas-api
   name: Coda Project Formulas API
-  description: Formulas can be great for performing one-off computations, or used with tables and other
-    formulas to compute a single value. With this API, you can discover formulas in a doc and obtain computed
-    results.
+  description: >-
+    Formulas can be great for performing one-off computations, or used with tables and other formulas
+    to compute a single value. With this API, you can discover formulas in a doc and obtain computed results.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -244,23 +248,11 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/coda-project-groups-api-openapi.yml
-- aid: coda-project:coda-project-legalholds-api
-  name: Coda Project LegalHolds API
-  description: Legal holds are used to ensure a given set of docs cannot be deleted and enables simplified
-    export management of doc content.
-  humanURL: https://coda.io/developers/apis/v1
-  baseURL: https://coda.io/apis/v1
-  tags:
-  - Legal Holds
-  tags_raw:
-  - LegalHolds
-  properties:
-  - type: OpenAPI
-    url: openapi/coda-project-legalholds-api-openapi.yml
 - aid: coda-project:coda-project-miscellaneous-api
   name: Coda Project Miscellaneous API
-  description: These endpoints wouldn't fit anywhere else, but you may find them useful when working with
-    Superhuman Docs.
+  description: >-
+    These endpoints wouldn't fit anywhere else, but you may find them useful when working with Superhuman
+    Docs.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags: []
@@ -293,8 +285,9 @@ apis:
     url: openapi/coda-project-organizations-api-openapi.yml
 - aid: coda-project:coda-project-pack-configurations-api
   name: Coda Project Pack Configurations API
-  description: Pack configurations control fine grained access, scopes, feature sets, shareability of
-    docs with installed Packs, and more settings.
+  description: >-
+    Pack configurations control fine grained access, scopes, feature sets, shareability of docs with installed
+    Packs, and more settings.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -324,8 +317,8 @@ apis:
     url: openapi/coda-project-packs-api-openapi.yml
 - aid: coda-project:coda-project-pages-api
   name: Coda Project Pages API
-  description: Pages in Superhuman Docs offer canvases containing rich text, tables, controls, and other
-    objects.
+  description: >-
+    Pages in Superhuman Docs offer canvases containing rich text, tables, controls, and other objects.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -345,8 +338,9 @@ apis:
     url: openapi/coda-project-permissions-api-openapi.yml
 - aid: coda-project:coda-project-preferences-api
   name: Coda Project Preferences API
-  description: Import preferences control how external entities are imported (exempt, owner, location),
-    scoped to an organization and importer.
+  description: >-
+    Import preferences control how external entities are imported (exempt, owner, location), scoped to
+    an organization and importer.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -356,8 +350,9 @@ apis:
     url: openapi/coda-project-preferences-api-openapi.yml
 - aid: coda-project:coda-project-publishing-api
   name: Coda Project Publishing API
-  description: Documents can be published publicly and associated with categories to help the world discover
-    them. This API lets you manage the publishing settings of your docs.
+  description: >-
+    Documents can be published publicly and associated with categories to help the world discover them.
+    This API lets you manage the publishing settings of your docs.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -367,9 +362,10 @@ apis:
     url: openapi/coda-project-publishing-api-openapi.yml
 - aid: coda-project:coda-project-rows-api
   name: Coda Project Rows API
-  description: You'll likely use this part of the API the most. These endpoints let you retrieve row data
-    from tables in Superhuman Docs as well as create, upsert, update, and delete them. Most of these endpoints
-    work for both base tables and views, but for inserting/upsering rows, you must use a base table.
+  description: >-
+    You'll likely use this part of the API the most. These endpoints let you retrieve row data from tables
+    in Superhuman Docs as well as create, upsert, update, and delete them. Most of these endpoints work
+    for both base tables and views, but for inserting/upsering rows, you must use a base table.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -401,8 +397,9 @@ apis:
     url: openapi/coda-project-webhooks-api-openapi.yml
 - aid: coda-project:coda-project-workspace-users-api
   name: Coda Project Workspace Users API
-  description: This API enables viewing and modifying user membership within a workspace. It is accessible
-    both to organization admins and workspace admins for the respective workspaces.
+  description: >-
+    This API enables viewing and modifying user membership within a workspace. It is accessible both to
+    organization admins and workspace admins for the respective workspaces.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
@@ -420,6 +417,18 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/coda-project-workspaces-api-openapi.yml
+- aid: coda-project:coda-project-legal-holds-api
+  name: Coda Project Legal Holds API
+  description: >-
+    Legal holds are used to ensure a given set of docs cannot be deleted and enables simplified export
+    management of doc content.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Legal Holds
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-project-legal-holds-api-openapi.yml
 common:
 - type: Website
   url: https://coda.io
