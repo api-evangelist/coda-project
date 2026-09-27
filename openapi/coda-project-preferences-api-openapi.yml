@@ -204,7 +204,175 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' -X DELETE \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences/<your import preference id>'\n# => Delete an import preference\n"
 components:
+  responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   schemas:
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    UpdateOwnerImportPreferenceRequest:
+      x-schema-name: UpdateOwnerImportPreferenceRequest
+      description: Update to an owner import preference.
+      type: object
+      required:
+      - preferenceType
+      - ownerEmail
+      additionalProperties: false
+      properties:
+        preferenceType:
+          type: string
+          enum:
+          - owner
+        ownerEmail:
+          type: string
+          format: email
+          maxLength: 512
+          description: 'Email of the user who will own imported documents for this item. The address domain must be registered to the organization. The user does not need to exist yet when the preference is saved. Stored lowercased.
+
+            '
+          example: owner@example.com
+    ImportExternalParent:
+      x-schema-name: ImportExternalParent
+      type: object
+      description: Destination in the source system.
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          maxLength: 128
+          description: 'ID of the parent in the source system. For Quip, this is the folder''s `secret_path` from the Quip API.
+
+            '
+          example: folder-xyz789
+        type:
+          type: string
+          description: Parent container type.
+          enum:
+          - folder
+          example: folder
     AddLocationImportPreferenceRequest:
       x-schema-name: AddLocationImportPreferenceRequest
       description: Create a location import preference.
@@ -229,59 +397,6 @@ components:
       type: object
       additionalProperties: false
       properties: {}
-    AddImportPreferenceRequest:
-      x-schema-name: AddImportPreferenceRequest
-      description: Create an import preference.
-      oneOf:
-      - $ref: '#/components/schemas/AddExemptImportPreferenceRequest'
-      - $ref: '#/components/schemas/AddOwnerImportPreferenceRequest'
-      - $ref: '#/components/schemas/AddLocationImportPreferenceRequest'
-      discriminator:
-        propertyName: preferenceType
-        mapping:
-          exempt: '#/components/schemas/AddExemptImportPreferenceRequest'
-          owner: '#/components/schemas/AddOwnerImportPreferenceRequest'
-          location: '#/components/schemas/AddLocationImportPreferenceRequest'
-    UpdateOwnerImportPreferenceRequest:
-      x-schema-name: UpdateOwnerImportPreferenceRequest
-      description: Update to an owner import preference.
-      type: object
-      required:
-      - preferenceType
-      - ownerEmail
-      additionalProperties: false
-      properties:
-        preferenceType:
-          type: string
-          enum:
-          - owner
-        ownerEmail:
-          type: string
-          format: email
-          maxLength: 512
-          description: 'Email of the user who will own imported documents for this item. The address domain must be registered to the organization. The user does not need to exist yet when the preference is saved. Stored lowercased.
-
-            '
-          example: owner@example.com
-    AddExemptImportPreferenceRequest:
-      x-schema-name: AddExemptImportPreferenceRequest
-      description: Create an exempt import preference.
-      type: object
-      required:
-      - externalEntity
-      - preferenceType
-      additionalProperties: false
-      properties:
-        externalEntity:
-          $ref: '#/components/schemas/ImportExternalEntity'
-        preferenceType:
-          type: string
-          enum:
-          - exempt
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
     AddOwnerImportPreferenceRequest:
       x-schema-name: AddOwnerImportPreferenceRequest
       description: Create an owner import preference.
@@ -306,63 +421,40 @@ components:
 
             '
           example: owner@example.com
-    ImportExternalEntity:
-      x-schema-name: ImportExternalEntity
-      type: object
-      description: External item this preference applies to.
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          maxLength: 128
-          description: 'ID of the item in the source system. For Quip, this is the `secret_path` from the Quip API.
-
-            '
-          example: thread-def456
-        type:
-          type: string
-          maxLength: 32
-          description: 'Type of the item in the source system. Allowed values depend on the importer; for Quip this must be either `thread` or `folder`.
-
-            '
-          example: thread
-    UpdateExemptImportPreferenceRequest:
-      x-schema-name: UpdateExemptImportPreferenceRequest
-      description: Update to an exempt import preference.
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    AddExemptImportPreferenceRequest:
+      x-schema-name: AddExemptImportPreferenceRequest
+      description: Create an exempt import preference.
       type: object
       required:
+      - externalEntity
       - preferenceType
       additionalProperties: false
       properties:
+        externalEntity:
+          $ref: '#/components/schemas/ImportExternalEntity'
         preferenceType:
           type: string
           enum:
           - exempt
-    ImportExternalParent:
-      x-schema-name: ImportExternalParent
-      type: object
-      description: Destination in the source system.
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          maxLength: 128
-          description: 'ID of the parent in the source system. For Quip, this is the folder''s `secret_path` from the Quip API.
+    UpdateImportPreferenceRequest:
+      x-schema-name: UpdateImportPreferenceRequest
+      description: 'Replace the import preference''s type and settings. The body must match the target `preferenceType` shape (not a partial patch). The external entity is fixed at create time and cannot be changed.
 
-            '
-          example: folder-xyz789
-        type:
-          type: string
-          description: Parent container type.
-          enum:
-          - folder
-          example: folder
+        '
+      oneOf:
+      - $ref: '#/components/schemas/UpdateExemptImportPreferenceRequest'
+      - $ref: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
+      - $ref: '#/components/schemas/UpdateLocationImportPreferenceRequest'
+      discriminator:
+        propertyName: preferenceType
+        mapping:
+          exempt: '#/components/schemas/UpdateExemptImportPreferenceRequest'
+          owner: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
+          location: '#/components/schemas/UpdateLocationImportPreferenceRequest'
     UpdateLocationImportPreferenceRequest:
       x-schema-name: UpdateLocationImportPreferenceRequest
       description: Update to a location import preference.
@@ -378,10 +470,44 @@ components:
           - location
         externalParent:
           $ref: '#/components/schemas/ImportExternalParent'
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
+    AddImportPreferenceRequest:
+      x-schema-name: AddImportPreferenceRequest
+      description: Create an import preference.
+      oneOf:
+      - $ref: '#/components/schemas/AddExemptImportPreferenceRequest'
+      - $ref: '#/components/schemas/AddOwnerImportPreferenceRequest'
+      - $ref: '#/components/schemas/AddLocationImportPreferenceRequest'
+      discriminator:
+        propertyName: preferenceType
+        mapping:
+          exempt: '#/components/schemas/AddExemptImportPreferenceRequest'
+          owner: '#/components/schemas/AddOwnerImportPreferenceRequest'
+          location: '#/components/schemas/AddLocationImportPreferenceRequest'
+    ImportPreferenceList:
+      x-schema-name: ImportPreferenceList
+      description: List of import preferences.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImportPreference'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences?pageToken=eyJsaW1pd
     ImportPreference:
       x-schema-name: ImportPreference
       description: An import preference for an external entity.
@@ -457,46 +583,6 @@ components:
           type: number
           description: Coda user id that last modified the preference. Omitted if never updated.
           example: 67890
-    ImportPreferenceList:
-      x-schema-name: ImportPreferenceList
-      description: List of import preferences.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ImportPreference'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences?pageToken=eyJsaW1pd
-    UpdateImportPreferenceRequest:
-      x-schema-name: UpdateImportPreferenceRequest
-      description: 'Replace the import preference''s type and settings. The body must match the target `preferenceType` shape (not a partial patch). The external entity is fixed at create time and cannot be changed.
-
-        '
-      oneOf:
-      - $ref: '#/components/schemas/UpdateExemptImportPreferenceRequest'
-      - $ref: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
-      - $ref: '#/components/schemas/UpdateLocationImportPreferenceRequest'
-      discriminator:
-        propertyName: preferenceType
-        mapping:
-          exempt: '#/components/schemas/UpdateExemptImportPreferenceRequest'
-          owner: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
-          location: '#/components/schemas/UpdateLocationImportPreferenceRequest'
     ImportPreferenceMutationResult:
       x-schema-name: ImportPreferenceMutationResult
       description: The result of creating or updating an import preference.
@@ -510,6 +596,41 @@ components:
           format: uuid
           description: ID of the import preference.
           example: afe84ebf-4d06-44c5-b545-a8af5036bebf
+    UpdateExemptImportPreferenceRequest:
+      x-schema-name: UpdateExemptImportPreferenceRequest
+      description: Update to an exempt import preference.
+      type: object
+      required:
+      - preferenceType
+      additionalProperties: false
+      properties:
+        preferenceType:
+          type: string
+          enum:
+          - exempt
+    ImportExternalEntity:
+      x-schema-name: ImportExternalEntity
+      type: object
+      description: External item this preference applies to.
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          maxLength: 128
+          description: 'ID of the item in the source system. For Quip, this is the `secret_path` from the Quip API.
+
+            '
+          example: thread-def456
+        type:
+          type: string
+          maxLength: 32
+          description: 'Type of the item in the source system. Allowed values depend on the importer; for Quip this must be either `thread` or `folder`.
+
+            '
+          example: thread
   parameters:
     organizationId:
       name: organizationId
@@ -519,6 +640,19 @@ components:
       example: org-AbCDeFGHIj
       schema:
         type: string
+    importerId:
+      name: importerId
+      description: 'Importer id for the source system.
+
+        '
+      in: path
+      required: true
+      example: quip
+      schema:
+        type: string
+        enum:
+        - quip
+        maxLength: 32
     pageToken:
       name: pageToken
       description: An opaque token used to fetch the next page of results.
@@ -549,19 +683,6 @@ components:
         items:
           type: string
           maxLength: 128
-    importerId:
-      name: importerId
-      description: 'Importer id for the source system.
-
-        '
-      in: path
-      required: true
-      example: quip
-      schema:
-        type: string
-        enum:
-        - quip
-        maxLength: 32
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -572,127 +693,6 @@ components:
         minimum: 1
         default: 100
         maximum: 500
-  responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

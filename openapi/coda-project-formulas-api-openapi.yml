@@ -171,173 +171,6 @@ paths:
 
           '
 components:
-  schemas:
-    Formula:
-      x-schema-name: Formula
-      description: Details about a formula.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      - name
-      - value
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the formula.
-          example: f-fgHijkLm
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - formula
-          x-tsType: Type.Formula
-        href:
-          type: string
-          format: url
-          description: API link to the formula.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas/f-fgHijkLm
-        name:
-          type: string
-          description: Name of the formula.
-          example: Sum of expenses
-        parent:
-          $ref: '#/components/schemas/PageReference'
-        value:
-          $ref: '#/components/schemas/Value'
-    FormulaList:
-      x-schema-name: FormulaList
-      description: List of formulas.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormulaReference'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas?pageToken=eyJsaW1pd
-    FormulaReference:
-      x-schema-name: FormulaReference
-      description: Reference to a formula.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the formula.
-          example: f-fgHijkLm
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - formula
-          x-tsType: Type.Formula
-        href:
-          type: string
-          format: url
-          description: API link to the formula.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas/f-fgHijkLm
-        name:
-          type: string
-          description: Name of the formula.
-          example: Sum of expenses
-        parent:
-          $ref: '#/components/schemas/PageReference'
-    ScalarValue:
-      x-schema-name: ScalarValue
-      description: A Superhuman Docs result or entity expressed as a primitive type.
-      oneOf:
-      - type: string
-        example: $12.34
-      - type: number
-        example: 12.34
-      - type: boolean
-        example: true
-    SortBy:
-      x-schema-name: SortBy
-      description: Determines how the objects returned are sorted
-      type: string
-      enum:
-      - name
-      x-tsEnumNames:
-      - Name
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    Value:
-      x-schema-name: Value
-      description: A Superhuman Docs result or entity expressed as a primitive type, or array of primitive types.
-      additionalProperties: false
-      oneOf:
-      - $ref: '#/components/schemas/ScalarValue'
-      - type: array
-        items:
-          oneOf:
-          - $ref: '#/components/schemas/ScalarValue'
-          - type: array
-            items:
-              $ref: '#/components/schemas/ScalarValue'
   responses:
     ForbiddenError:
       description: The API token does not grant access to this resource.
@@ -363,30 +196,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -435,6 +244,197 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+  schemas:
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+    FormulaReference:
+      x-schema-name: FormulaReference
+      description: Reference to a formula.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the formula.
+          example: f-fgHijkLm
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - formula
+          x-tsType: Type.Formula
+        href:
+          type: string
+          format: url
+          description: API link to the formula.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas/f-fgHijkLm
+        name:
+          type: string
+          description: Name of the formula.
+          example: Sum of expenses
+        parent:
+          $ref: '#/components/schemas/PageReference'
+    FormulaList:
+      x-schema-name: FormulaList
+      description: List of formulas.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormulaReference'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas?pageToken=eyJsaW1pd
+    Formula:
+      x-schema-name: Formula
+      description: Details about a formula.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      - value
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the formula.
+          example: f-fgHijkLm
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - formula
+          x-tsType: Type.Formula
+        href:
+          type: string
+          format: url
+          description: API link to the formula.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/formulas/f-fgHijkLm
+        name:
+          type: string
+          description: Name of the formula.
+          example: Sum of expenses
+        parent:
+          $ref: '#/components/schemas/PageReference'
+        value:
+          $ref: '#/components/schemas/Value'
+    ScalarValue:
+      x-schema-name: ScalarValue
+      description: A Superhuman Docs result or entity expressed as a primitive type.
+      oneOf:
+      - type: string
+        example: $12.34
+      - type: number
+        example: 12.34
+      - type: boolean
+        example: true
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    SortBy:
+      x-schema-name: SortBy
+      description: Determines how the objects returned are sorted
+      type: string
+      enum:
+      - name
+      x-tsEnumNames:
+      - Name
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    Value:
+      x-schema-name: Value
+      description: A Superhuman Docs result or entity expressed as a primitive type, or array of primitive types.
+      additionalProperties: false
+      oneOf:
+      - $ref: '#/components/schemas/ScalarValue'
+      - type: array
+        items:
+          oneOf:
+          - $ref: '#/components/schemas/ScalarValue'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ScalarValue'
   parameters:
     sortBy:
       name: sortBy
@@ -443,6 +443,13 @@ components:
       example: name
       schema:
         $ref: '#/components/schemas/SortBy'
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
     docId:
       name: docId
       description: ID of the doc.
@@ -467,13 +474,6 @@ components:
       in: path
       required: true
       example: f-fgHijkLm
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
       schema:
         type: string
   securitySchemes:

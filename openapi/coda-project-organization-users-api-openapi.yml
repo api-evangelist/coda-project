@@ -245,220 +245,7 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/users/<user email>/deactivate'\n"
 components:
-  parameters:
-    isActivated:
-      name: isActivated
-      description: Filter results to users based on their activation status.
-      in: query
-      required: false
-      schema:
-        type: boolean
-        x-no-default: true
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    query:
-      name: query
-      description: Search terms used to narrow down results.
-      in: query
-      required: false
-      example: feature%parity
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
-    userEmail:
-      name: userEmail
-      description: User to act upon.
-      in: path
-      required: true
-      example: april@example.com
-      schema:
-        type: string
-        format: email
-  schemas:
-    TransferResourcesRequest:
-      x-schema-name: TransferResourcesRequest
-      description: Payload for transferring resources between users.
-      type: object
-      required:
-      - fromEmail
-      - toEmail
-      additionalProperties: false
-      properties:
-        fromEmail:
-          type: string
-          description: The email address of the user to transfer resources away from.
-          example: joe@example.com
-        toEmail:
-          type: string
-          description: The email address of the user to transfer resources to.
-          example: april@example.com
-        filterDocIds:
-          type: array
-          description: List of IDs of docs to transfer. Must be owned by the from user. If unspecified transfers all docs the from user owns.
-          example:
-          - AbCDeFGH
-          items:
-            type: string
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    OrgUser:
-      x-schema-name: OrgUser
-      description: Metadata of a user in an organization.
-      type: object
-      required:
-      - email
-      - name
-      - status
-      - registeredAt
-      additionalProperties: false
-      properties:
-        id:
-          type: number
-          description: Unique id of the user.
-          example: 12345
-        email:
-          type: string
-          description: Email of the user.
-          example: hello@example.com
-        name:
-          type: string
-          description: Name of the user.
-          example: Sally Jane
-        pictureUrl:
-          type: string
-          description: Picture url of the user.
-          format: url
-          example: codahosted.io/123
-        status:
-          $ref: '#/components/schemas/OrgUserStatus'
-        registeredAt:
-          type: string
-          format: date-time
-          description: Timestamp representing when the user registered with Superhuman Docs.
-          example: '2018-04-11T00:18:57.946Z'
-        deactivatedAt:
-          type: string
-          format: date-time
-          description: Timestamp representing when the user was deactivated from Superhuman Docs.
-          example: '2018-04-11T00:18:57.946Z'
-        ownedDocCount:
-          type: number
-          description: Number of docs owned by this user.
-          example: 12
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    OrgUserList:
-      x-schema-name: OrgUserList
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrgUser'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?pageToken=eyJsaW1pd
-    OrgUserActivationChangeRequest:
-      x-schema-name: OrgUserActivationChangeRequest
-      description: Payload for making changes to an org user's state.
-      type: object
-      additionalProperties: false
-      properties:
-        bypassScim:
-          type: boolean
-          description: By default, requests to update org users' activation state are rejected if SCIM is enabled for the organization. Updating membership here may cause Superhuman Docs to be out of sync with your identity provider and/or refreshes from SCIM may overwrite your changes here. Set this flag to bypass this protection.
-    OrgUserActivationChangeResult:
-      x-schema-name: OrgUserActivationChangeResult
-      description: The result of a change to an org user's state.
-      type: object
-      additionalProperties: false
-      properties: {}
-    TransferResourcesResponse:
-      x-schema-name: TransferResourcesResponse
-      description: Result of the transfer resources request
-      type: object
-      required:
-      - requestId
-      additionalProperties: false
-      properties:
-        requestId:
-          type: string
-          description: An opaque identifier that represents the request.
-          example: c5cb3278-800e-4ae3-be53-19b0b794f8e1
-    OrgUserStatus:
-      x-schema-name: OrgUserStatus
-      type: string
-      enum:
-      - Active
-      - Deactivated
-      - Deleted
-      x-tsEnumNames:
-      - Active
-      - Deactivated
-      - Deleted
   responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -483,6 +270,54 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -531,30 +366,195 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
+  schemas:
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    TransferResourcesResponse:
+      x-schema-name: TransferResourcesResponse
+      description: Result of the transfer resources request
+      type: object
+      required:
+      - requestId
+      additionalProperties: false
+      properties:
+        requestId:
+          type: string
+          description: An opaque identifier that represents the request.
+          example: c5cb3278-800e-4ae3-be53-19b0b794f8e1
+    OrgUserList:
+      x-schema-name: OrgUserList
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrgUser'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?pageToken=eyJsaW1pd
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    OrgUserStatus:
+      x-schema-name: OrgUserStatus
+      type: string
+      enum:
+      - Active
+      - Deactivated
+      - Deleted
+      x-tsEnumNames:
+      - Active
+      - Deactivated
+      - Deleted
+    TransferResourcesRequest:
+      x-schema-name: TransferResourcesRequest
+      description: Payload for transferring resources between users.
+      type: object
+      required:
+      - fromEmail
+      - toEmail
+      additionalProperties: false
+      properties:
+        fromEmail:
+          type: string
+          description: The email address of the user to transfer resources away from.
+          example: joe@example.com
+        toEmail:
+          type: string
+          description: The email address of the user to transfer resources to.
+          example: april@example.com
+        filterDocIds:
+          type: array
+          description: List of IDs of docs to transfer. Must be owned by the from user. If unspecified transfers all docs the from user owns.
+          example:
+          - AbCDeFGH
+          items:
+            type: string
+    OrgUserActivationChangeResult:
+      x-schema-name: OrgUserActivationChangeResult
+      description: The result of a change to an org user's state.
+      type: object
+      additionalProperties: false
+      properties: {}
+    OrgUserActivationChangeRequest:
+      x-schema-name: OrgUserActivationChangeRequest
+      description: Payload for making changes to an org user's state.
+      type: object
+      additionalProperties: false
+      properties:
+        bypassScim:
+          type: boolean
+          description: By default, requests to update org users' activation state are rejected if SCIM is enabled for the organization. Updating membership here may cause Superhuman Docs to be out of sync with your identity provider and/or refreshes from SCIM may overwrite your changes here. Set this flag to bypass this protection.
+    OrgUser:
+      x-schema-name: OrgUser
+      description: Metadata of a user in an organization.
+      type: object
+      required:
+      - email
+      - name
+      - status
+      - registeredAt
+      additionalProperties: false
+      properties:
+        id:
+          type: number
+          description: Unique id of the user.
+          example: 12345
+        email:
+          type: string
+          description: Email of the user.
+          example: hello@example.com
+        name:
+          type: string
+          description: Name of the user.
+          example: Sally Jane
+        pictureUrl:
+          type: string
+          description: Picture url of the user.
+          format: url
+          example: codahosted.io/123
+        status:
+          $ref: '#/components/schemas/OrgUserStatus'
+        registeredAt:
+          type: string
+          format: date-time
+          description: Timestamp representing when the user registered with Superhuman Docs.
+          example: '2018-04-11T00:18:57.946Z'
+        deactivatedAt:
+          type: string
+          format: date-time
+          description: Timestamp representing when the user was deactivated from Superhuman Docs.
+          example: '2018-04-11T00:18:57.946Z'
+        ownedDocCount:
+          type: number
+          description: Number of docs owned by this user.
+          example: 12
+  parameters:
+    query:
+      name: query
+      description: Search terms used to narrow down results.
+      in: query
+      required: false
+      example: feature%parity
+      schema:
+        type: string
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    isActivated:
+      name: isActivated
+      description: Filter results to users based on their activation status.
+      in: query
+      required: false
+      schema:
+        type: boolean
+        x-no-default: true
+    userEmail:
+      name: userEmail
+      description: User to act upon.
+      in: path
+      required: true
+      example: april@example.com
+      schema:
+        type: string
+        format: email
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

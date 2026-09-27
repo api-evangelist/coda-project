@@ -285,7 +285,226 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks/<your webhook id>/reset'\n"
 components:
+  responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   schemas:
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    UpdateWebhookRequest:
+      x-schema-name: UpdateWebhookRequest
+      description: Payload for creating or updating a webhook subscription.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the webhook subscription.
+          example: My webhook
+        target:
+          type: string
+          format: url
+          description: The target URL where webhook payloads will be sent
+          example: https://example.com/webhook/endpoint
+        filters:
+          $ref: '#/components/schemas/WebhookFilter'
+    WebhookFilterPredicate:
+      x-schema-name: WebhookFilterPredicate
+      description: One entry in a webhook subscription filter.
+      type: object
+      required:
+      - action
+      additionalProperties: false
+      properties:
+        action:
+          type: string
+          description: The event action.
+          example: EditDoc
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    WebhookList:
+      x-schema-name: WebhookList
+      description: List of webhooks.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks?pageToken=eyJsaW1pd
+    WebhookWatchedResource:
+      x-schema-name: WebhookWatchedResource
+      description: Type of resource a webhook is subscribed to.
+      type: string
+      enum:
+      - auditEvents
+      x-tsEnumNames:
+      - AuditEvents
+    DeleteWebhookResult:
+      x-schema-name: DeleteWebhookResult
+      description: The result of deleting a webhook subscription.
+      type: object
+      additionalProperties: false
+      properties: {}
+    AddWebhookRequest:
+      x-schema-name: AddWebhookRequest
+      description: Payload for creating or updating a webhook subscription.
+      type: object
+      required:
+      - resource
+      - target
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the webhook subscription.
+          example: My webhook
+        resource:
+          $ref: '#/components/schemas/WebhookWatchedResource'
+        target:
+          type: string
+          format: url
+          description: The target URL where webhook payloads will be sent
+          example: https://example.com/webhook/endpoint
+        filters:
+          $ref: '#/components/schemas/WebhookFilter'
     Webhook:
       x-schema-name: Webhook
       description: Info about a webhook subscription.
@@ -350,58 +569,6 @@ components:
           format: date-time
           description: Timestamp for when the webhook last successfully sent a payload to the target.
           example: '2018-04-11T00:18:57.946Z'
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    DeleteWebhookResult:
-      x-schema-name: DeleteWebhookResult
-      description: The result of deleting a webhook subscription.
-      type: object
-      additionalProperties: false
-      properties: {}
-    WebhookList:
-      x-schema-name: WebhookList
-      description: List of webhooks.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Webhook'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks?pageToken=eyJsaW1pd
-    UpdateWebhookRequest:
-      x-schema-name: UpdateWebhookRequest
-      description: Payload for creating or updating a webhook subscription.
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the webhook subscription.
-          example: My webhook
-        target:
-          type: string
-          format: url
-          description: The target URL where webhook payloads will be sent
-          example: https://example.com/webhook/endpoint
-        filters:
-          $ref: '#/components/schemas/WebhookFilter'
     WebhookFilter:
       x-schema-name: WebhookFilter
       description: Filter set for the webhook subscription.
@@ -412,52 +579,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WebhookFilterPredicate'
-    WebhookWatchedResource:
-      x-schema-name: WebhookWatchedResource
-      description: Type of resource a webhook is subscribed to.
-      type: string
-      enum:
-      - auditEvents
-      x-tsEnumNames:
-      - AuditEvents
-    AddWebhookRequest:
-      x-schema-name: AddWebhookRequest
-      description: Payload for creating or updating a webhook subscription.
-      type: object
-      required:
-      - resource
-      - target
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the webhook subscription.
-          example: My webhook
-        resource:
-          $ref: '#/components/schemas/WebhookWatchedResource'
-        target:
-          type: string
-          format: url
-          description: The target URL where webhook payloads will be sent
-          example: https://example.com/webhook/endpoint
-        filters:
-          $ref: '#/components/schemas/WebhookFilter'
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    WebhookFilterPredicate:
-      x-schema-name: WebhookFilterPredicate
-      description: One entry in a webhook subscription filter.
-      type: object
-      required:
-      - action
-      additionalProperties: false
-      properties:
-        action:
-          type: string
-          description: The event action.
-          example: EditDoc
   parameters:
     organizationId:
       name: organizationId
@@ -493,127 +614,6 @@ components:
         minimum: 1
         default: 100
         maximum: 500
-  responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

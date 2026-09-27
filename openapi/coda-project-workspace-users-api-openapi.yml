@@ -205,82 +205,16 @@ paths:
 
           '
 components:
-  parameters:
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    workspaceUserRoles:
-      name: workspaceUserRoles
-      description: Filter results to users based on their role in the workspace
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/WorkspaceUserRole'
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    workspaceId:
-      name: workspaceId
-      description: ID of the workspace.
-      in: path
-      required: true
-      example: ws-AbCDeFGHIj
-      schema:
-        type: string
-    query:
-      name: query
-      description: Search terms used to narrow down results.
-      in: query
-      required: false
-      example: feature%parity
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
-    userEmail:
-      name: userEmail
-      description: User to act upon.
-      in: path
-      required: true
-      example: april@example.com
-      schema:
-        type: string
-        format: email
   schemas:
-    AddWorkspaceUserRequest:
-      x-schema-name: AddWorkspaceUserRequest
-      description: Payload for adding an existing user to a workspace.
+    RemoveWorkspaceUserResponse:
+      x-schema-name: RemoveWorkspaceUserResponse
+      description: Result of the user workspace removal request
       type: object
-      required:
-      - email
-      - role
       additionalProperties: false
-      properties:
-        email:
-          type: string
-          description: The email address of the existing user to add to the workspace.
-          example: joe@example.com
-        role:
-          $ref: '#/components/schemas/WorkspaceUserRole'
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     WorkspaceUser:
       x-schema-name: WorkspaceUser
       description: Metadata of a user in a workspace.
@@ -340,29 +274,6 @@ components:
           type: number
           description: Unique members who have viewed any of the member's Total docs in the last 90 days.
           example: 5
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    RemoveWorkspaceUserResponse:
-      x-schema-name: RemoveWorkspaceUserResponse
-      description: Result of the user workspace removal request
-      type: object
-      additionalProperties: false
-    UpdateWorkspaceUserRequest:
-      x-schema-name: UpdateWorkspaceUserRequest
-      description: Payload for updating an existing user in a workspace.
-      type: object
-      required:
-      - role
-      additionalProperties: false
-      properties:
-        role:
-          $ref: '#/components/schemas/WorkspaceUserRole'
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
     WorkspaceUserRole:
       x-schema-name: WorkspaceUserRole
       type: string
@@ -374,6 +285,35 @@ components:
       - Admin
       - DocMaker
       - Editor
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    UpdateWorkspaceUserRequest:
+      x-schema-name: UpdateWorkspaceUserRequest
+      description: Payload for updating an existing user in a workspace.
+      type: object
+      required:
+      - role
+      additionalProperties: false
+      properties:
+        role:
+          $ref: '#/components/schemas/WorkspaceUserRole'
+    AddWorkspaceUserRequest:
+      x-schema-name: AddWorkspaceUserRequest
+      description: Payload for adding an existing user to a workspace.
+      type: object
+      required:
+      - email
+      - role
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          description: The email address of the existing user to add to the workspace.
+          example: joe@example.com
+        role:
+          $ref: '#/components/schemas/WorkspaceUserRole'
     WorkspaceUserList:
       x-schema-name: WorkspaceUserList
       type: object
@@ -398,30 +338,6 @@ components:
           - type: string
             example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/workspaces/ws-n123897sfd/users?pageToken=eyJsaW1pd
   responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -446,6 +362,54 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -494,30 +458,66 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
+  parameters:
+    query:
+      name: query
+      description: Search terms used to narrow down results.
+      in: query
+      required: false
+      example: feature%parity
+      schema:
+        type: string
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    workspaceUserRoles:
+      name: workspaceUserRoles
+      description: Filter results to users based on their role in the workspace
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/WorkspaceUserRole'
+    workspaceId:
+      name: workspaceId
+      description: ID of the workspace.
+      in: path
+      required: true
+      example: ws-AbCDeFGHIj
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    userEmail:
+      name: userEmail
+      description: User to act upon.
+      in: path
+      required: true
+      example: april@example.com
+      schema:
+        type: string
+        format: email
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

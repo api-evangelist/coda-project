@@ -178,13 +178,127 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
+  responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
   schemas:
-    UpdateCustomDocDomainRequest:
-      x-schema-name: UpdateCustomDocDomainRequest
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    CustomDomainConnectedStatus:
+      x-schema-name: CustomDomainConnectedStatus
+      type: string
+      enum:
+      - connected
+      - notConnected
+      x-tsEnumNames:
+      - Connected
+      - NotConnected
+    CustomDocDomainProviderResponse:
+      x-schema-name: CustomDocDomainProviderResponse
       type: object
-      description: Payload for updating the properties of a custom published doc domain.
+      description: The result of determining the domain provider for a custom doc domain.
+      required:
+      - provider
       additionalProperties: false
-      properties: {}
+      properties:
+        provider:
+          $ref: '#/components/schemas/CustomDocDomainProvider'
     CustomDocDomain:
       x-schema-name: CustomDocDomain
       type: object
@@ -218,30 +332,40 @@ components:
           format: date-time
           description: When the domain DNS settings were last checked.
           example: '2018-04-11T00:18:57.946Z'
-    CustomDomainConnectedStatus:
-      x-schema-name: CustomDomainConnectedStatus
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
       type: string
-      enum:
-      - connected
-      - notConnected
-      x-tsEnumNames:
-      - Connected
-      - NotConnected
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    CustomDocDomainSetupStatus:
-      x-schema-name: CustomDocDomainSetupStatus
-      type: string
-      enum:
-      - pending
-      - succeeded
-      - failed
-      x-tsEnumNames:
-      - Pending
-      - Succeeded
-      - Failed
+      example: eyJsaW1pd
+    AddCustomDocDomainRequest:
+      x-schema-name: AddCustomDocDomainRequest
+      type: object
+      description: Payload for adding a custom published doc domain.
+      required:
+      - customDocDomain
+      additionalProperties: false
+      properties:
+        customDocDomain:
+          type: string
+          description: The custom domain.
+          example: example.com
+    UpdateCustomDocDomainResponse:
+      x-schema-name: UpdateCustomDocDomainResponse
+      type: object
+      description: The result of updating a custom domain for a published doc.
+      additionalProperties: false
+      properties: {}
+    DeleteCustomDocDomainResponse:
+      x-schema-name: DeleteCustomDocDomainResponse
+      type: object
+      description: The result of deleting a custom domain from a published doc.
+      additionalProperties: false
+      properties: {}
+    AddCustomDocDomainResponse:
+      x-schema-name: AddCustomDocDomainResponse
+      type: object
+      description: The result of adding a custom domain to a published doc.
+      additionalProperties: false
+      properties: {}
     CustomDocDomainList:
       x-schema-name: CustomDocDomainList
       type: object
@@ -262,22 +386,12 @@ components:
           - $ref: '#/components/schemas/nextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/domains?pageToken=eyJsaW1pd
-    DeleteCustomDocDomainResponse:
-      x-schema-name: DeleteCustomDocDomainResponse
+    UpdateCustomDocDomainRequest:
+      x-schema-name: UpdateCustomDocDomainRequest
       type: object
-      description: The result of deleting a custom domain from a published doc.
+      description: Payload for updating the properties of a custom published doc domain.
       additionalProperties: false
       properties: {}
-    CustomDocDomainProviderResponse:
-      x-schema-name: CustomDocDomainProviderResponse
-      type: object
-      description: The result of determining the domain provider for a custom doc domain.
-      required:
-      - provider
-      additionalProperties: false
-      properties:
-        provider:
-          $ref: '#/components/schemas/CustomDocDomainProvider'
     CustomDocDomainProvider:
       x-schema-name: CustomDocDomainProvider
       type: string
@@ -295,145 +409,31 @@ components:
       - NetworkSolutions
       - GoogleDomains
       - Other
-    AddCustomDocDomainResponse:
-      x-schema-name: AddCustomDocDomainResponse
-      type: object
-      description: The result of adding a custom domain to a published doc.
-      additionalProperties: false
-      properties: {}
-    UpdateCustomDocDomainResponse:
-      x-schema-name: UpdateCustomDocDomainResponse
-      type: object
-      description: The result of updating a custom domain for a published doc.
-      additionalProperties: false
-      properties: {}
-    AddCustomDocDomainRequest:
-      x-schema-name: AddCustomDocDomainRequest
-      type: object
-      description: Payload for adding a custom published doc domain.
-      required:
-      - customDocDomain
-      additionalProperties: false
-      properties:
-        customDocDomain:
-          type: string
-          description: The custom domain.
-          example: example.com
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
+    CustomDocDomainSetupStatus:
+      x-schema-name: CustomDocDomainSetupStatus
       type: string
-      example: eyJsaW1pd
-  responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
+      enum:
+      - pending
+      - succeeded
+      - failed
+      x-tsEnumNames:
+      - Pending
+      - Succeeded
+      - Failed
   parameters:
-    customDocDomain:
-      name: customDocDomain
-      description: A custom domain for a published doc.
-      in: path
-      required: true
-      schema:
-        type: string
     docId:
       name: docId
       description: ID of the doc.
       in: path
       required: true
       example: AbCDeFGH
+      schema:
+        type: string
+    customDocDomain:
+      name: customDocDomain
+      description: A custom domain for a published doc.
+      in: path
+      required: true
       schema:
         type: string
   securitySchemes:

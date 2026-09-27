@@ -208,79 +208,100 @@ paths:
 
           '
 components:
+  schemas:
+    DocCategory:
+      x-schema-name: DocCategory
+      type: object
+      description: The category applied to a doc.
+      required:
+      - name
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the category.
+          example: Project Management
+    PublishResult:
+      x-schema-name: PublishResult
+      description: The result of publishing a doc.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        additionalProperties: false
+        properties: {}
+    DocPublishMode:
+      x-schema-name: DocPublishMode
+      description: Which interaction mode the published doc should use.
+      type: string
+      enum:
+      - view
+      - play
+      - edit
+      x-tsEnumNames:
+      - View
+      - Play
+      - Edit
+    DocPublish:
+      x-schema-name: DocPublish
+      description: Payload for publishing a doc or or updating its publishing information.
+      type: object
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+          description: Slug for the published doc.
+          example: my-doc
+        discoverable:
+          type: boolean
+          description: If true, indicates that the doc is discoverable.
+          example: true
+        earnCredit:
+          type: boolean
+          description: 'If true, new users may be required to sign in to view content within this document. You will receive Superhuman Docs credit for each user who signs up via your document.
+
+            '
+          example: true
+        categoryNames:
+          type: array
+          description: The names of categories to apply to the document.
+          example:
+          - Project management
+          items:
+            type: string
+        mode:
+          $ref: '#/components/schemas/DocPublishMode'
+    UnpublishResult:
+      x-schema-name: UnpublishResult
+      description: The result of unpublishing a doc.
+      type: object
+      additionalProperties: false
+      properties: {}
+    DocumentMutateResponse:
+      x-schema-name: DocumentMutateResponse
+      description: Base response type for an operation that mutates a document.
+      type: object
+      additionalProperties: false
+      required:
+      - requestId
+      properties:
+        requestId:
+          type: string
+          description: An arbitrary unique identifier for this request.
+          example: abc-123-def-456
+    DocCategoryList:
+      x-schema-name: DocCategoryList
+      type: object
+      description: A list of categories that can be applied to a doc.
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          description: Categories for the doc.
+          items:
+            $ref: '#/components/schemas/DocCategory'
   responses:
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -329,99 +350,78 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-  schemas:
-    UnpublishResult:
-      x-schema-name: UnpublishResult
-      description: The result of unpublishing a doc.
-      type: object
-      additionalProperties: false
-      properties: {}
-    PublishResult:
-      x-schema-name: PublishResult
-      description: The result of publishing a doc.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        additionalProperties: false
-        properties: {}
-    DocPublish:
-      x-schema-name: DocPublish
-      description: Payload for publishing a doc or or updating its publishing information.
-      type: object
-      additionalProperties: false
-      properties:
-        slug:
-          type: string
-          description: Slug for the published doc.
-          example: my-doc
-        discoverable:
-          type: boolean
-          description: If true, indicates that the doc is discoverable.
-          example: true
-        earnCredit:
-          type: boolean
-          description: 'If true, new users may be required to sign in to view content within this document. You will receive Superhuman Docs credit for each user who signs up via your document.
-
-            '
-          example: true
-        categoryNames:
-          type: array
-          description: The names of categories to apply to the document.
-          example:
-          - Project management
-          items:
-            type: string
-        mode:
-          $ref: '#/components/schemas/DocPublishMode'
-    DocCategoryList:
-      x-schema-name: DocCategoryList
-      type: object
-      description: A list of categories that can be applied to a doc.
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          description: Categories for the doc.
-          items:
-            $ref: '#/components/schemas/DocCategory'
-    DocCategory:
-      x-schema-name: DocCategory
-      type: object
-      description: The category applied to a doc.
-      required:
-      - name
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the category.
-          example: Project Management
-    DocPublishMode:
-      x-schema-name: DocPublishMode
-      description: Which interaction mode the published doc should use.
-      type: string
-      enum:
-      - view
-      - play
-      - edit
-      x-tsEnumNames:
-      - View
-      - Play
-      - Edit
-    DocumentMutateResponse:
-      x-schema-name: DocumentMutateResponse
-      description: Base response type for an operation that mutates a document.
-      type: object
-      additionalProperties: false
-      required:
-      - requestId
-      properties:
-        requestId:
-          type: string
-          description: An arbitrary unique identifier for this request.
-          example: abc-123-def-456
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   parameters:
     docId:
       name: docId
