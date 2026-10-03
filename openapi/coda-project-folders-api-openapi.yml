@@ -435,7 +435,140 @@ paths:
     - url: https://docs.superhuman.com/apis/v1
       description: Superhuman Docs API (v1)
 components:
+  parameters:
+    folderId:
+      name: folderId
+      description: ID of the folder.
+      in: path
+      required: true
+      example: fl-AbCDeFGHIj
+      schema:
+        type: string
+    query:
+      name: query
+      description: Search terms used to narrow down results.
+      in: query
+      required: false
+      example: feature%parity
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    folderType:
+      name: folderType
+      description: Type of the folder
+      in: query
+      example: Standard
+      schema:
+        $ref: '#/components/schemas/FolderType'
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    workspaceId:
+      name: workspaceId
+      description: ID of the workspace.
+      in: path
+      required: true
+      example: ws-AbCDeFGHIj
+      schema:
+        type: string
+    folderIds:
+      name: folderIds
+      description: Comma-separated list of folder IDs
+      in: query
+      explode: false
+      example:
+      - fl-AbCDeFGHIj
+      schema:
+        type: array
+        items:
+          type: string
+    folderId_2:
+      name: folderId
+      description: ID of the folder.
+      in: path
+      required: true
+      example: fl-1Ab234
+      schema:
+        type: string
+    limit_2:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
   responses:
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -484,30 +617,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -532,57 +641,13 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
   schemas:
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    GroupPrincipal:
+    DeleteFolderResult:
+      x-schema-name: DeleteFolderResult
+      description: The result of deleting a folder.
       type: object
-      required:
-      - groupId
-      - groupName
-      - type
       additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - group
-          x-tsType: PrincipalType.Group
-        groupId:
-          type: string
-          description: Group ID for the principal.
-          example: grp-6SM9xrKcqW
-        groupName:
-          type: string
-          description: Name of the group.
-          example: Marketing team
+      properties: {}
     FolderPermission:
       x-schema-name: FolderPermission
       description: A specific folder permission granted to a principal.
@@ -607,41 +672,10 @@ components:
           description: ID for the Permission
         access:
           $ref: '#/components/schemas/FolderAccessType'
-    AnyonePrincipal:
-      type: object
-      required:
-      - type
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - anyone
-          x-tsType: PrincipalType.Anyone
-    DomainPrincipal:
-      type: object
-      required:
-      - domain
-      - type
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - domain
-          x-tsType: PrincipalType.Domain
-        domain:
-          type: string
-          description: Domain for the principal.
-          example: domain.com
-    DeleteFolderResult:
-      x-schema-name: DeleteFolderResult
-      description: The result of deleting a folder.
-      type: object
-      additionalProperties: false
-      properties: {}
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     WorkspacePrincipal:
       type: object
       required:
@@ -676,26 +710,19 @@ components:
           type: string
           description: Email for the principal.
           example: example@domain.com
-    FolderAccessType:
-      x-schema-name: FolderAccessType
-      description: Type of access for folders only.
-      type: string
-      enum:
-      - readonly
-      - write
-      - comment
-      - manage
-      - none
-      x-tsEnumNames:
-      - ReadOnly
-      - Write
-      - Comment
-      - Manage
-      - None
     NextPageLink:
       description: If specified, a link that can be used to fetch the next page of results.
       type: string
       format: url
+    FolderType:
+      x-schema-name: FolderType
+      type: string
+      enum:
+      - Standard
+      - Personal
+      x-tsEnumNames:
+      - Standard
+      - Personal
     Principal:
       x-schema-name: Principal
       description: Metadata about a principal.
@@ -713,15 +740,35 @@ components:
           domain: '#/components/schemas/DomainPrincipal'
           workspace: '#/components/schemas/WorkspacePrincipal'
           anyone: '#/components/schemas/AnyonePrincipal'
-    FolderType:
-      x-schema-name: FolderType
-      type: string
-      enum:
-      - Standard
-      - Personal
-      x-tsEnumNames:
-      - Standard
-      - Personal
+    AnyonePrincipal:
+      type: object
+      required:
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - anyone
+          x-tsType: PrincipalType.Anyone
+    DomainPrincipal:
+      type: object
+      required:
+      - domain
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - domain
+          x-tsType: PrincipalType.Domain
+        domain:
+          type: string
+          description: Domain for the principal.
+          example: domain.com
     FolderList:
       x-schema-name: FolderList
       description: List of folders.
@@ -747,6 +794,22 @@ components:
           - $ref: '#/components/schemas/NextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/workspaces/<your workspace id>/folders?pageToken=eyJsaW1pd
+    FolderAccessType:
+      x-schema-name: FolderAccessType
+      description: Type of access for folders only.
+      type: string
+      enum:
+      - readonly
+      - write
+      - comment
+      - manage
+      - none
+      x-tsEnumNames:
+      - ReadOnly
+      - Write
+      - Comment
+      - Manage
+      - None
     Folder:
       x-schema-name: Folder
       description: Info about a Superhuman Docs folder.
@@ -793,111 +856,28 @@ components:
         truncatedAcl:
           type: boolean
           description: True if the inline ACL field was truncated; use a paginated ACL query to fetch all permissions.
-    UpdateFolderRequest:
-      x-schema-name: UpdateFolderRequest
-      description: Request for updating a folder.
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the folder.
-          example: Projects
-        description:
-          type: string
-          description: Description of the folder.
-          example: A collection of project docs.
-    FolderList_2:
-      x-schema-name: FolderList
-      description: List of folders.
+    GroupPrincipal:
       type: object
       required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Folder_2'
-        href:
-          type: string
-          format: url
-          description: API link to these results.
-          example: https://docs.superhuman.com/apis/v1/folders?workspaceId=ws-1Ab234
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/folders?pageToken=xyz
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    WorkspaceReference:
-      x-schema-name: WorkspaceReference
-      description: Reference to a Superhuman Docs workspace.
-      type: object
-      required:
-      - id
+      - groupId
+      - groupName
       - type
-      - browserLink
       additionalProperties: false
       properties:
-        id:
-          type: string
-          description: ID of the Superhuman Docs workspace.
-          example: ws-1Ab234
         type:
           type: string
-          description: The type of this resource.
+          description: The type of this principal.
           enum:
-          - workspace
-          x-tsType: Type.Workspace
-        organizationId:
+          - group
+          x-tsType: PrincipalType.Group
+        groupId:
           type: string
-          description: ID of the organization bound to this workspace, if any.
-          example: org-2Bc456
-        browserLink:
+          description: Group ID for the principal.
+          example: grp-6SM9xrKcqW
+        groupName:
           type: string
-          format: url
-          description: Browser-friendly link to the Superhuman Docs workspace.
-          example: https://docs.superhuman.com/docs?workspaceId=ws-1Ab234
-        name:
-          type: string
-          description: Name of the workspace; included if the user has access to the workspace.
-          example: My workspace
-    DeleteFolderResult_2:
-      x-schema-name: DeleteFolderResult
-      description: The result of a folder deletion.
-      type: object
-      additionalProperties: false
-    CreateFolderRequest:
-      x-schema-name: CreateFolderRequest
-      description: Request for creating a folder.
-      type: object
-      required:
-      - name
-      - workspaceId
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the folder.
-          example: Projects
-        workspaceId:
-          type: string
-          description: ID of the workspace where the folder should be created.
-          example: ws-1Ab234
-        description:
-          type: string
-          description: Description of the folder.
-          example: A collection of project docs.
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
+          description: Name of the group.
+          example: Marketing team
     Folder_2:
       x-schema-name: Folder
       description: A Superhuman Docs folder.
@@ -946,6 +926,83 @@ components:
           example: true
         workspace:
           $ref: '#/components/schemas/WorkspaceReference'
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    CreateFolderRequest:
+      x-schema-name: CreateFolderRequest
+      description: Request for creating a folder.
+      type: object
+      required:
+      - name
+      - workspaceId
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the folder.
+          example: Projects
+        workspaceId:
+          type: string
+          description: ID of the workspace where the folder should be created.
+          example: ws-1Ab234
+        description:
+          type: string
+          description: Description of the folder.
+          example: A collection of project docs.
+    DeleteFolderResult_2:
+      x-schema-name: DeleteFolderResult
+      description: The result of a folder deletion.
+      type: object
+      additionalProperties: false
+    UpdateFolderRequest:
+      x-schema-name: UpdateFolderRequest
+      description: Request for updating a folder.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the folder.
+          example: Projects
+        description:
+          type: string
+          description: Description of the folder.
+          example: A collection of project docs.
+    WorkspaceReference:
+      x-schema-name: WorkspaceReference
+      description: Reference to a Superhuman Docs workspace.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the Superhuman Docs workspace.
+          example: ws-1Ab234
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - workspace
+          x-tsType: Type.Workspace
+        organizationId:
+          type: string
+          description: ID of the organization bound to this workspace, if any.
+          example: org-2Bc456
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the Superhuman Docs workspace.
+          example: https://docs.superhuman.com/docs?workspaceId=ws-1Ab234
+        name:
+          type: string
+          description: Name of the workspace; included if the user has access to the workspace.
+          example: My workspace
     Icon:
       x-schema-name: icon
       description: Info about the icon.
@@ -967,91 +1024,34 @@ components:
           format: url
           description: Browser-friendly link to an icon.
           example: https://cdn.coda.io/icons/png/color/icon-32.png
-  parameters:
-    query:
-      name: query
-      description: Search terms used to narrow down results.
-      in: query
-      required: false
-      example: feature%parity
-      schema:
-        type: string
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    folderType:
-      name: folderType
-      description: Type of the folder
-      in: query
-      example: Standard
-      schema:
-        $ref: '#/components/schemas/FolderType'
-    workspaceId:
-      name: workspaceId
-      description: ID of the workspace.
-      in: path
-      required: true
-      example: ws-AbCDeFGHIj
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
       example: eyJsaW1pd
-      schema:
-        type: string
-    folderIds:
-      name: folderIds
-      description: Comma-separated list of folder IDs
-      in: query
-      explode: false
-      example:
-      - fl-AbCDeFGHIj
-      schema:
-        type: array
+    FolderList_2:
+      x-schema-name: FolderList
+      description: List of folders.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
         items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Folder_2'
+        href:
           type: string
-    folderId:
-      name: folderId
-      description: ID of the folder.
-      in: path
-      required: true
-      example: fl-AbCDeFGHIj
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
-    folderId_2:
-      name: folderId
-      description: ID of the folder.
-      in: path
-      required: true
-      example: fl-1Ab234
-      schema:
-        type: string
-    limit_2:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
+          format: url
+          description: API link to these results.
+          example: https://docs.superhuman.com/apis/v1/folders?workspaceId=ws-1Ab234
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/folders?pageToken=xyz
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

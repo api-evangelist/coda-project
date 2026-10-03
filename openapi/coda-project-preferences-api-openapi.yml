@@ -205,6 +205,54 @@ paths:
         source: "curl -s -H 'Authorization: Bearer <your API token>' -X DELETE \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences/<your import preference id>'\n# => Delete an import preference\n"
 components:
   responses:
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -253,30 +301,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -301,35 +325,7 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
   schemas:
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
     UpdateOwnerImportPreferenceRequest:
       x-schema-name: UpdateOwnerImportPreferenceRequest
       description: Update to an owner import preference.
@@ -351,36 +347,13 @@ components:
 
             '
           example: owner@example.com
-    ImportExternalParent:
-      x-schema-name: ImportExternalParent
-      type: object
-      description: Destination in the source system.
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          maxLength: 128
-          description: 'ID of the parent in the source system. For Quip, this is the folder''s `secret_path` from the Quip API.
-
-            '
-          example: folder-xyz789
-        type:
-          type: string
-          description: Parent container type.
-          enum:
-          - folder
-          example: folder
-    AddLocationImportPreferenceRequest:
-      x-schema-name: AddLocationImportPreferenceRequest
-      description: Create a location import preference.
+    AddExemptImportPreferenceRequest:
+      x-schema-name: AddExemptImportPreferenceRequest
+      description: Create an exempt import preference.
       type: object
       required:
       - externalEntity
       - preferenceType
-      - externalParent
       additionalProperties: false
       properties:
         externalEntity:
@@ -388,9 +361,11 @@ components:
         preferenceType:
           type: string
           enum:
-          - location
-        externalParent:
-          $ref: '#/components/schemas/ImportExternalParent'
+          - exempt
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     DeleteImportPreferenceResult:
       x-schema-name: DeleteImportPreferenceResult
       description: The result of deleting an import preference.
@@ -425,36 +400,19 @@ components:
       description: If specified, a link that can be used to fetch the next page of results.
       type: string
       format: url
-    AddExemptImportPreferenceRequest:
-      x-schema-name: AddExemptImportPreferenceRequest
-      description: Create an exempt import preference.
-      type: object
-      required:
-      - externalEntity
-      - preferenceType
-      additionalProperties: false
-      properties:
-        externalEntity:
-          $ref: '#/components/schemas/ImportExternalEntity'
-        preferenceType:
-          type: string
-          enum:
-          - exempt
-    UpdateImportPreferenceRequest:
-      x-schema-name: UpdateImportPreferenceRequest
-      description: 'Replace the import preference''s type and settings. The body must match the target `preferenceType` shape (not a partial patch). The external entity is fixed at create time and cannot be changed.
-
-        '
+    AddImportPreferenceRequest:
+      x-schema-name: AddImportPreferenceRequest
+      description: Create an import preference.
       oneOf:
-      - $ref: '#/components/schemas/UpdateExemptImportPreferenceRequest'
-      - $ref: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
-      - $ref: '#/components/schemas/UpdateLocationImportPreferenceRequest'
+      - $ref: '#/components/schemas/AddExemptImportPreferenceRequest'
+      - $ref: '#/components/schemas/AddOwnerImportPreferenceRequest'
+      - $ref: '#/components/schemas/AddLocationImportPreferenceRequest'
       discriminator:
         propertyName: preferenceType
         mapping:
-          exempt: '#/components/schemas/UpdateExemptImportPreferenceRequest'
-          owner: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
-          location: '#/components/schemas/UpdateLocationImportPreferenceRequest'
+          exempt: '#/components/schemas/AddExemptImportPreferenceRequest'
+          owner: '#/components/schemas/AddOwnerImportPreferenceRequest'
+          location: '#/components/schemas/AddLocationImportPreferenceRequest'
     UpdateLocationImportPreferenceRequest:
       x-schema-name: UpdateLocationImportPreferenceRequest
       description: Update to a location import preference.
@@ -470,19 +428,74 @@ components:
           - location
         externalParent:
           $ref: '#/components/schemas/ImportExternalParent'
-    AddImportPreferenceRequest:
-      x-schema-name: AddImportPreferenceRequest
-      description: Create an import preference.
+    ImportPreferenceMutationResult:
+      x-schema-name: ImportPreferenceMutationResult
+      description: The result of creating or updating an import preference.
+      type: object
+      required:
+      - id
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the import preference.
+          example: afe84ebf-4d06-44c5-b545-a8af5036bebf
+    UpdateImportPreferenceRequest:
+      x-schema-name: UpdateImportPreferenceRequest
+      description: 'Replace the import preference''s type and settings. The body must match the target `preferenceType` shape (not a partial patch). The external entity is fixed at create time and cannot be changed.
+
+        '
       oneOf:
-      - $ref: '#/components/schemas/AddExemptImportPreferenceRequest'
-      - $ref: '#/components/schemas/AddOwnerImportPreferenceRequest'
-      - $ref: '#/components/schemas/AddLocationImportPreferenceRequest'
+      - $ref: '#/components/schemas/UpdateExemptImportPreferenceRequest'
+      - $ref: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
+      - $ref: '#/components/schemas/UpdateLocationImportPreferenceRequest'
       discriminator:
         propertyName: preferenceType
         mapping:
-          exempt: '#/components/schemas/AddExemptImportPreferenceRequest'
-          owner: '#/components/schemas/AddOwnerImportPreferenceRequest'
-          location: '#/components/schemas/AddLocationImportPreferenceRequest'
+          exempt: '#/components/schemas/UpdateExemptImportPreferenceRequest'
+          owner: '#/components/schemas/UpdateOwnerImportPreferenceRequest'
+          location: '#/components/schemas/UpdateLocationImportPreferenceRequest'
+    AddLocationImportPreferenceRequest:
+      x-schema-name: AddLocationImportPreferenceRequest
+      description: Create a location import preference.
+      type: object
+      required:
+      - externalEntity
+      - preferenceType
+      - externalParent
+      additionalProperties: false
+      properties:
+        externalEntity:
+          $ref: '#/components/schemas/ImportExternalEntity'
+        preferenceType:
+          type: string
+          enum:
+          - location
+        externalParent:
+          $ref: '#/components/schemas/ImportExternalParent'
+    ImportExternalParent:
+      x-schema-name: ImportExternalParent
+      type: object
+      description: Destination in the source system.
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          maxLength: 128
+          description: 'ID of the parent in the source system. For Quip, this is the folder''s `secret_path` from the Quip API.
+
+            '
+          example: folder-xyz789
+        type:
+          type: string
+          description: Parent container type.
+          enum:
+          - folder
+          example: folder
     ImportPreferenceList:
       x-schema-name: ImportPreferenceList
       description: List of import preferences.
@@ -508,6 +521,41 @@ components:
           - $ref: '#/components/schemas/NextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/importers/quip/preferences?pageToken=eyJsaW1pd
+    ImportExternalEntity:
+      x-schema-name: ImportExternalEntity
+      type: object
+      description: External item this preference applies to.
+      required:
+      - id
+      - type
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          maxLength: 128
+          description: 'ID of the item in the source system. For Quip, this is the `secret_path` from the Quip API.
+
+            '
+          example: thread-def456
+        type:
+          type: string
+          maxLength: 32
+          description: 'Type of the item in the source system. Allowed values depend on the importer; for Quip this must be either `thread` or `folder`.
+
+            '
+          example: thread
+    UpdateExemptImportPreferenceRequest:
+      x-schema-name: UpdateExemptImportPreferenceRequest
+      description: Update to an exempt import preference.
+      type: object
+      required:
+      - preferenceType
+      additionalProperties: false
+      properties:
+        preferenceType:
+          type: string
+          enum:
+          - exempt
     ImportPreference:
       x-schema-name: ImportPreference
       description: An import preference for an external entity.
@@ -583,92 +631,7 @@ components:
           type: number
           description: Coda user id that last modified the preference. Omitted if never updated.
           example: 67890
-    ImportPreferenceMutationResult:
-      x-schema-name: ImportPreferenceMutationResult
-      description: The result of creating or updating an import preference.
-      type: object
-      required:
-      - id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the import preference.
-          example: afe84ebf-4d06-44c5-b545-a8af5036bebf
-    UpdateExemptImportPreferenceRequest:
-      x-schema-name: UpdateExemptImportPreferenceRequest
-      description: Update to an exempt import preference.
-      type: object
-      required:
-      - preferenceType
-      additionalProperties: false
-      properties:
-        preferenceType:
-          type: string
-          enum:
-          - exempt
-    ImportExternalEntity:
-      x-schema-name: ImportExternalEntity
-      type: object
-      description: External item this preference applies to.
-      required:
-      - id
-      - type
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          maxLength: 128
-          description: 'ID of the item in the source system. For Quip, this is the `secret_path` from the Quip API.
-
-            '
-          example: thread-def456
-        type:
-          type: string
-          maxLength: 32
-          description: 'Type of the item in the source system. Allowed values depend on the importer; for Quip this must be either `thread` or `folder`.
-
-            '
-          example: thread
   parameters:
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    importerId:
-      name: importerId
-      description: 'Importer id for the source system.
-
-        '
-      in: path
-      required: true
-      example: quip
-      schema:
-        type: string
-        enum:
-        - quip
-        maxLength: 32
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    importPreferenceId:
-      name: importPreferenceId
-      description: ID of the import preference.
-      in: path
-      required: true
-      example: afe84ebf-4d06-44c5-b545-a8af5036bebf
-      schema:
-        type: string
-        format: uuid
     importEntityIds:
       name: importEntityIds
       description: 'Comma-separated list of external entity ids to filter by (batch lookup). For Quip, each id is a `secret_path` from the Quip API.
@@ -683,6 +646,21 @@ components:
         items:
           type: string
           maxLength: 128
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -693,6 +671,28 @@ components:
         minimum: 1
         default: 100
         maximum: 500
+    importerId:
+      name: importerId
+      description: 'Importer id for the source system.
+
+        '
+      in: path
+      required: true
+      example: quip
+      schema:
+        type: string
+        enum:
+        - quip
+        maxLength: 32
+    importPreferenceId:
+      name: importPreferenceId
+      description: ID of the import preference.
+      in: path
+      required: true
+      example: afe84ebf-4d06-44c5-b545-a8af5036bebf
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)
