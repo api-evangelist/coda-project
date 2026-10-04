@@ -111,7 +111,160 @@ paths:
         lang: python
         source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/packs/controls/<pack id>'\n\nparams = {\n  'clientSecret': 'someSecret'\n}\nres = requests.pur(uri, headers=headers, params=params).json()\n\nprint(f'Client ID: {res[\"maskedClientId\"]}')\n# => Client ID: some***\n"
 components:
+  schemas:
+    PackControlList:
+      x-schema-name: PackControlList
+      description: List of Pack controls.
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackControl'
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+    PackAccess:
+      x-schema-name: PackAccess
+      description: Determines how the Pack can be used in the context of the organization.
+      type: string
+      enum:
+      - allow
+      - deny
+      - requiresConfiguration
+      x-tsEnumNames:
+      - Allow
+      - Deny
+      - RequiresConfiguration
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    UpdatePackControlRequest:
+      x-schema-name: UpdatePackControlRequest
+      description: Payload for a updating a Pack control
+      type: object
+      additionalProperties: false
+      required:
+      - access
+      properties:
+        access:
+          $ref: '#/components/schemas/PackAccess'
+    Pack:
+      x-schema-name: Pack
+      description: Info about a Pack.
+      type: object
+      required:
+      - type
+      - id
+      - name
+      properties:
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - pack
+          x-tsType: Type.Pack
+        id:
+          type: number
+          description: ID of the Pack.
+          example: 1003
+        name:
+          type: string
+          description: The name of the Pack.
+          example: Cool Geometry Formulas
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    PackControl:
+      x-schema-name: PackControl
+      description: Info about how access to a Pack has been configured for an organization.
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - organizationId
+      - pack
+      - access
+      - creationTimestamp
+      - modificationTimestamp
+      properties:
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - packControl
+          x-tsType: Type.PackControl
+        organizationId:
+          type: string
+          description: ID of the Superhuman Docs organization.
+          example: org-1AbcdeFgh1
+        pack:
+          $ref: '#/components/schemas/Pack'
+        access:
+          $ref: '#/components/schemas/PackAccess'
+        creationTimestamp:
+          type: number
+          description: Timestamp when the Pack configuration was created.
+        modificationTimestamp:
+          type: number
+          description: Timestamp when the Pack configuration was last modified.
   responses:
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
     NotFoundError:
       description: The resource could not be located with the current API token.
       content:
@@ -160,30 +313,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
     BadRequestError:
       description: The request parameters did not conform to expectations.
       content:
@@ -208,49 +337,7 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
   parameters:
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    optionalQueryPackIds:
-      name: packIds
-      description: Comma-separated list of Pack IDs
-      in: query
-      explode: false
-      example: 123,456
-      schema:
-        type: array
-        items:
-          type: integer
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -261,6 +348,16 @@ components:
         minimum: 1
         default: 100
         maximum: 500
+    optionalQueryPackIds:
+      name: packIds
+      description: Comma-separated list of Pack IDs
+      in: query
+      explode: false
+      example: 123,456
+      schema:
+        type: array
+        items:
+          type: integer
     packId:
       name: packId
       description: ID of a Pack
@@ -277,111 +374,14 @@ components:
       example: eyJsaW1pd
       schema:
         type: string
-  schemas:
-    PackControl:
-      x-schema-name: PackControl
-      description: Info about how access to a Pack has been configured for an organization.
-      type: object
-      additionalProperties: false
-      required:
-      - type
-      - organizationId
-      - pack
-      - access
-      - creationTimestamp
-      - modificationTimestamp
-      properties:
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - packControl
-          x-tsType: Type.PackControl
-        organizationId:
-          type: string
-          description: ID of the Superhuman Docs organization.
-          example: org-1AbcdeFgh1
-        pack:
-          $ref: '#/components/schemas/Pack'
-        access:
-          $ref: '#/components/schemas/PackAccess'
-        creationTimestamp:
-          type: number
-          description: Timestamp when the Pack configuration was created.
-        modificationTimestamp:
-          type: number
-          description: Timestamp when the Pack configuration was last modified.
-    Pack:
-      x-schema-name: Pack
-      description: Info about a Pack.
-      type: object
-      required:
-      - type
-      - id
-      - name
-      properties:
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - pack
-          x-tsType: Type.Pack
-        id:
-          type: number
-          description: ID of the Pack.
-          example: 1003
-        name:
-          type: string
-          description: The name of the Pack.
-          example: Cool Geometry Formulas
-    PackControlList:
-      x-schema-name: PackControlList
-      description: List of Pack controls.
-      type: object
-      additionalProperties: false
-      required:
-      - items
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackControl'
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    PackAccess:
-      x-schema-name: PackAccess
-      description: Determines how the Pack can be used in the context of the organization.
-      type: string
-      enum:
-      - allow
-      - deny
-      - requiresConfiguration
-      x-tsEnumNames:
-      - Allow
-      - Deny
-      - RequiresConfiguration
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    UpdatePackControlRequest:
-      x-schema-name: UpdatePackControlRequest
-      description: Payload for a updating a Pack control
-      type: object
-      additionalProperties: false
-      required:
-      - access
-      properties:
-        access:
-          $ref: '#/components/schemas/PackAccess'
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

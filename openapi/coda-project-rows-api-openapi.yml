@@ -590,144 +590,125 @@ paths:
 
           '
 components:
-  parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    syncToken:
-      name: syncToken
-      description: 'An opaque token returned from a previous call that can be used to return results that are relevant to the query since the call where the syncToken was generated.
-
-        '
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    tableIdOrName:
-      name: tableIdOrName
-      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: grid-pqRst-U
-      schema:
-        type: string
-    columnIdOrName:
-      name: columnIdOrName
-      description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: c-tuVwxYz
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
-    useColumnNames:
-      name: useColumnNames
-      description: 'Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.
-
-        '
-      in: query
-      example: true
-      schema:
-        type: boolean
-    rowIdOrName:
-      name: rowIdOrName
-      description: 'ID or name of the row. Names are discouraged because they''re easily prone to being changed by users. If you''re using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.
-
-        '
-      x-sdk-description: 'ID or name of the row. Names are discouraged because they''re easily prone to being changed by users. Note that if there are multiple rows with the same value in the identifying column, an arbitrary one will be returned.
-
-        '
-      in: path
-      required: true
-      example: i-tuVwxYz
-      schema:
-        type: string
   schemas:
-    CurrencyValue:
-      x-schema-name: CurrencyValue
-      description: A monetary value with its associated currency code.
+    ValueFormat:
+      x-schema-name: ValueFormat
+      description: The format that cell values are returned as.
+      type: string
+      enum:
+      - simple
+      - simpleWithArrays
+      - rich
+      x-tsEnumNames:
+      - Simple
+      - SimpleWithArrays
+      - Rich
+    RowsUpsertResult:
+      x-schema-name: RowsUpsertResult
+      description: The result of a rows insert/upsert operation.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        additionalProperties: false
+        properties:
+          addedRowIds:
+            description: Row IDs for rows that will be added. Only applicable when keyColumns is not set or empty.
+            example:
+            - i-bCdeFgh
+            - i-CdEfgHi
+            type: array
+            items:
+              type: string
+    RowEdit:
+      x-schema-name: RowEdit
+      description: An edit made to a particular row.
+      type: object
+      required:
+      - cells
+      additionalProperties: false
+      properties:
+        cells:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellEdit'
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+    CellValue:
+      x-schema-name: CellValue
+      description: All values that a row cell can contain.
+      oneOf:
+      - $ref: '#/components/schemas/Value'
+      - $ref: '#/components/schemas/RichValue'
+    UrlValue:
+      x-schema-name: UrlValue
+      description: A named hyperlink to an arbitrary url.
       allOf:
       - $ref: '#/components/schemas/LinkedDataObject'
       - type: object
         additionalProperties: false
         required:
         - '@type'
-        - currency
-        - amount
+        - url
         properties:
           '@type':
             type: string
             enum:
-            - MonetaryAmount
-            x-tsType: LinkedDataType.MonetaryAmount
-          currency:
+            - WebPage
+            x-tsType: LinkedDataType.WebPage
+          name:
             type: string
-            description: The 3-letter currency code.
-            example: USD
-          amount:
-            $ref: '#/components/schemas/CurrencyAmount'
-    TableType:
-      x-schema-name: TableType
+            description: The user-visible text of the hyperlink.
+            example: Click me
+          url:
+            type: string
+            description: The url of the hyperlink.
+            example: https://example.com
+    RowsSortBy:
+      x-schema-name: RowsSortBy
+      description: Determines how the rows returned are sorted
       type: string
       enum:
-      - table
-      - view
+      - createdAt
+      - natural
+      - updatedAt
       x-tsEnumNames:
-      - Table
-      - View
-    PushButtonResult:
-      x-schema-name: PushButtonResult
-      description: The result of a push button.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - rowId
-        - columnId
-        additionalProperties: false
-        properties:
-          rowId:
-            type: string
-            description: ID of the row where the button exists.
-            example: i-tuVwxYz
-          columnId:
-            type: string
-            description: ID of the column where the button exists.
-            example: i-tuVwxYz
-    DocumentMutateResponse:
-      x-schema-name: DocumentMutateResponse
-      description: Base response type for an operation that mutates a document.
-      type: object
-      additionalProperties: false
-      required:
-      - requestId
-      properties:
-        requestId:
-          type: string
-          description: An arbitrary unique identifier for this request.
-          example: abc-123-def-456
+      - CreatedAt
+      - Natural
+      - UpdatedAt
     RowsDeleteResult:
       x-schema-name: RowsDeleteResult
       description: The result of a rows delete operation.
@@ -746,12 +727,68 @@ components:
             type: array
             items:
               type: string
-    CellValue:
-      x-schema-name: CellValue
-      description: All values that a row cell can contain.
-      oneOf:
-      - $ref: '#/components/schemas/Value'
-      - $ref: '#/components/schemas/RichValue'
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    RowUpdate:
+      x-schema-name: RowUpdate
+      description: Payload for updating a row in a table.
+      type: object
+      required:
+      - row
+      additionalProperties: false
+      properties:
+        row:
+          $ref: '#/components/schemas/RowEdit'
+    RowsDelete:
+      x-schema-name: RowsDelete
+      description: Payload for deleting rows from a table.
+      type: object
+      required:
+      - rowIds
+      additionalProperties: false
+      properties:
+        rowIds:
+          description: 'Row IDs to delete.
+
+            '
+          example:
+          - i-bCdeFgh
+          - i-CdEfgHi
+          type: array
+          items:
+            type: string
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    RowList:
+      x-schema-name: RowList
+      description: List of rows.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Row'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows?pageToken=eyJsaW1pd
+        nextSyncToken:
+          $ref: '#/components/schemas/nextSyncToken'
     LinkedDataObject:
       x-schema-name: LinkedDataObject
       description: Base type for a JSON-LD (Linked Data) object.
@@ -772,61 +809,203 @@ components:
           description: 'An identifier of additional type info specific to Superhuman Docs that may not be present in a schema.org taxonomy,
 
             '
-    TableReference:
-      x-schema-name: TableReference
-      description: Reference to a table or view.
+    ImageStatus:
+      x-schema-name: ImageStatus
+      description: The status values that an image object can have.
+      type: string
+      enum:
+      - live
+      - deleted
+      - failed
+      x-tsEnumNames:
+      - Live
+      - Deleted
+      - Failed
+    CellEdit:
+      x-schema-name: CellEdit
+      description: An edit made to a particular cell in a row.
+      type: object
+      required:
+      - column
+      - value
+      additionalProperties: false
+      properties:
+        column:
+          type: string
+          description: Column ID, URL, or name (fragile and discouraged) associated with this edit.
+          example: c-tuVwxYz
+        value:
+          $ref: '#/components/schemas/Value'
+    CurrencyAmount:
+      x-schema-name: CurrencyAmount
+      description: A numeric monetary amount as a string or number.
+      oneOf:
+      - type: string
+        example: '12.99'
+      - type: number
+        example: 42
+    PersonValue:
+      x-schema-name: PersonValue
+      description: A named reference to a person, where the person is identified by email address.
+      allOf:
+      - $ref: '#/components/schemas/LinkedDataObject'
+      - type: object
+        additionalProperties: false
+        required:
+        - '@type'
+        - name
+        properties:
+          '@type':
+            type: string
+            enum:
+            - Person
+            x-tsType: LinkedDataType.Person
+          name:
+            type: string
+            description: The full name of the person.
+            example: Alice Atkins
+          email:
+            type: string
+            description: The email address of the person.
+            example: alice@atkins.com
+    RowsUpsert:
+      x-schema-name: RowsUpsert
+      description: Payload for upserting rows in a table.
+      type: object
+      required:
+      - rows
+      additionalProperties: false
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/RowEdit'
+        keyColumns:
+          description: Optional column IDs, URLs, or names (fragile and discouraged), specifying columns to be used as upsert keys.
+          example:
+          - c-bCdeFgh
+          type: array
+          items:
+            type: string
+    Row:
+      x-schema-name: Row
+      description: Info about a row.
       type: object
       required:
       - id
       - type
-      - tableType
-      - browserLink
       - href
       - name
+      - index
+      - browserLink
+      - createdAt
+      - updatedAt
+      - values
       additionalProperties: false
       properties:
         id:
           type: string
-          description: ID of the table.
-          example: grid-pqRst-U
+          description: ID of the row.
+          example: i-tuVwxYz
         type:
           type: string
           description: The type of this resource.
           enum:
-          - table
-          x-tsType: Type.Table
-        tableType:
-          $ref: '#/components/schemas/TableType'
+          - row
+          x-tsType: Type.Row
         href:
           type: string
           format: url
-          description: API link to the table.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U
+          description: API link to the row.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows/i-RstUv-W
+        name:
+          type: string
+          description: The display name of the row, based on its identifying column.
+          example: Apple
+        index:
+          type: integer
+          description: Index of the row within the table.
+          example: 7
         browserLink:
           type: string
           format: url
-          description: Browser-friendly link to the table.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/#Teams-and-Tasks_tpqRst-U
-        name:
+          description: Browser-friendly link to the row.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH#Teams-and-Tasks_tpqRst-U/_rui-tuVwxYz
+        createdAt:
           type: string
-          description: Name of the table.
-          example: Tasks
-        parent:
-          $ref: '#/components/schemas/PageReference'
-    RichSingleValue:
-      x-schema-name: RichSingleValue
-      description: 'A value that contains rich structured data. Cell values are composed of these values or arrays of these values.
+          format: date-time
+          description: Timestamp for when the row was created.
+          example: '2018-04-11T00:18:57.946Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the row was last modified.
+          example: '2018-04-11T00:18:57.946Z'
+        values:
+          type: object
+          description: 'Values for a specific row, represented as a hash of column IDs (or names with `useColumnNames`) to values.
 
-        '
+            '
+          additionalProperties:
+            $ref: '#/components/schemas/CellValue'
+          example:
+            c-tuVwxYz: Apple
+            c-bCdeFgh:
+            - $12.34
+            - $56.78
+    RichValue:
+      x-schema-name: RichValue
+      description: A cell value that contains rich structured data.
+      oneOf:
+      - $ref: '#/components/schemas/RichSingleValue'
+      - type: array
+        items:
+          oneOf:
+          - $ref: '#/components/schemas/RichSingleValue'
+          - type: array
+            items:
+              $ref: '#/components/schemas/RichSingleValue'
+    Value:
+      x-schema-name: Value
+      description: A Superhuman Docs result or entity expressed as a primitive type, or array of primitive types.
+      additionalProperties: false
       oneOf:
       - $ref: '#/components/schemas/ScalarValue'
-      - $ref: '#/components/schemas/CurrencyValue'
-      - $ref: '#/components/schemas/ImageUrlValue'
-      - $ref: '#/components/schemas/PersonValue'
-      - $ref: '#/components/schemas/UrlValue'
-      - $ref: '#/components/schemas/RowValue'
-      discriminator:
-        propertyName: '@type'
+      - type: array
+        items:
+          oneOf:
+          - $ref: '#/components/schemas/ScalarValue'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ScalarValue'
+    RowDeleteResult:
+      x-schema-name: RowDeleteResult
+      description: The result of a row deletion.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the row to be deleted.
+            example: i-tuVwxYz
+    RowUpdateResult:
+      x-schema-name: RowUpdateResult
+      description: The result of a row update.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the updated row.
+            example: i-tuVwxYz
     RowDetail:
       x-schema-name: RowDetail
       description: Details about a row.
@@ -906,42 +1085,20 @@ components:
         example: 12.34
       - type: boolean
         example: true
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
+    RichSingleValue:
+      x-schema-name: RichSingleValue
+      description: 'A value that contains rich structured data. Cell values are composed of these values or arrays of these values.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/ScalarValue'
+      - $ref: '#/components/schemas/CurrencyValue'
+      - $ref: '#/components/schemas/ImageUrlValue'
+      - $ref: '#/components/schemas/PersonValue'
+      - $ref: '#/components/schemas/UrlValue'
+      - $ref: '#/components/schemas/RowValue'
+      discriminator:
+        propertyName: '@type'
     ImageUrlValue:
       x-schema-name: ImageUrlValue
       description: A named url of an image along with metadata.
@@ -975,285 +1132,53 @@ components:
             example: 640
           status:
             $ref: '#/components/schemas/ImageStatus'
-    RowUpdateResult:
-      x-schema-name: RowUpdateResult
-      description: The result of a row update.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the updated row.
-            example: i-tuVwxYz
-    RowUpdate:
-      x-schema-name: RowUpdate
-      description: Payload for updating a row in a table.
-      type: object
-      required:
-      - row
-      additionalProperties: false
-      properties:
-        row:
-          $ref: '#/components/schemas/RowEdit'
-    RowsDelete:
-      x-schema-name: RowsDelete
-      description: Payload for deleting rows from a table.
-      type: object
-      required:
-      - rowIds
-      additionalProperties: false
-      properties:
-        rowIds:
-          description: 'Row IDs to delete.
-
-            '
-          example:
-          - i-bCdeFgh
-          - i-CdEfgHi
-          type: array
-          items:
-            type: string
-    ImageStatus:
-      x-schema-name: ImageStatus
-      description: The status values that an image object can have.
-      type: string
-      enum:
-      - live
-      - deleted
-      - failed
-      x-tsEnumNames:
-      - Live
-      - Deleted
-      - Failed
-    UrlValue:
-      x-schema-name: UrlValue
-      description: A named hyperlink to an arbitrary url.
-      allOf:
-      - $ref: '#/components/schemas/LinkedDataObject'
-      - type: object
-        additionalProperties: false
-        required:
-        - '@type'
-        - url
-        properties:
-          '@type':
-            type: string
-            enum:
-            - WebPage
-            x-tsType: LinkedDataType.WebPage
-          name:
-            type: string
-            description: The user-visible text of the hyperlink.
-            example: Click me
-          url:
-            type: string
-            description: The url of the hyperlink.
-            example: https://example.com
     nextSyncToken:
       description: 'If specified, an opaque token that can be passed back later to retrieve new results that match the parameters specified when the sync token was created.
 
         '
       type: string
       example: eyJsaW1pd
-    RichValue:
-      x-schema-name: RichValue
-      description: A cell value that contains rich structured data.
-      oneOf:
-      - $ref: '#/components/schemas/RichSingleValue'
-      - type: array
-        items:
-          oneOf:
-          - $ref: '#/components/schemas/RichSingleValue'
-          - type: array
-            items:
-              $ref: '#/components/schemas/RichSingleValue'
-    CurrencyAmount:
-      x-schema-name: CurrencyAmount
-      description: A numeric monetary amount as a string or number.
-      oneOf:
-      - type: string
-        example: '12.99'
-      - type: number
-        example: 42
-    PersonValue:
-      x-schema-name: PersonValue
-      description: A named reference to a person, where the person is identified by email address.
-      allOf:
-      - $ref: '#/components/schemas/LinkedDataObject'
-      - type: object
-        additionalProperties: false
-        required:
-        - '@type'
-        - name
-        properties:
-          '@type':
-            type: string
-            enum:
-            - Person
-            x-tsType: LinkedDataType.Person
-          name:
-            type: string
-            description: The full name of the person.
-            example: Alice Atkins
-          email:
-            type: string
-            description: The email address of the person.
-            example: alice@atkins.com
-    RowEdit:
-      x-schema-name: RowEdit
-      description: An edit made to a particular row.
-      type: object
-      required:
-      - cells
-      additionalProperties: false
-      properties:
-        cells:
-          type: array
-          items:
-            $ref: '#/components/schemas/CellEdit'
-    ValueFormat:
-      x-schema-name: ValueFormat
-      description: The format that cell values are returned as.
-      type: string
-      enum:
-      - simple
-      - simpleWithArrays
-      - rich
-      x-tsEnumNames:
-      - Simple
-      - SimpleWithArrays
-      - Rich
-    CellEdit:
-      x-schema-name: CellEdit
-      description: An edit made to a particular cell in a row.
-      type: object
-      required:
-      - column
-      - value
-      additionalProperties: false
-      properties:
-        column:
-          type: string
-          description: Column ID, URL, or name (fragile and discouraged) associated with this edit.
-          example: c-tuVwxYz
-        value:
-          $ref: '#/components/schemas/Value'
-    RowsUpsertResult:
-      x-schema-name: RowsUpsertResult
-      description: The result of a rows insert/upsert operation.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        additionalProperties: false
-        properties:
-          addedRowIds:
-            description: Row IDs for rows that will be added. Only applicable when keyColumns is not set or empty.
-            example:
-            - i-bCdeFgh
-            - i-CdEfgHi
-            type: array
-            items:
-              type: string
-    RowList:
-      x-schema-name: RowList
-      description: List of rows.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Row'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows?pageToken=eyJsaW1pd
-        nextSyncToken:
-          $ref: '#/components/schemas/nextSyncToken'
-    Row:
-      x-schema-name: Row
-      description: Info about a row.
+    TableReference:
+      x-schema-name: TableReference
+      description: Reference to a table or view.
       type: object
       required:
       - id
       - type
+      - tableType
+      - browserLink
       - href
       - name
-      - index
-      - browserLink
-      - createdAt
-      - updatedAt
-      - values
       additionalProperties: false
       properties:
         id:
           type: string
-          description: ID of the row.
-          example: i-tuVwxYz
+          description: ID of the table.
+          example: grid-pqRst-U
         type:
           type: string
           description: The type of this resource.
           enum:
-          - row
-          x-tsType: Type.Row
+          - table
+          x-tsType: Type.Table
+        tableType:
+          $ref: '#/components/schemas/TableType'
         href:
           type: string
           format: url
-          description: API link to the row.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows/i-RstUv-W
-        name:
-          type: string
-          description: The display name of the row, based on its identifying column.
-          example: Apple
-        index:
-          type: integer
-          description: Index of the row within the table.
-          example: 7
+          description: API link to the table.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U
         browserLink:
           type: string
           format: url
-          description: Browser-friendly link to the row.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH#Teams-and-Tasks_tpqRst-U/_rui-tuVwxYz
-        createdAt:
+          description: Browser-friendly link to the table.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/#Teams-and-Tasks_tpqRst-U
+        name:
           type: string
-          format: date-time
-          description: Timestamp for when the row was created.
-          example: '2018-04-11T00:18:57.946Z'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the row was last modified.
-          example: '2018-04-11T00:18:57.946Z'
-        values:
-          type: object
-          description: 'Values for a specific row, represented as a hash of column IDs (or names with `useColumnNames`) to values.
-
-            '
-          additionalProperties:
-            $ref: '#/components/schemas/CellValue'
-          example:
-            c-tuVwxYz: Apple
-            c-bCdeFgh:
-            - $12.34
-            - $56.78
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
+          description: Name of the table.
+          example: Tasks
+        parent:
+          $ref: '#/components/schemas/PageReference'
     LinkedDataType:
       x-schema-name: LinkedDataType
       description: A schema.org identifier for the object.
@@ -1270,18 +1195,46 @@ components:
       - Person
       - WebPage
       - StructuredValue
-    RowsSortBy:
-      x-schema-name: RowsSortBy
-      description: Determines how the rows returned are sorted
+    TableType:
+      x-schema-name: TableType
       type: string
       enum:
-      - createdAt
-      - natural
-      - updatedAt
+      - table
+      - view
       x-tsEnumNames:
-      - CreatedAt
-      - Natural
-      - UpdatedAt
+      - Table
+      - View
+    DocumentMutateResponse:
+      x-schema-name: DocumentMutateResponse
+      description: Base response type for an operation that mutates a document.
+      type: object
+      additionalProperties: false
+      required:
+      - requestId
+      properties:
+        requestId:
+          type: string
+          description: An arbitrary unique identifier for this request.
+          example: abc-123-def-456
+    PushButtonResult:
+      x-schema-name: PushButtonResult
+      description: The result of a push button.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - rowId
+        - columnId
+        additionalProperties: false
+        properties:
+          rowId:
+            type: string
+            description: ID of the row where the button exists.
+            example: i-tuVwxYz
+          columnId:
+            type: string
+            description: ID of the column where the button exists.
+            example: i-tuVwxYz
     RowValue:
       x-schema-name: RowValue
       description: A value representing a Superhuman Docs row.
@@ -1329,105 +1282,30 @@ components:
             enum:
             - row
             x-tsType: Type.Row
-    RowsUpsert:
-      x-schema-name: RowsUpsert
-      description: Payload for upserting rows in a table.
-      type: object
-      required:
-      - rows
-      additionalProperties: false
-      properties:
-        rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/RowEdit'
-        keyColumns:
-          description: Optional column IDs, URLs, or names (fragile and discouraged), specifying columns to be used as upsert keys.
-          example:
-          - c-bCdeFgh
-          type: array
-          items:
-            type: string
-    RowDeleteResult:
-      x-schema-name: RowDeleteResult
-      description: The result of a row deletion.
+    CurrencyValue:
+      x-schema-name: CurrencyValue
+      description: A monetary value with its associated currency code.
       allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - $ref: '#/components/schemas/LinkedDataObject'
       - type: object
-        required:
-        - id
         additionalProperties: false
+        required:
+        - '@type'
+        - currency
+        - amount
         properties:
-          id:
+          '@type':
             type: string
-            description: ID of the row to be deleted.
-            example: i-tuVwxYz
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    Value:
-      x-schema-name: Value
-      description: A Superhuman Docs result or entity expressed as a primitive type, or array of primitive types.
-      additionalProperties: false
-      oneOf:
-      - $ref: '#/components/schemas/ScalarValue'
-      - type: array
-        items:
-          oneOf:
-          - $ref: '#/components/schemas/ScalarValue'
-          - type: array
-            items:
-              $ref: '#/components/schemas/ScalarValue'
+            enum:
+            - MonetaryAmount
+            x-tsType: LinkedDataType.MonetaryAmount
+          currency:
+            type: string
+            description: The 3-letter currency code.
+            example: USD
+          amount:
+            $ref: '#/components/schemas/CurrencyAmount'
   responses:
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -1452,6 +1330,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -1500,6 +1402,104 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
+  parameters:
+    syncToken:
+      name: syncToken
+      description: 'An opaque token returned from a previous call that can be used to return results that are relevant to the query since the call where the syncToken was generated.
+
+        '
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
+    tableIdOrName:
+      name: tableIdOrName
+      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: grid-pqRst-U
+      schema:
+        type: string
+    columnIdOrName:
+      name: columnIdOrName
+      description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: c-tuVwxYz
+      schema:
+        type: string
+    rowIdOrName:
+      name: rowIdOrName
+      description: 'ID or name of the row. Names are discouraged because they''re easily prone to being changed by users. If you''re using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.
+
+        '
+      x-sdk-description: 'ID or name of the row. Names are discouraged because they''re easily prone to being changed by users. Note that if there are multiple rows with the same value in the identifying column, an arbitrary one will be returned.
+
+        '
+      in: path
+      required: true
+      example: i-tuVwxYz
+      schema:
+        type: string
+    useColumnNames:
+      name: useColumnNames
+      description: 'Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.
+
+        '
+      in: query
+      example: true
+      schema:
+        type: boolean
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: "The Superhuman Docs API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)\nin Superhuman Docs. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Superhuman Docs, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Superhuman Docs API can perform any action that the user who created the token\ncan perform. However, Superhuman Docs API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Superhuman Docs API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nSuperhuman Docs API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Superhuman Docs API tokens.\n* `/resolveBrowserLink`: This method can be called by all Superhuman Docs API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Superhuman Community.\n"

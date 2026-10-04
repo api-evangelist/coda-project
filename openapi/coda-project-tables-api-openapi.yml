@@ -175,46 +175,6 @@ paths:
           '
 components:
   parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    tableIdOrName:
-      name: tableIdOrName
-      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: grid-pqRst-U
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
-    sortBy:
-      name: sortBy
-      description: Determines how to sort the given objects.
-      in: query
-      example: name
-      schema:
-        $ref: '#/components/schemas/SortBy'
     tableTypes:
       name: tableTypes
       description: Comma-separated list of table types to include in results. If omitted, includes both tables and views.
@@ -225,7 +185,83 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/TableType'
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
+    tableIdOrName:
+      name: tableIdOrName
+      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: grid-pqRst-U
+      schema:
+        type: string
+    sortBy:
+      name: sortBy
+      description: Determines how to sort the given objects.
+      in: query
+      example: name
+      schema:
+        $ref: '#/components/schemas/SortBy'
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
   schemas:
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
     TableList:
       x-schema-name: TableList
       description: List of tables.
@@ -250,15 +286,6 @@ components:
           - $ref: '#/components/schemas/nextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables?pageToken=eyJsaW1pd
-    TableType:
-      x-schema-name: TableType
-      type: string
-      enum:
-      - table
-      - view
-      x-tsEnumNames:
-      - Table
-      - View
     Sort:
       x-schema-name: Sort
       description: A sort applied to a table or view.
@@ -272,6 +299,50 @@ components:
           $ref: '#/components/schemas/ColumnReference'
         direction:
           $ref: '#/components/schemas/SortDirection'
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    Layout:
+      x-schema-name: Layout
+      description: Layout type of the table or view.
+      type: string
+      enum:
+      - default
+      - areaChart
+      - barChart
+      - bubbleChart
+      - calendar
+      - card
+      - detail
+      - form
+      - ganttChart
+      - lineChart
+      - masterDetail
+      - pieChart
+      - scatterChart
+      - slide
+      - wordCloud
+      x-tsEnumNames:
+      - Default
+      - AreaChart
+      - BarChart
+      - BubbleChart
+      - Calendar
+      - Card
+      - Detail
+      - Form
+      - GanttChart
+      - LineChart
+      - MasterDetail
+      - PieChart
+      - ScatterChart
+      - Slide
+      - WordCloud
     SortDirection:
       x-schema-name: SortDirection
       description: Direction of a sort for a table or view.
@@ -282,6 +353,39 @@ components:
       x-tsEnumNames:
       - Ascending
       - Descending
+    ColumnReference:
+      x-schema-name: ColumnReference
+      description: Reference to a column.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the column.
+          example: c-tuVwxYz
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - column
+          x-tsType: Type.Column
+        href:
+          type: string
+          format: url
+          description: API link to the column.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns/c-tuVwxYz
+    SortBy:
+      x-schema-name: SortBy
+      description: Determines how the objects returned are sorted
+      type: string
+      enum:
+      - name
+      x-tsEnumNames:
+      - Name
     Table:
       x-schema-name: Table
       description: Metadata about a table.
@@ -402,119 +506,15 @@ components:
           example: Tasks
         parent:
           $ref: '#/components/schemas/PageReference'
-    Layout:
-      x-schema-name: Layout
-      description: Layout type of the table or view.
+    TableType:
+      x-schema-name: TableType
       type: string
       enum:
-      - default
-      - areaChart
-      - barChart
-      - bubbleChart
-      - calendar
-      - card
-      - detail
-      - form
-      - ganttChart
-      - lineChart
-      - masterDetail
-      - pieChart
-      - scatterChart
-      - slide
-      - wordCloud
+      - table
+      - view
       x-tsEnumNames:
-      - Default
-      - AreaChart
-      - BarChart
-      - BubbleChart
-      - Calendar
-      - Card
-      - Detail
-      - Form
-      - GanttChart
-      - LineChart
-      - MasterDetail
-      - PieChart
-      - ScatterChart
-      - Slide
-      - WordCloud
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-    ColumnReference:
-      x-schema-name: ColumnReference
-      description: Reference to a column.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the column.
-          example: c-tuVwxYz
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - column
-          x-tsType: Type.Column
-        href:
-          type: string
-          format: url
-          description: API link to the column.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns/c-tuVwxYz
-    SortBy:
-      x-schema-name: SortBy
-      description: Determines how the objects returned are sorted
-      type: string
-      enum:
-      - name
-      x-tsEnumNames:
-      - Name
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
+      - Table
+      - View
     FormulaDetail:
       x-schema-name: FormulaDetail
       description: Detailed information about a formula.
@@ -546,30 +546,6 @@ components:
           description: Returns whether or not the given formula has a Now() formula within it.
           example: false
   responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -594,6 +570,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:

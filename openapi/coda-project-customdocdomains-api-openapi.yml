@@ -178,23 +178,19 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    customDocDomain:
-      name: customDocDomain
-      description: A custom domain for a published doc.
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
+    UpdateCustomDocDomainRequest:
+      x-schema-name: UpdateCustomDocDomainRequest
+      type: object
+      description: Payload for updating the properties of a custom published doc domain.
+      additionalProperties: false
+      properties: {}
+    AddCustomDocDomainResponse:
+      x-schema-name: AddCustomDocDomainResponse
+      type: object
+      description: The result of adding a custom domain to a published doc.
+      additionalProperties: false
+      properties: {}
     CustomDocDomainSetupStatus:
       x-schema-name: CustomDocDomainSetupStatus
       type: string
@@ -206,30 +202,6 @@ components:
       - Pending
       - Succeeded
       - Failed
-    DeleteCustomDocDomainResponse:
-      x-schema-name: DeleteCustomDocDomainResponse
-      type: object
-      description: The result of deleting a custom domain from a published doc.
-      additionalProperties: false
-      properties: {}
-    UpdateCustomDocDomainRequest:
-      x-schema-name: UpdateCustomDocDomainRequest
-      type: object
-      description: Payload for updating the properties of a custom published doc domain.
-      additionalProperties: false
-      properties: {}
-    AddCustomDocDomainRequest:
-      x-schema-name: AddCustomDocDomainRequest
-      type: object
-      description: Payload for adding a custom published doc domain.
-      required:
-      - customDocDomain
-      additionalProperties: false
-      properties:
-        customDocDomain:
-          type: string
-          description: The custom domain.
-          example: example.com
     CustomDocDomainProvider:
       x-schema-name: CustomDocDomainProvider
       type: string
@@ -280,15 +252,14 @@ components:
           format: date-time
           description: When the domain DNS settings were last checked.
           example: '2018-04-11T00:18:57.946Z'
-    CustomDomainConnectedStatus:
-      x-schema-name: CustomDomainConnectedStatus
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
       type: string
-      enum:
-      - connected
-      - notConnected
-      x-tsEnumNames:
-      - Connected
-      - NotConnected
+      format: url
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     CustomDocDomainList:
       x-schema-name: CustomDocDomainList
       type: object
@@ -309,22 +280,15 @@ components:
           - $ref: '#/components/schemas/nextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/domains?pageToken=eyJsaW1pd
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
+    CustomDomainConnectedStatus:
+      x-schema-name: CustomDomainConnectedStatus
       type: string
-      format: url
-    AddCustomDocDomainResponse:
-      x-schema-name: AddCustomDocDomainResponse
-      type: object
-      description: The result of adding a custom domain to a published doc.
-      additionalProperties: false
-      properties: {}
-    UpdateCustomDocDomainResponse:
-      x-schema-name: UpdateCustomDocDomainResponse
-      type: object
-      description: The result of updating a custom domain for a published doc.
-      additionalProperties: false
-      properties: {}
+      enum:
+      - connected
+      - notConnected
+      x-tsEnumNames:
+      - Connected
+      - NotConnected
     CustomDocDomainProviderResponse:
       x-schema-name: CustomDocDomainProviderResponse
       type: object
@@ -335,35 +299,31 @@ components:
       properties:
         provider:
           $ref: '#/components/schemas/CustomDocDomainProvider'
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
+    DeleteCustomDocDomainResponse:
+      x-schema-name: DeleteCustomDocDomainResponse
+      type: object
+      description: The result of deleting a custom domain from a published doc.
+      additionalProperties: false
+      properties: {}
+    AddCustomDocDomainRequest:
+      x-schema-name: AddCustomDocDomainRequest
+      type: object
+      description: Payload for adding a custom published doc domain.
+      required:
+      - customDocDomain
+      additionalProperties: false
+      properties:
+        customDocDomain:
+          type: string
+          description: The custom domain.
+          example: example.com
+    UpdateCustomDocDomainResponse:
+      x-schema-name: UpdateCustomDocDomainResponse
+      type: object
+      description: The result of updating a custom domain for a published doc.
+      additionalProperties: false
+      properties: {}
   responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -388,6 +348,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -436,6 +420,22 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
+  parameters:
+    customDocDomain:
+      name: customDocDomain
+      description: A custom domain for a published doc.
+      in: path
+      required: true
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: "The Superhuman Docs API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)\nin Superhuman Docs. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Superhuman Docs, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Superhuman Docs API can perform any action that the user who created the token\ncan perform. However, Superhuman Docs API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Superhuman Docs API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nSuperhuman Docs API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Superhuman Docs API tokens.\n* `/resolveBrowserLink`: This method can be called by all Superhuman Docs API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Superhuman Community.\n"

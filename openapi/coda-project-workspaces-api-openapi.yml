@@ -242,153 +242,11 @@ paths:
     - url: https://docs.superhuman.com/apis/v1
       description: Superhuman Docs API (v1)
 components:
-  responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
   schemas:
-    WorkspaceList:
-      x-schema-name: WorkspaceList
-      description: List of workspaces.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Workspace'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/workspaces
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/workspaces?pageToken=eyJsaW1pd
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
     Workspace:
       x-schema-name: Workspace
       description: Info about a Superhuman Docs workspace.
@@ -438,10 +296,6 @@ components:
           type: integer
           description: Number of Editors in the workspace.
           example: 5
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
     FeatureSet:
       x-schema-name: FeatureSet
       deprecated: true
@@ -457,14 +311,136 @@ components:
       - Pro
       - Team
       - Enterprise
+    WorkspaceList:
+      x-schema-name: WorkspaceList
+      description: List of workspaces.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/workspaces
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/workspaces?pageToken=eyJsaW1pd
     NextPageToken:
       description: If specified, an opaque token used to fetch the next page of results.
       type: string
       example: eyJsaW1pd
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
+    WorkspaceUserRole:
+      x-schema-name: WorkspaceUserRole
       type: string
-      format: url
+      enum:
+      - Admin
+      - DocMaker
+      - Editor
+      x-tsEnumNames:
+      - Admin
+      - DocMaker
+      - Editor
+    WorkspaceRoleActivity:
+      x-schema-name: WorkspaceRoleActivity
+      description: Metadata for workspace role activity.
+      type: object
+      required:
+      - month
+      - activeAdminCount
+      - activeDocMakerCount
+      - activeEditorCount
+      - inactiveAdminCount
+      - inactiveDocMakerCount
+      - inactiveEditorCount
+      additionalProperties: false
+      properties:
+        month:
+          type: string
+          description: Month corresponding to the data.
+          example: '2020-09-15'
+        activeAdminCount:
+          type: number
+          description: Number of active Admins.
+          example: 2
+        activeDocMakerCount:
+          type: number
+          description: Number of active Doc Makers.
+          example: 2
+        activeEditorCount:
+          type: number
+          description: Number of active Editors.
+          example: 2
+        inactiveAdminCount:
+          type: number
+          description: Number of inactive Admins.
+          example: 2
+        inactiveDocMakerCount:
+          type: number
+          description: Number of inactive Doc Makers.
+          example: 2
+        inactiveEditorCount:
+          type: number
+          description: Number of inactive Editor users.
+          example: 2
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    GetWorkspaceRoleActivity:
+      x-schema-name: GetWorkspaceRoleActivity
+      description: Response for getting workspace role activity.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceRoleActivity'
+    ChangeRoleResult:
+      x-schema-name: ChangeRoleResult
+      description: The result of changing a user's workspace user role.
+      type: object
+      required:
+      - roleChangedAt
+      additionalProperties: false
+      properties:
+        roleChangedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the user's role last changed in this workspace.
+          example: '2018-04-11T00:18:57.946Z'
+    WorkspaceMembersList:
+      x-schema-name: WorkspaceMembersList
+      description: Response for listing workspace users.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceUser'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/workspaces/{workspaceId}/users?pageToken=xyz
     WorkspaceUser:
       x-schema-name: WorkspaceUser
       description: Metadata of a workspace user.
@@ -532,61 +508,6 @@ components:
           type: number
           description: Number of unique users that have viewed any doc the user owns, manages, or has added pages to in the last 90 days.
           example: 2
-    ChangeRoleResult:
-      x-schema-name: ChangeRoleResult
-      description: The result of changing a user's workspace user role.
-      type: object
-      required:
-      - roleChangedAt
-      additionalProperties: false
-      properties:
-        roleChangedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the user's role last changed in this workspace.
-          example: '2018-04-11T00:18:57.946Z'
-    GetWorkspaceRoleActivity:
-      x-schema-name: GetWorkspaceRoleActivity
-      description: Response for getting workspace role activity.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceRoleActivity'
-    WorkspaceMembersList:
-      x-schema-name: WorkspaceMembersList
-      description: Response for listing workspace users.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceUser'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/workspaces/{workspaceId}/users?pageToken=xyz
-    WorkspaceUserRole:
-      x-schema-name: WorkspaceUserRole
-      type: string
-      enum:
-      - Admin
-      - DocMaker
-      - Editor
-      x-tsEnumNames:
-      - Admin
-      - DocMaker
-      - Editor
     ChangeRole:
       x-schema-name: ChangeRole
       description: Parameters for changing a workspace user role.
@@ -602,59 +523,17 @@ components:
           example: hello@example.com
         newRole:
           $ref: '#/components/schemas/WorkspaceUserRole'
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
       type: string
-      example: eyJsaW1pd
-    WorkspaceRoleActivity:
-      x-schema-name: WorkspaceRoleActivity
-      description: Metadata for workspace role activity.
-      type: object
-      required:
-      - month
-      - activeAdminCount
-      - activeDocMakerCount
-      - activeEditorCount
-      - inactiveAdminCount
-      - inactiveDocMakerCount
-      - inactiveEditorCount
-      additionalProperties: false
-      properties:
-        month:
-          type: string
-          description: Month corresponding to the data.
-          example: '2020-09-15'
-        activeAdminCount:
-          type: number
-          description: Number of active Admins.
-          example: 2
-        activeDocMakerCount:
-          type: number
-          description: Number of active Doc Makers.
-          example: 2
-        activeEditorCount:
-          type: number
-          description: Number of active Editors.
-          example: 2
-        inactiveAdminCount:
-          type: number
-          description: Number of inactive Admins.
-          example: 2
-        inactiveDocMakerCount:
-          type: number
-          description: Number of inactive Doc Makers.
-          example: 2
-        inactiveEditorCount:
-          type: number
-          description: Number of inactive Editor users.
-          example: 2
+      format: url
   parameters:
-    workspaceId:
-      name: workspaceId
-      description: ID of the workspace.
-      in: path
-      required: true
-      example: ws-AbCDeFGHIj
+    query:
+      name: query
+      description: Search terms used to narrow down results.
+      in: query
+      required: false
+      example: feature%parity
       schema:
         type: string
     limit:
@@ -667,6 +546,29 @@ components:
         minimum: 1
         default: 100
         maximum: 500
+    workspaceId:
+      name: workspaceId
+      description: ID of the workspace.
+      in: path
+      required: true
+      example: ws-AbCDeFGHIj
+      schema:
+        type: string
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
     workspaceIds:
       name: workspaceIds
       description: Comma-separated list of workspace IDs
@@ -678,29 +580,6 @@ components:
         type: array
         items:
           type: string
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    query:
-      name: query
-      description: Search terms used to narrow down results.
-      in: query
-      required: false
-      example: feature%parity
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
     workspaceId_2:
       name: workspaceId
       description: ID of the workspace.
@@ -709,6 +588,127 @@ components:
       example: ws-1Ab234
       schema:
         type: string
+  responses:
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

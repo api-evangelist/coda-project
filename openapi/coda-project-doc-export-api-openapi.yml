@@ -213,7 +213,89 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/docs/<your doc id>/export/<export id>' |\n  jq '.status'\n# => \"InProgress\"\n"
 components:
+  parameters:
+    exportId:
+      name: exportId
+      description: ID of the doc export request.
+      in: path
+      required: true
+      example: 85d2fb03-2747-44c4-8b3b-7a05d37eec04
+      schema:
+        type: string
+        format: uuid
+    workspaceId:
+      name: workspaceId
+      description: ID of the workspace.
+      in: path
+      required: true
+      example: ws-AbCDeFGHIj
+      schema:
+        type: string
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: d-AbCDeFGHIj
+      schema:
+        type: string
   responses:
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
     NotFoundError:
       description: The resource could not be located with the current API token.
       content:
@@ -262,30 +344,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
     BadRequestError:
       description: The request parameters did not conform to expectations.
       content:
@@ -310,77 +368,7 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-  parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: d-AbCDeFGHIj
-      schema:
-        type: string
-    workspaceId:
-      name: workspaceId
-      description: ID of the workspace.
-      in: path
-      required: true
-      example: ws-AbCDeFGHIj
-      schema:
-        type: string
-    exportId:
-      name: exportId
-      description: ID of the doc export request.
-      in: path
-      required: true
-      example: 85d2fb03-2747-44c4-8b3b-7a05d37eec04
-      schema:
-        type: string
-        format: uuid
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
   schemas:
-    DocExportFormat:
-      x-schema-name: DocExportFormat
-      description: Format of the doc export
-      type: string
-      enum:
-      - PDF
-      - Plaintext
-      - HTML
-      x-tsEnumNames:
-      - PDF
-      - Plaintext
-      - HTML
     DocExportRequest:
       x-schema-name: DocExportRequest
       description: Request payload for exporting a doc
@@ -404,16 +392,6 @@ components:
         includeHiddenPages:
           type: boolean
           description: Whether to include hidden pages in the export. Defaults to true.
-    DocExportOrientation:
-      x-schema-name: DocExportOrientation
-      description: Orientation of the doc export. Defaults to Portrait.
-      type: string
-      enum:
-      - Landscape
-      - Portrait
-      x-tsEnumNames:
-      - Landscape
-      - Portrait
     DocExportStatusResponse:
       x-schema-name: DocExportStatusResponse
       description: Response payload that includes the status and location of a doc export request.
@@ -439,18 +417,28 @@ components:
         downloadLink:
           type: string
           description: Once the export completes, the location where the resulting file can be downloaded; this link typically expires after a short time.  Call this method again to get a fresh link.
-    DocExportStatus:
-      x-schema-name: DocExportStatus
-      description: Status of a doc export request
+    DocExportFormat:
+      x-schema-name: DocExportFormat
+      description: Format of the doc export
       type: string
       enum:
-      - InProgress
-      - Failed
-      - Complete
+      - PDF
+      - Plaintext
+      - HTML
       x-tsEnumNames:
-      - InProgress
-      - Failed
-      - Complete
+      - PDF
+      - Plaintext
+      - HTML
+    DocExportOrientation:
+      x-schema-name: DocExportOrientation
+      description: Orientation of the doc export. Defaults to Portrait.
+      type: string
+      enum:
+      - Landscape
+      - Portrait
+      x-tsEnumNames:
+      - Landscape
+      - Portrait
     DocExportPaperSize:
       x-schema-name: DocExportPaperSize
       description: Size of pages in the resulting export, if supported by the export format. Defaults to Letter.
@@ -477,6 +465,18 @@ components:
       - Letter
       - Legal
       - Tabloid
+    DocExportStatus:
+      x-schema-name: DocExportStatus
+      description: Status of a doc export request
+      type: string
+      enum:
+      - InProgress
+      - Failed
+      - Complete
+      x-tsEnumNames:
+      - InProgress
+      - Failed
+      - Complete
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

@@ -286,37 +286,16 @@ paths:
         source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks/<your webhook id>/reset'\n"
 components:
   schemas:
-    WebhookFilterPredicate:
-      x-schema-name: WebhookFilterPredicate
-      description: One entry in a webhook subscription filter.
-      type: object
-      required:
-      - action
-      additionalProperties: false
-      properties:
-        action:
-          type: string
-          description: The event action.
-          example: EditDoc
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    AddWebhookRequest:
-      x-schema-name: AddWebhookRequest
+    UpdateWebhookRequest:
+      x-schema-name: UpdateWebhookRequest
       description: Payload for creating or updating a webhook subscription.
       type: object
-      required:
-      - resource
-      - target
       additionalProperties: false
       properties:
         name:
           type: string
           description: Name of the webhook subscription.
           example: My webhook
-        resource:
-          $ref: '#/components/schemas/WebhookWatchedResource'
         target:
           type: string
           format: url
@@ -324,51 +303,6 @@ components:
           example: https://example.com/webhook/endpoint
         filters:
           $ref: '#/components/schemas/WebhookFilter'
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    WebhookList:
-      x-schema-name: WebhookList
-      description: List of webhooks.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Webhook'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks?pageToken=eyJsaW1pd
-    DeleteWebhookResult:
-      x-schema-name: DeleteWebhookResult
-      description: The result of deleting a webhook subscription.
-      type: object
-      additionalProperties: false
-      properties: {}
-    WebhookFilter:
-      x-schema-name: WebhookFilter
-      description: Filter set for the webhook subscription.
-      type: object
-      additionalProperties: false
-      properties:
-        or:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebhookFilterPredicate'
     Webhook:
       x-schema-name: Webhook
       description: Info about a webhook subscription.
@@ -433,16 +367,21 @@ components:
           format: date-time
           description: Timestamp for when the webhook last successfully sent a payload to the target.
           example: '2018-04-11T00:18:57.946Z'
-    UpdateWebhookRequest:
-      x-schema-name: UpdateWebhookRequest
+    AddWebhookRequest:
+      x-schema-name: AddWebhookRequest
       description: Payload for creating or updating a webhook subscription.
       type: object
+      required:
+      - resource
+      - target
       additionalProperties: false
       properties:
         name:
           type: string
           description: Name of the webhook subscription.
           example: My webhook
+        resource:
+          $ref: '#/components/schemas/WebhookWatchedResource'
         target:
           type: string
           format: url
@@ -450,6 +389,57 @@ components:
           example: https://example.com/webhook/endpoint
         filters:
           $ref: '#/components/schemas/WebhookFilter'
+    WebhookFilter:
+      x-schema-name: WebhookFilter
+      description: Filter set for the webhook subscription.
+      type: object
+      additionalProperties: false
+      properties:
+        or:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookFilterPredicate'
+    WebhookList:
+      x-schema-name: WebhookList
+      description: List of webhooks.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/webhooks?pageToken=eyJsaW1pd
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    WebhookFilterPredicate:
+      x-schema-name: WebhookFilterPredicate
+      description: One entry in a webhook subscription filter.
+      type: object
+      required:
+      - action
+      additionalProperties: false
+      properties:
+        action:
+          type: string
+          description: The event action.
+          example: EditDoc
     WebhookWatchedResource:
       x-schema-name: WebhookWatchedResource
       description: Type of resource a webhook is subscribed to.
@@ -458,55 +448,17 @@ components:
       - auditEvents
       x-tsEnumNames:
       - AuditEvents
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    DeleteWebhookResult:
+      x-schema-name: DeleteWebhookResult
+      description: The result of deleting a webhook subscription.
+      type: object
+      additionalProperties: false
+      properties: {}
   responses:
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -531,6 +483,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -579,31 +555,31 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   parameters:
-    webhookId:
-      name: webhookId
-      description: ID of the webhook subscription.
-      in: path
-      required: true
-      example: f88ba9d9-037d-41df-a49c-49798701ed41
-      schema:
-        type: string
-        format: uuid
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -614,6 +590,30 @@ components:
         minimum: 1
         default: 100
         maximum: 500
+    webhookId:
+      name: webhookId
+      description: ID of the webhook subscription.
+      in: path
+      required: true
+      example: f88ba9d9-037d-41df-a49c-49798701ed41
+      schema:
+        type: string
+        format: uuid
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

@@ -188,319 +188,49 @@ paths:
 
           '
 components:
-  parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    tableIdOrName:
-      name: tableIdOrName
-      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: grid-pqRst-U
-      schema:
-        type: string
-    columnIdOrName:
-      name: columnIdOrName
-      description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: c-tuVwxYz
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
   schemas:
-    ColumnList:
-      x-schema-name: ColumnList
-      description: List of columns.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?pageToken=eyJsaW1pd
-    TableType:
-      x-schema-name: TableType
+    CurrencyFormatType:
+      x-schema-name: CurrencyFormatType
+      description: How the numeric value should be formatted (with or without symbol, negative numbers in parens).
       type: string
       enum:
-      - table
-      - view
+      - currency
+      - accounting
+      - financial
       x-tsEnumNames:
-      - Table
-      - View
-    SliderColumnFormat:
-      x-schema-name: SliderColumnFormat
-      description: Format of a numeric column that renders as a slider.
+      - Currency
+      - Accounting
+      - Financial
+    ButtonColumnFormat:
+      x-schema-name: ButtonColumnFormat
+      description: Format of a button column.
       allOf:
       - $ref: '#/components/schemas/SimpleColumnFormat'
       - type: object
         additionalProperties: false
         properties:
-          minimum:
-            allOf:
-            - description: The minimum allowed value for this slider.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          maximum:
-            allOf:
-            - description: The maximum allowed value for this slider.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          step:
-            allOf:
-            - description: The step size (numeric increment) for this slider.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          displayType:
-            $ref: '#/components/schemas/SliderDisplayType'
-          showValue:
-            type: boolean
-            description: Whether the underyling numeric value is also displayed.
-            example: true
-    SelectColumnFormat:
-      x-schema-name: SelectColumnFormat
-      description: Format of a select column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          options:
-            type: array
-            description: For select format columns, the list of available options. Only returned for select lists that used a fixed set of options. Returns the first 5000 options.
-            items:
-              $ref: '#/components/schemas/SelectOption'
-    DurationColumnFormat:
-      x-schema-name: DurationColumnFormat
-      description: Format of a duration column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          precision:
-            type: integer
-            example: 2
-          maxUnit:
-            allOf:
-            - description: The maximum unit of precision, e.g. "hours" if this duration need not include minutes.
-              additionalProperties: false
-            - $ref: '#/components/schemas/DurationUnit'
-    CheckboxDisplayType:
-      x-schema-name: CheckboxDisplayType
-      description: How a checkbox should be displayed.
-      type: string
-      enum:
-      - toggle
-      - check
-      x-tsEnumNames:
-      - Toggle
-      - Check
-    ImageShapeStyle:
-      x-schema-name: ImageShapeStyle
-      description: How an image should be displayed.
-      type: string
-      enum:
-      - auto
-      - circle
-      x-tsEnumNames:
-      - Auto
-      - Circle
-    DateTimeColumnFormat:
-      x-schema-name: DateTimeColumnFormat
-      description: Format of a date column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          dateFormat:
+          label:
             type: string
-            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
-            example: YYYY-MM-DD
-          timeFormat:
+            description: Label formula for the button.
+            example: Click me
+          disableIf:
             type: string
-            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
-            example: h:mm:ss A
-    DurationUnit:
-      x-schema-name: DurationUnit
-      description: A time unit used as part of a duration value.
-      type: string
-      enum:
-      - days
-      - hours
-      - minutes
-      - seconds
-      x-tsEnumNames:
-      - Days
-      - Hours
-      - Minutes
-      - Seconds
-    ColumnFormat:
-      x-schema-name: ColumnFormat
-      description: Format of a column.
+            description: DisableIf formula for the button.
+            example: False()
+          action:
+            type: string
+            description: Action formula for the button.
+            example: OpenUrl("www.google.com")
+    NumberOrNumberFormula:
+      x-schema-name: NumberOrNumberFormula
+      description: A number or a string representing a formula that evaluates to a number.
       oneOf:
-      - $ref: '#/components/schemas/ButtonColumnFormat'
-      - $ref: '#/components/schemas/CheckboxColumnFormat'
-      - $ref: '#/components/schemas/DateColumnFormat'
-      - $ref: '#/components/schemas/DateTimeColumnFormat'
-      - $ref: '#/components/schemas/DurationColumnFormat'
-      - $ref: '#/components/schemas/EmailColumnFormat'
-      - $ref: '#/components/schemas/LinkColumnFormat'
-      - $ref: '#/components/schemas/CurrencyColumnFormat'
-      - $ref: '#/components/schemas/ImageReferenceColumnFormat'
-      - $ref: '#/components/schemas/NumericColumnFormat'
-      - $ref: '#/components/schemas/ReferenceColumnFormat'
-      - $ref: '#/components/schemas/SelectColumnFormat'
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - $ref: '#/components/schemas/ScaleColumnFormat'
-      - $ref: '#/components/schemas/SliderColumnFormat'
-      - $ref: '#/components/schemas/TimeColumnFormat'
-      discriminator:
-        propertyName: type
-        mapping:
-          text: '#/components/schemas/SimpleColumnFormat'
-          person: '#/components/schemas/ReferenceColumnFormat'
-          lookup: '#/components/schemas/ReferenceColumnFormat'
-          number: '#/components/schemas/NumericColumnFormat'
-          percent: '#/components/schemas/NumericColumnFormat'
-          currency: '#/components/schemas/CurrencyColumnFormat'
-          date: '#/components/schemas/DateColumnFormat'
-          dateTime: '#/components/schemas/DateTimeColumnFormat'
-          time: '#/components/schemas/TimeColumnFormat'
-          duration: '#/components/schemas/DurationColumnFormat'
-          slider: '#/components/schemas/SliderColumnFormat'
-          scale: '#/components/schemas/ScaleColumnFormat'
-          image: '#/components/schemas/SimpleColumnFormat'
-          imageReference: '#/components/schemas/ImageReferenceColumnFormat'
-          attachments: '#/components/schemas/SimpleColumnFormat'
-          button: '#/components/schemas/ButtonColumnFormat'
-          checkbox: '#/components/schemas/CheckboxColumnFormat'
-          select: '#/components/schemas/SelectColumnFormat'
-          packObject: '#/components/schemas/SimpleColumnFormat'
-          canvas: '#/components/schemas/SimpleColumnFormat'
-          other: '#/components/schemas/SimpleColumnFormat'
-    TableReference:
-      x-schema-name: TableReference
-      description: Reference to a table or view.
-      type: object
-      required:
-      - id
-      - type
-      - tableType
-      - browserLink
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the table.
-          example: grid-pqRst-U
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - table
-          x-tsType: Type.Table
-        tableType:
-          $ref: '#/components/schemas/TableType'
-        href:
-          type: string
-          format: url
-          description: API link to the table.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the table.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/#Teams-and-Tasks_tpqRst-U
-        name:
-          type: string
-          description: Name of the table.
-          example: Tasks
-        parent:
-          $ref: '#/components/schemas/PageReference'
-    ColumnDetail:
-      x-schema-name: ColumnDetail
-      description: Info about a column.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      - name
-      - parent
-      - format
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the column.
-          example: c-tuVwxYz
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - column
-          x-tsType: Type.Column
-        href:
-          type: string
-          format: url
-          description: API link to the column.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns/c-tuVwxYz
-        name:
-          type: string
-          description: Name of the column.
-          example: Completed
-        display:
-          type: boolean
-          description: Whether the column is the display column.
-          example: true
-        calculated:
-          type: boolean
-          description: Whether the column has a formula set on it.
-          example: true
-        formula:
-          type: string
-          description: Formula on the column.
-          example: thisRow.Created()
-        defaultValue:
-          type: string
-          description: Default value formula for the column.
-          example: Test
-        format:
-          $ref: '#/components/schemas/ColumnFormat'
-        parent:
-          $ref: '#/components/schemas/TableReference'
+      - type: number
+        description: A numeric value.
+        example: 1
+      - type: string
+        description: A formula that evaluates to a numeric value.
+        example: 5 * 10
     PageReference:
       x-schema-name: PageReference
       description: Reference to a page.
@@ -537,55 +267,231 @@ components:
           type: string
           description: Name of the page.
           example: Launch Status
-    Column:
-      x-schema-name: Column
-      description: Info about a column.
+    DurationColumnFormat:
+      x-schema-name: DurationColumnFormat
+      description: Format of a duration column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          precision:
+            type: integer
+            example: 2
+          maxUnit:
+            allOf:
+            - description: The maximum unit of precision, e.g. "hours" if this duration need not include minutes.
+              additionalProperties: false
+            - $ref: '#/components/schemas/DurationUnit'
+    EmailDisplayType:
+      x-schema-name: EmailDisplayType
+      description: How an email address should be displayed in the user interface.
+      type: string
+      enum:
+      - iconAndEmail
+      - iconOnly
+      - emailOnly
+      x-tsEnumNames:
+      - IconAndEmail
+      - IconOnly
+      - EmailOnly
+    ColumnList:
+      x-schema-name: ColumnList
+      description: List of columns.
       type: object
       required:
-      - id
-      - type
-      - href
-      - name
-      - format
+      - items
       additionalProperties: false
       properties:
-        id:
-          type: string
-          description: ID of the column.
-          example: c-tuVwxYz
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - column
-          x-tsType: Type.Column
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
         href:
           type: string
           format: url
-          description: API link to the column.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns/c-tuVwxYz
-        name:
-          type: string
-          description: Name of the column.
-          example: Completed
-        display:
-          type: boolean
-          description: Whether the column is the display column.
-          example: true
-        calculated:
-          type: boolean
-          description: Whether the column has a formula set on it.
-          example: true
-        formula:
-          type: string
-          description: Formula on the column.
-          example: thisRow.Created()
-        defaultValue:
-          type: string
-          description: Default value formula for the column.
-          example: Test
-        format:
-          $ref: '#/components/schemas/ColumnFormat'
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?pageToken=eyJsaW1pd
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    DateColumnFormat:
+      x-schema-name: DateColumnFormat
+      description: Format of a date column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          format:
+            type: string
+            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
+            example: YYYY-MM-DD
+    ImageReferenceColumnFormat:
+      x-schema-name: ImageReferenceColumnFormat
+      description: Format of an image reference column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        required:
+        - width
+        - height
+        - style
+        properties:
+          width:
+            allOf:
+            - description: The image width.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          height:
+            allOf:
+            - description: The image height.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          style:
+            $ref: '#/components/schemas/ImageShapeStyle'
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    TimeColumnFormat:
+      x-schema-name: TimeColumnFormat
+      description: Format of a time column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          format:
+            type: string
+            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
+            example: h:mm:ss A
+    DateTimeColumnFormat:
+      x-schema-name: DateTimeColumnFormat
+      description: Format of a date column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          dateFormat:
+            type: string
+            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
+            example: YYYY-MM-DD
+          timeFormat:
+            type: string
+            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
+            example: h:mm:ss A
+    IconSet:
+      x-schema-name: IconSet
+      description: List of available icon sets.
+      type: string
+      enum:
+      - star
+      - circle
+      - fire
+      - bug
+      - diamond
+      - bell
+      - thumbsup
+      - heart
+      - chili
+      - smiley
+      - lightning
+      - currency
+      - coffee
+      - person
+      - battery
+      - cocktail
+      - cloud
+      - sun
+      - checkmark
+      - lightbulb
+      x-tsEnumNames:
+      - Star
+      - Circle
+      - Fire
+      - Bug
+      - Diamond
+      - Bell
+      - ThumbsUp
+      - Heart
+      - Chili
+      - Smiley
+      - Lightning
+      - Currency
+      - Coffee
+      - Person
+      - Battery
+      - Cocktail
+      - Cloud
+      - Sun
+      - Checkmark
+      - LightBulb
+    NumericColumnFormat:
+      x-schema-name: NumericColumnFormat
+      description: Format of a numeric column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          precision:
+            type: integer
+            minimum: 0
+            maximum: 10
+            description: The decimal precision.
+            example: 2
+          useThousandsSeparator:
+            type: boolean
+            description: Whether to use a thousands separator (like ",") to format the numeric value.
+            example: true
+    SliderDisplayType:
+      x-schema-name: SliderDisplayType
+      description: How the slider should be rendered.
+      type: string
+      enum:
+      - slider
+      - progress
+      x-tsEnumNames:
+      - Slider
+      - Progress
+    SelectColumnFormat:
+      x-schema-name: SelectColumnFormat
+      description: Format of a select column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          options:
+            type: array
+            description: For select format columns, the list of available options. Only returned for select lists that used a fixed set of options. Returns the first 5000 options.
+            items:
+              $ref: '#/components/schemas/SelectOption'
+    LinkColumnFormat:
+      x-schema-name: LinkColumnFormat
+      description: Format of a link column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          display:
+            $ref: '#/components/schemas/LinkDisplayType'
+          force:
+            type: boolean
+            description: Force embeds to render on the client instead of the server (for sites that require user login).
+            example: true
     SelectOption:
       x-schema-name: SelectOption
       description: An option for a select column.
@@ -606,30 +512,16 @@ components:
           type: string
           description: The foreground color of the option.
           example: '#ffffff'
-    DateColumnFormat:
-      x-schema-name: DateColumnFormat
-      description: Format of a date column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          format:
-            type: string
-            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
-            example: YYYY-MM-DD
-    EmailDisplayType:
-      x-schema-name: EmailDisplayType
-      description: How an email address should be displayed in the user interface.
+    ImageShapeStyle:
+      x-schema-name: ImageShapeStyle
+      description: How an image should be displayed.
       type: string
       enum:
-      - iconAndEmail
-      - iconOnly
-      - emailOnly
+      - auto
+      - circle
       x-tsEnumNames:
-      - IconAndEmail
-      - IconOnly
-      - EmailOnly
+      - Auto
+      - Circle
     ColumnFormatType:
       x-schema-name: ColumnFormatType
       description: Format type of the column
@@ -684,6 +576,92 @@ components:
       - Reaction
       - Canvas
       - Other
+    CheckboxDisplayType:
+      x-schema-name: CheckboxDisplayType
+      description: How a checkbox should be displayed.
+      type: string
+      enum:
+      - toggle
+      - check
+      x-tsEnumNames:
+      - Toggle
+      - Check
+    EmailColumnFormat:
+      x-schema-name: EmailColumnFormat
+      description: Format of an email column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          display:
+            $ref: '#/components/schemas/EmailDisplayType'
+          autocomplete:
+            type: boolean
+    ColumnDetail:
+      x-schema-name: ColumnDetail
+      description: Info about a column.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      - parent
+      - format
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the column.
+          example: c-tuVwxYz
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - column
+          x-tsType: Type.Column
+        href:
+          type: string
+          format: url
+          description: API link to the column.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns/c-tuVwxYz
+        name:
+          type: string
+          description: Name of the column.
+          example: Completed
+        display:
+          type: boolean
+          description: Whether the column is the display column.
+          example: true
+        calculated:
+          type: boolean
+          description: Whether the column has a formula set on it.
+          example: true
+        formula:
+          type: string
+          description: Formula on the column.
+          example: thisRow.Created()
+        defaultValue:
+          type: string
+          description: Default value formula for the column.
+          example: Test
+        format:
+          $ref: '#/components/schemas/ColumnFormat'
+        parent:
+          $ref: '#/components/schemas/TableReference'
+    CheckboxColumnFormat:
+      x-schema-name: CheckboxColumnFormat
+      description: Format of a checkbox column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        required:
+        - displayType
+        properties:
+          displayType:
+            $ref: '#/components/schemas/CheckboxDisplayType'
     ReferenceColumnFormat:
       x-schema-name: ReferenceColumnFormat
       description: Format of a column that refers to another table.
@@ -715,156 +693,20 @@ components:
       - Title
       - Card
       - Embed
-    SliderDisplayType:
-      x-schema-name: SliderDisplayType
-      description: How the slider should be rendered.
+    DurationUnit:
+      x-schema-name: DurationUnit
+      description: A time unit used as part of a duration value.
       type: string
       enum:
-      - slider
-      - progress
+      - days
+      - hours
+      - minutes
+      - seconds
       x-tsEnumNames:
-      - Slider
-      - Progress
-    ScaleColumnFormat:
-      x-schema-name: ScaleColumnFormat
-      description: Format of a numeric column that renders as a scale, like star ratings.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        required:
-        - maximum
-        - icon
-        properties:
-          maximum:
-            type: number
-            description: The maximum number allowed for this scale.
-            example: 5
-          icon:
-            allOf:
-            - description: The icon set to use when rendering the scale, e.g. render a 5 star scale.
-              additionalProperties: false
-            - $ref: '#/components/schemas/IconSet'
-    EmailColumnFormat:
-      x-schema-name: EmailColumnFormat
-      description: Format of an email column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          display:
-            $ref: '#/components/schemas/EmailDisplayType'
-          autocomplete:
-            type: boolean
-    IconSet:
-      x-schema-name: IconSet
-      description: List of available icon sets.
-      type: string
-      enum:
-      - star
-      - circle
-      - fire
-      - bug
-      - diamond
-      - bell
-      - thumbsup
-      - heart
-      - chili
-      - smiley
-      - lightning
-      - currency
-      - coffee
-      - person
-      - battery
-      - cocktail
-      - cloud
-      - sun
-      - checkmark
-      - lightbulb
-      x-tsEnumNames:
-      - Star
-      - Circle
-      - Fire
-      - Bug
-      - Diamond
-      - Bell
-      - ThumbsUp
-      - Heart
-      - Chili
-      - Smiley
-      - Lightning
-      - Currency
-      - Coffee
-      - Person
-      - Battery
-      - Cocktail
-      - Cloud
-      - Sun
-      - Checkmark
-      - LightBulb
-    ImageReferenceColumnFormat:
-      x-schema-name: ImageReferenceColumnFormat
-      description: Format of an image reference column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        required:
-        - width
-        - height
-        - style
-        properties:
-          width:
-            allOf:
-            - description: The image width.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          height:
-            allOf:
-            - description: The image height.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          style:
-            $ref: '#/components/schemas/ImageShapeStyle'
-    NumericColumnFormat:
-      x-schema-name: NumericColumnFormat
-      description: Format of a numeric column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          precision:
-            type: integer
-            minimum: 0
-            maximum: 10
-            description: The decimal precision.
-            example: 2
-          useThousandsSeparator:
-            type: boolean
-            description: Whether to use a thousands separator (like ",") to format the numeric value.
-            example: true
-    ButtonColumnFormat:
-      x-schema-name: ButtonColumnFormat
-      description: Format of a button column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          label:
-            type: string
-            description: Label formula for the button.
-            example: Click me
-          disableIf:
-            type: string
-            description: DisableIf formula for the button.
-            example: False()
-          action:
-            type: string
-            description: Action formula for the button.
-            example: OpenUrl("www.google.com")
+      - Days
+      - Hours
+      - Minutes
+      - Seconds
     CurrencyColumnFormat:
       x-schema-name: CurrencyColumnFormat
       description: Format of a currency column.
@@ -885,60 +727,55 @@ components:
             example: 2
           format:
             $ref: '#/components/schemas/CurrencyFormatType'
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    CurrencyFormatType:
-      x-schema-name: CurrencyFormatType
-      description: How the numeric value should be formatted (with or without symbol, negative numbers in parens).
-      type: string
-      enum:
-      - currency
-      - accounting
-      - financial
-      x-tsEnumNames:
-      - Currency
-      - Accounting
-      - Financial
-    CheckboxColumnFormat:
-      x-schema-name: CheckboxColumnFormat
-      description: Format of a checkbox column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        required:
-        - displayType
-        properties:
-          displayType:
-            $ref: '#/components/schemas/CheckboxDisplayType'
-    TimeColumnFormat:
-      x-schema-name: TimeColumnFormat
-      description: Format of a time column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          format:
-            type: string
-            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
-            example: h:mm:ss A
-    LinkColumnFormat:
-      x-schema-name: LinkColumnFormat
-      description: Format of a link column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          display:
-            $ref: '#/components/schemas/LinkDisplayType'
-          force:
-            type: boolean
-            description: Force embeds to render on the client instead of the server (for sites that require user login).
-            example: true
+    Column:
+      x-schema-name: Column
+      description: Info about a column.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      - format
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the column.
+          example: c-tuVwxYz
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - column
+          x-tsType: Type.Column
+        href:
+          type: string
+          format: url
+          description: API link to the column.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns/c-tuVwxYz
+        name:
+          type: string
+          description: Name of the column.
+          example: Completed
+        display:
+          type: boolean
+          description: Whether the column is the display column.
+          example: true
+        calculated:
+          type: boolean
+          description: Whether the column has a formula set on it.
+          example: true
+        formula:
+          type: string
+          description: Formula on the column.
+          example: thisRow.Created()
+        defaultValue:
+          type: string
+          description: Default value formula for the column.
+          example: Test
+        format:
+          $ref: '#/components/schemas/ColumnFormat'
     SimpleColumnFormat:
       x-schema-name: SimpleColumnFormat
       description: Format of a simple column.
@@ -954,45 +791,150 @@ components:
           type: boolean
           description: Whether or not this column is an array.
           example: true
-    NumberOrNumberFormula:
-      x-schema-name: NumberOrNumberFormula
-      description: A number or a string representing a formula that evaluates to a number.
+    ScaleColumnFormat:
+      x-schema-name: ScaleColumnFormat
+      description: Format of a numeric column that renders as a scale, like star ratings.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        required:
+        - maximum
+        - icon
+        properties:
+          maximum:
+            type: number
+            description: The maximum number allowed for this scale.
+            example: 5
+          icon:
+            allOf:
+            - description: The icon set to use when rendering the scale, e.g. render a 5 star scale.
+              additionalProperties: false
+            - $ref: '#/components/schemas/IconSet'
+    TableReference:
+      x-schema-name: TableReference
+      description: Reference to a table or view.
+      type: object
+      required:
+      - id
+      - type
+      - tableType
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the table.
+          example: grid-pqRst-U
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - table
+          x-tsType: Type.Table
+        tableType:
+          $ref: '#/components/schemas/TableType'
+        href:
+          type: string
+          format: url
+          description: API link to the table.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the table.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/#Teams-and-Tasks_tpqRst-U
+        name:
+          type: string
+          description: Name of the table.
+          example: Tasks
+        parent:
+          $ref: '#/components/schemas/PageReference'
+    ColumnFormat:
+      x-schema-name: ColumnFormat
+      description: Format of a column.
       oneOf:
-      - type: number
-        description: A numeric value.
-        example: 1
-      - type: string
-        description: A formula that evaluates to a numeric value.
-        example: 5 * 10
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
+      - $ref: '#/components/schemas/ButtonColumnFormat'
+      - $ref: '#/components/schemas/CheckboxColumnFormat'
+      - $ref: '#/components/schemas/DateColumnFormat'
+      - $ref: '#/components/schemas/DateTimeColumnFormat'
+      - $ref: '#/components/schemas/DurationColumnFormat'
+      - $ref: '#/components/schemas/EmailColumnFormat'
+      - $ref: '#/components/schemas/LinkColumnFormat'
+      - $ref: '#/components/schemas/CurrencyColumnFormat'
+      - $ref: '#/components/schemas/ImageReferenceColumnFormat'
+      - $ref: '#/components/schemas/NumericColumnFormat'
+      - $ref: '#/components/schemas/ReferenceColumnFormat'
+      - $ref: '#/components/schemas/SelectColumnFormat'
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - $ref: '#/components/schemas/ScaleColumnFormat'
+      - $ref: '#/components/schemas/SliderColumnFormat'
+      - $ref: '#/components/schemas/TimeColumnFormat'
+      discriminator:
+        propertyName: type
+        mapping:
+          text: '#/components/schemas/SimpleColumnFormat'
+          person: '#/components/schemas/ReferenceColumnFormat'
+          lookup: '#/components/schemas/ReferenceColumnFormat'
+          number: '#/components/schemas/NumericColumnFormat'
+          percent: '#/components/schemas/NumericColumnFormat'
+          currency: '#/components/schemas/CurrencyColumnFormat'
+          date: '#/components/schemas/DateColumnFormat'
+          dateTime: '#/components/schemas/DateTimeColumnFormat'
+          time: '#/components/schemas/TimeColumnFormat'
+          duration: '#/components/schemas/DurationColumnFormat'
+          slider: '#/components/schemas/SliderColumnFormat'
+          scale: '#/components/schemas/ScaleColumnFormat'
+          image: '#/components/schemas/SimpleColumnFormat'
+          imageReference: '#/components/schemas/ImageReferenceColumnFormat'
+          attachments: '#/components/schemas/SimpleColumnFormat'
+          button: '#/components/schemas/ButtonColumnFormat'
+          checkbox: '#/components/schemas/CheckboxColumnFormat'
+          select: '#/components/schemas/SelectColumnFormat'
+          packObject: '#/components/schemas/SimpleColumnFormat'
+          canvas: '#/components/schemas/SimpleColumnFormat'
+          other: '#/components/schemas/SimpleColumnFormat'
+    TableType:
+      x-schema-name: TableType
       type: string
-      example: eyJsaW1pd
+      enum:
+      - table
+      - view
+      x-tsEnumNames:
+      - Table
+      - View
+    SliderColumnFormat:
+      x-schema-name: SliderColumnFormat
+      description: Format of a numeric column that renders as a slider.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          minimum:
+            allOf:
+            - description: The minimum allowed value for this slider.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          maximum:
+            allOf:
+            - description: The maximum allowed value for this slider.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          step:
+            allOf:
+            - description: The step size (numeric increment) for this slider.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          displayType:
+            $ref: '#/components/schemas/SliderDisplayType'
+          showValue:
+            type: boolean
+            description: Whether the underyling numeric value is also displayed.
+            example: true
   responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -1017,6 +959,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -1065,6 +1031,40 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
+  parameters:
+    tableIdOrName:
+      name: tableIdOrName
+      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: grid-pqRst-U
+      schema:
+        type: string
+    columnIdOrName:
+      name: columnIdOrName
+      description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: c-tuVwxYz
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: "The Superhuman Docs API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)\nin Superhuman Docs. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Superhuman Docs, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Superhuman Docs API can perform any action that the user who created the token\ncan perform. However, Superhuman Docs API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Superhuman Docs API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nSuperhuman Docs API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Superhuman Docs API tokens.\n* `/resolveBrowserLink`: This method can be called by all Superhuman Docs API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Superhuman Community.\n"

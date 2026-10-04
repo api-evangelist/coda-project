@@ -169,56 +169,6 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' -X DELETE \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/workspaces/<your workspace id>/folders/<your folder id>/acl/permissions/<permission ID>'\n# => Revoke access to the folder\n"
 components:
-  parameters:
-    permissionId:
-      name: permissionId
-      description: ID of a permission on an object.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
-    workspaceId:
-      name: workspaceId
-      description: ID of the workspace.
-      in: path
-      required: true
-      example: ws-AbCDeFGHIj
-      schema:
-        type: string
-    folderId:
-      name: folderId
-      description: ID of the folder.
-      in: path
-      required: true
-      example: fl-AbCDeFGHIj
-      schema:
-        type: string
   schemas:
     FolderAcl:
       x-schema-name: FolderAcl
@@ -242,6 +192,35 @@ components:
           allOf:
           - $ref: '#/components/schemas/NextPageLink'
           - type: string
+    WorkspacePrincipal:
+      type: object
+      required:
+      - type
+      - workspaceId
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - workspace
+          x-tsType: PrincipalType.Workspace
+        workspaceId:
+          type: string
+          description: WorkspaceId for the principal.
+          example: ws-sdfmsdf9
+    AnyonePrincipal:
+      type: object
+      required:
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - anyone
+          x-tsType: PrincipalType.Anyone
     AddFolderPermissionRequest:
       x-schema-name: AddFolderPermissionRequest
       description: Payload for granting a new folder permission.
@@ -261,6 +240,74 @@ components:
         bypassOrgExternalSharingRestrictions:
           type: boolean
           description: When true bypasses organization external sharing restrictions
+    FolderAccessTypeNotNone:
+      x-schema-name: FolderAccessTypeNotNone
+      description: Type of access for folders only (excluding none).
+      type: string
+      enum:
+      - readonly
+      - write
+      - comment
+      - manage
+      x-tsEnumNames:
+      - ReadOnly
+      - Write
+      - Comment
+      - Manage
+    AddedGroupPrincipal:
+      type: object
+      required:
+      - groupId
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - group
+          x-tsType: PrincipalType.Group
+        groupId:
+          type: string
+          description: Group ID for the principal.
+          example: grp-6SM9xrKcqW
+    FolderAccessType:
+      x-schema-name: FolderAccessType
+      description: Type of access for folders only.
+      type: string
+      enum:
+      - readonly
+      - write
+      - comment
+      - manage
+      - none
+      x-tsEnumNames:
+      - ReadOnly
+      - Write
+      - Comment
+      - Manage
+      - None
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    AddedWorkspacePrincipal:
+      type: object
+      required:
+      - type
+      - workspaceId
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - workspace
+          x-tsType: PrincipalType.Workspace
+        workspaceId:
+          type: string
+          description: WorkspaceId for the principal.
+          example: ws-sdfmsdf9
     FolderPermission:
       x-schema-name: FolderPermission
       description: A specific folder permission granted to a principal.
@@ -285,27 +332,6 @@ components:
           description: ID for the Permission
         access:
           $ref: '#/components/schemas/FolderAccessType'
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    WorkspacePrincipal:
-      type: object
-      required:
-      - type
-      - workspaceId
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - workspace
-          x-tsType: PrincipalType.Workspace
-        workspaceId:
-          type: string
-          description: WorkspaceId for the principal.
-          example: ws-sdfmsdf9
     EmailPrincipal:
       type: object
       required:
@@ -323,11 +349,10 @@ components:
           type: string
           description: Email for the principal.
           example: example@domain.com
-    GroupPrincipal:
+    AddedEmailPrincipal:
       type: object
       required:
-      - groupId
-      - groupName
+      - email
       - type
       additionalProperties: false
       properties:
@@ -335,16 +360,18 @@ components:
           type: string
           description: The type of this principal.
           enum:
-          - group
-          x-tsType: PrincipalType.Group
-        groupId:
+          - email
+          x-tsType: PrincipalType.Email
+        email:
           type: string
-          description: Group ID for the principal.
-          example: grp-6SM9xrKcqW
-        groupName:
-          type: string
-          description: Name of the group.
-          example: Marketing team
+          description: Email for the principal.
+          example: example@domain.com
+    DeletePermissionResult:
+      x-schema-name: DeletePermissionResult
+      description: The result of deleting a permission.
+      type: object
+      additionalProperties: false
+      properties: {}
     NextPageLink:
       description: If specified, a link that can be used to fetch the next page of results.
       type: string
@@ -372,30 +399,7 @@ components:
       type: object
       additionalProperties: false
       properties: {}
-    DeletePermissionResult:
-      x-schema-name: DeletePermissionResult
-      description: The result of deleting a permission.
-      type: object
-      additionalProperties: false
-      properties: {}
-    Principal:
-      x-schema-name: Principal
-      description: Metadata about a principal.
-      oneOf:
-      - $ref: '#/components/schemas/EmailPrincipal'
-      - $ref: '#/components/schemas/GroupPrincipal'
-      - $ref: '#/components/schemas/DomainPrincipal'
-      - $ref: '#/components/schemas/WorkspacePrincipal'
-      - $ref: '#/components/schemas/AnyonePrincipal'
-      discriminator:
-        propertyName: type
-        mapping:
-          email: '#/components/schemas/EmailPrincipal'
-          group: '#/components/schemas/GroupPrincipal'
-          domain: '#/components/schemas/DomainPrincipal'
-          workspace: '#/components/schemas/WorkspacePrincipal'
-          anyone: '#/components/schemas/AnyonePrincipal'
-    AnyonePrincipal:
+    AddedAnyonePrincipal:
       type: object
       required:
       - type
@@ -407,6 +411,28 @@ components:
           enum:
           - anyone
           x-tsType: PrincipalType.Anyone
+    GroupPrincipal:
+      type: object
+      required:
+      - groupId
+      - groupName
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - group
+          x-tsType: PrincipalType.Group
+        groupId:
+          type: string
+          description: Group ID for the principal.
+          example: grp-6SM9xrKcqW
+        groupName:
+          type: string
+          description: Name of the group.
+          example: Marketing team
     DomainPrincipal:
       type: object
       required:
@@ -424,51 +450,23 @@ components:
           type: string
           description: Domain for the principal.
           example: domain.com
-    AddedWorkspacePrincipal:
-      type: object
-      required:
-      - type
-      - workspaceId
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - workspace
-          x-tsType: PrincipalType.Workspace
-        workspaceId:
-          type: string
-          description: WorkspaceId for the principal.
-          example: ws-sdfmsdf9
-    FolderAccessType:
-      x-schema-name: FolderAccessType
-      description: Type of access for folders only.
-      type: string
-      enum:
-      - readonly
-      - write
-      - comment
-      - manage
-      - none
-      x-tsEnumNames:
-      - ReadOnly
-      - Write
-      - Comment
-      - Manage
-      - None
-    AddedAnyonePrincipal:
-      type: object
-      required:
-      - type
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - anyone
-          x-tsType: PrincipalType.Anyone
+    Principal:
+      x-schema-name: Principal
+      description: Metadata about a principal.
+      oneOf:
+      - $ref: '#/components/schemas/EmailPrincipal'
+      - $ref: '#/components/schemas/GroupPrincipal'
+      - $ref: '#/components/schemas/DomainPrincipal'
+      - $ref: '#/components/schemas/WorkspacePrincipal'
+      - $ref: '#/components/schemas/AnyonePrincipal'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/EmailPrincipal'
+          group: '#/components/schemas/GroupPrincipal'
+          domain: '#/components/schemas/DomainPrincipal'
+          workspace: '#/components/schemas/WorkspacePrincipal'
+          anyone: '#/components/schemas/AnyonePrincipal'
     AddedDomainPrincipal:
       type: object
       required:
@@ -486,103 +484,7 @@ components:
           type: string
           description: Domain for the principal.
           example: domain.com
-    AddedGroupPrincipal:
-      type: object
-      required:
-      - groupId
-      - type
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - group
-          x-tsType: PrincipalType.Group
-        groupId:
-          type: string
-          description: Group ID for the principal.
-          example: grp-6SM9xrKcqW
-    AddedEmailPrincipal:
-      type: object
-      required:
-      - email
-      - type
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - email
-          x-tsType: PrincipalType.Email
-        email:
-          type: string
-          description: Email for the principal.
-          example: example@domain.com
-    FolderAccessTypeNotNone:
-      x-schema-name: FolderAccessTypeNotNone
-      description: Type of access for folders only (excluding none).
-      type: string
-      enum:
-      - readonly
-      - write
-      - comment
-      - manage
-      x-tsEnumNames:
-      - ReadOnly
-      - Write
-      - Comment
-      - Manage
   responses:
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -607,6 +509,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -655,6 +581,80 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
+  parameters:
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    permissionId:
+      name: permissionId
+      description: ID of a permission on an object.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    workspaceId:
+      name: workspaceId
+      description: ID of the workspace.
+      in: path
+      required: true
+      example: ws-AbCDeFGHIj
+      schema:
+        type: string
+    folderId:
+      name: folderId
+      description: ID of the folder.
+      in: path
+      required: true
+      example: fl-AbCDeFGHIj
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

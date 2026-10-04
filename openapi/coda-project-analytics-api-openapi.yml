@@ -293,21 +293,12 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    scale:
-      name: scale
-      description: Quantization period over which to view analytics. Defaults to daily.
+    isPublished:
+      name: isPublished
+      description: Limit results to only published items.
       in: query
-      example: daily
       schema:
-        $ref: '#/components/schemas/AnalyticsScale'
+        type: boolean
     isPublishedNoDefault:
       name: isPublished
       description: 'Limit results to only published items. If false or unspecified, returns all items including published ones.
@@ -317,24 +308,46 @@ components:
       schema:
         type: boolean
         x-no-default: true
-    direction:
-      name: direction
-      description: Direction to sort results in.
+    query:
+      name: query
+      description: Search term used to filter down results.
       in: query
+      example: Supercalifragilisticexpialidocious
       schema:
-        $ref: '#/components/schemas/SortDirection'
-    packFormulaAnalyticsOrderBy:
-      name: orderBy
+        type: string
+    scale:
+      name: scale
+      description: Quantization period over which to view analytics. Defaults to daily.
       in: query
-      description: Use this parameter to order the Pack formula analytics returned.
+      example: daily
       schema:
-        $ref: '#/components/schemas/PackFormulaAnalyticsOrderBy'
+        $ref: '#/components/schemas/AnalyticsScale'
+    workspaceIdInQuery:
+      name: workspaceId
+      description: ID of the workspace.
+      in: query
+      required: false
+      example: ws-1Ab234
+      schema:
+        type: string
     docAnalyticsOrderBy:
       name: orderBy
       in: query
       description: Use this parameter to order the doc analytics returned.
       schema:
         $ref: '#/components/schemas/DocAnalyticsOrderBy'
+    packFormulaAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack formula analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackFormulaAnalyticsOrderBy'
+    packAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackAnalyticsOrderBy'
     docIds:
       name: docIds
       description: List of docIds to fetch.
@@ -344,37 +357,6 @@ components:
         type: array
         items:
           type: string
-    query:
-      name: query
-      description: Search term used to filter down results.
-      in: query
-      example: Supercalifragilisticexpialidocious
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    workspaceIdInQuery:
-      name: workspaceId
-      description: ID of the workspace.
-      in: query
-      required: false
-      example: ws-1Ab234
-      schema:
-        type: string
-    packId:
-      name: packId
-      description: ID of a Pack
-      in: path
-      required: true
-      example: 123
-      schema:
-        type: integer
-        minimum: 1
     packIds:
       name: packIds
       description: Which Pack IDs to fetch.
@@ -384,26 +366,6 @@ components:
         type: array
         items:
           type: integer
-    isPublished:
-      name: isPublished
-      description: Limit results to only published items.
-      in: query
-      schema:
-        type: boolean
-    sinceDate:
-      name: sinceDate
-      description: Limit results to activity on or after this date.
-      in: query
-      example: '2020-08-01'
-      schema:
-        type: string
-        format: date
-    packAnalyticsOrderBy:
-      name: orderBy
-      in: query
-      description: Use this parameter to order the Pack analytics returned.
-      schema:
-        $ref: '#/components/schemas/PackAnalyticsOrderBy'
     untilDate:
       name: untilDate
       description: Limit results to activity on or before this date.
@@ -412,32 +374,338 @@ components:
       schema:
         type: string
         format: date
+    packId:
+      name: packId
+      description: ID of a Pack
+      in: path
+      required: true
+      example: 123
+      schema:
+        type: integer
+        minimum: 1
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    sinceDate:
+      name: sinceDate
+      description: Limit results to activity on or after this date.
+      in: query
+      example: '2020-08-01'
+      schema:
+        type: string
+        format: date
+    direction:
+      name: direction
+      description: Direction to sort results in.
+      in: query
+      schema:
+        $ref: '#/components/schemas/SortDirection'
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
   schemas:
-    AnalyticsLastUpdatedResponse:
-      x-schema-name: AnalyticsLastUpdatedResponse
-      description: Response representing the last day analytics were updated.
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
       type: object
       required:
-      - docAnalyticsLastUpdated
-      - packAnalyticsLastUpdated
-      - packFormulaAnalyticsLastUpdated
+      - name
+      - type
+      - browserLink
       additionalProperties: false
       properties:
-        docAnalyticsLastUpdated:
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
+    PageAnalyticsCollection:
+      x-schema-name: PageAnalyticsCollection
+      description: List of analytics for pages within a document over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz
+    PackFormulaAnalyticsMetrics:
+      x-schema-name: PackFormulaAnalyticsMetrics
+      description: Analytics metrics for a Superhuman Pack formula.
+      type: object
+      required:
+      - date
+      - formulaInvocations
+      - errors
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      additionalProperties: false
+      properties:
+        date:
           type: string
           format: date
-          description: Date that doc analytics were last updated.
-          example: '2022-05-01'
-        packAnalyticsLastUpdated:
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        formulaInvocations:
+          type: integer
+          description: Number of times this formula has been invoked.
+          example: 123
+        errors:
+          type: integer
+          description: Number of errors from invocations.
+          example: 5
+        medianLatencyMs:
+          type: integer
+          description: Median latency of an invocation in milliseconds. Only present for daily metrics.
+          example: 500
+        medianResponseSizeBytes:
+          type: integer
+          description: Median response size in bytes. Only present for daily metrics.
+          example: 300
+        docsActivelyUsing:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past day.
+          example: 50
+        docsActivelyUsing7Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 7 days.
+          example: 100
+        docsActivelyUsing30Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 30 days.
+          example: 200
+        docsActivelyUsing90Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 90 days.
+          example: 300
+        docsActivelyUsingAllTime:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack ever.
+          example: 500
+        workspacesActivelyUsing:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past day.
+          example: 10
+        workspacesActivelyUsing7Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 7 days.
+          example: 15
+        workspacesActivelyUsing30Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 30 days.
+          example: 20
+        workspacesActivelyUsing90Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 90 days.
+          example: 30
+        workspacesActivelyUsingAllTime:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack ever.
+          example: 50
+        workspacesActivelyTrialing:
+          type: integer
+          description: Number of unique workspaces that are currently involved in a trial.
+        workspacesActivelyTrialing7Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 7 days.
+        workspacesActivelyTrialing30Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 30 days.
+        workspacesActivelyTrialing90Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 90 days.
+        workspacesActivelyTrialingAllTime:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial ever.
+        workspacesNewlySubscribed:
+          type: integer
+          description: Number of unique workspaces that have recently subscribed to the Pack.
+        workspacesWithActiveSubscriptions:
+          type: integer
+          description: Number of unique workspaces that are currently subscribed to the Pack.
+        workspacesWithSuccessfulTrials:
+          type: integer
+          description: Number of unique workspaces that subscribed after undertaking a Pack trial.
+        revenueUsd:
+          type: string
+          description: Amount of revenue (in USD) that the Pack has produced.
+    DocAnalyticsMetrics:
+      x-schema-name: DocAnalyticsMetrics
+      description: Analytics metrics for a document.
+      type: object
+      required:
+      - date
+      - views
+      - copies
+      - likes
+      - sessionsMobile
+      - sessionsDesktop
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat,
+      - aiCreditsBlock,
+      - aiCreditsColumn,
+      - aiCreditsAssistant,
+      - aiCreditsReviewer,
+      - aiCredits,
+      additionalProperties: false
+      properties:
+        date:
           type: string
           format: date
-          description: Date that Pack analytics were last updated.
-          example: '2022-05-01'
-        packFormulaAnalyticsLastUpdated:
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        views:
+          type: integer
+          description: Number of times the doc was viewed.
+          example: 980
+        copies:
+          type: integer
+          description: Number of times the doc was copied.
+          example: 24
+        likes:
+          type: integer
+          description: Number of times the doc was liked.
+          example: 342
+        sessionsMobile:
+          type: integer
+          description: Number of unique visitors to this doc from a mobile device.
+          example: 530
+        sessionsDesktop:
+          type: integer
+          description: Number of unique visitors to this doc from a desktop device.
+          example: 212
+        sessionsOther:
+          type: integer
+          description: Number of unique visitors to this doc from an unknown device type.
+          example: 10
+        totalSessions:
+          type: integer
+          description: Sum of the total sessions from any device.
+          example: 1000
+        aiCreditsChat:
+          type: integer
+          description: Number of credits used for AI chat.
+          example: 10
+        aiCreditsBlock:
+          type: integer
+          description: Number of credits used for AI block.
+          example: 10
+        aiCreditsColumn:
+          type: integer
+          description: Number of credits used for AI column.
+          example: 10
+        aiCreditsAssistant:
+          type: integer
+          description: Number of credits used for AI assistant.
+          example: 10
+        aiCreditsReviewer:
+          type: integer
+          description: Number of credits used for AI reviewer.
+          example: 10
+        aiCredits:
+          type: integer
+          description: Total number of AI credits used.
+          example: 50
+    PackFormulaIdentifier:
+      x-schema-name: PackFormulaIdentifier
+      type: object
+      required:
+      - name
+      - type
+      additionalProperties: false
+      properties:
+        name:
           type: string
-          format: date
-          description: Date that Pack formula analytics were last updated.
-          example: '2022-05-01'
+          description: The Pack formula name.
+          example: SquareRoot
+        type:
+          $ref: '#/components/schemas/PackFormulaType'
+    PackFormulaType:
+      x-schema-name: PackFormulaType
+      type: string
+      enum:
+      - action
+      - formula
+      - sync
+      - metadata
+      x-tsEnumNames:
+      - Action
+      - Formula
+      - Sync
+      - Metadata
+    PackFormulaAnalyticsOrderBy:
+      x-schema-name: PackFormulaAnalyticsOrderBy
+      description: Determines how the Pack formula analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - formulaName
+      - formulaType
+      - formulaInvocations
+      - medianLatencyMs
+      - medianResponseSizeBytes
+      - errors
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      x-tsEnumNames:
+      - AnalyticsDate
+      - FormulaName
+      - FormulaType
+      - FormulaInvocations
+      - MedianLatencyMs
+      - MedianResponseSizeBytes
+      - Errors
+      - DocsActivelyUsing
+      - DocsActivelyUsing7Day
+      - DocsActivelyUsing30Day
+      - DocsActivelyUsing90Day
+      - DocsActivelyUsingAllTime
+      - WorkspacesActivelyUsing
+      - WorkspacesActivelyUsing7Day
+      - WorkspacesActivelyUsing30Day
+      - WorkspacesActivelyUsing90Day
+      - WorkspacesActivelyUsingAllTime
     PageAnalyticsItem:
       x-schema-name: PageAnalyticsItem
       description: Analytics data for a page within a document.
@@ -453,6 +721,48 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PageAnalyticsMetrics'
+    DocAnalyticsOrderBy:
+      x-schema-name: DocAnalyticsOrderBy
+      description: Determines how the Doc analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - docId
+      - title
+      - createdAt
+      - publishedAt
+      - likes
+      - copies
+      - views
+      - sessionsDesktop
+      - sessionsMobile
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat
+      - aiCreditsBlock
+      - aiCreditsColumn
+      - aiCreditsAssistant
+      - aiCreditsReviewer
+      - aiCredits
+      x-tsEnumNames:
+      - AnalyticsDate
+      - DocId
+      - Title
+      - CreatedAt
+      - PublishedAt
+      - Likes
+      - Copies
+      - Views
+      - SessionsDesktop
+      - SessionsMobile
+      - SessionsOther
+      - TotalSessions
+      - AiCreditsChat
+      - AiCreditsBlock
+      - AiCreditsColumn
+      - AiCreditsAssistant
+      - AiCreditsReviewer
+      - AiCredits
     DocAnalyticsDetails:
       allOf:
       - $ref: '#/components/schemas/DocReference'
@@ -480,6 +790,219 @@ components:
             format: date-time
             description: Published time of the doc.
             example: '2022-04-12T00:18:57.946Z'
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    DocAnalyticsSummary:
+      x-schema-name: DocAnalyticsSummary
+      description: Summarized metrics for documents.
+      type: object
+      required:
+      - totalSessions
+      additionalProperties: false
+      properties:
+        totalSessions:
+          type: integer
+          description: Total number of sessions across all docs.
+          example: 1337
+    PageAnalyticsDetails:
+      x-schema-name: PageAnalyticsDetails
+      description: Metadata about a page relevant to analytics.
+      required:
+      - id
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: section-IjkLmnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        icon:
+          $ref: '#/components/schemas/Icon'
+          example: https://docs.superhuman.com/d/_dAbCDeFGH
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    PackAnalyticsCollection:
+      x-schema-name: PackAnalyticsCollection
+      description: List of analytics for Superhuman Packs over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/packs?pageToken=xyz
+    PackFormulaAnalyticsItem:
+      x-schema-name: PackFormulaAnalyticsItem
+      description: Analytics data for a Superhuman Pack formula.
+      type: object
+      required:
+      - formula
+      - metrics
+      additionalProperties: false
+      properties:
+        formula:
+          $ref: '#/components/schemas/PackFormulaIdentifier'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsMetrics'
+    SortDirection:
+      x-schema-name: SortDirection
+      description: Direction of a sort for a table or view.
+      type: string
+      enum:
+      - ascending
+      - descending
+      x-tsEnumNames:
+      - Ascending
+      - Descending
+    PackAnalyticsOrderBy:
+      x-schema-name: PackAnalyticsOrderBy
+      description: Determines how the Pack analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - packId
+      - name
+      - createdAt
+      - docInstalls
+      - workspaceInstalls
+      - numFormulaInvocations
+      - numActionInvocations
+      - numSyncInvocations
+      - numMetadataInvocations
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      - workspacesWithActiveSubscriptions
+      - workspacesWithSuccessfulTrials
+      - revenueUsd
+      x-tsEnumNames:
+      - AnalyticsDate
+      - PackId
+      - Name
+      - CreatedAt
+      - DocInstalls
+      - WorkspaceInstalls
+      - NumFormulaInvocations
+      - NumActionInvocations
+      - NumSyncInvocations
+      - NumMetadataInvocations
+      - DocsActivelyUsing
+      - DocsActivelyUsing7Day
+      - DocsActivelyUsing30Day
+      - DocsActivelyUsing90Day
+      - DocsActivelyUsingAllTime
+      - WorkspacesActivelyUsing
+      - WorkspacesActivelyUsing7Day
+      - WorkspacesActivelyUsing30Day
+      - WorkspacesActivelyUsing90Day
+      - WorkspacesActivelyUsingAllTime
+      - WorkspacesWithActiveSubscriptions
+      - WorkspacesWithSuccessfulTrials
+      - RevenueUsd
+    PackAnalyticsItem:
+      x-schema-name: PackAnalyticsItem
+      description: Analytics data for a Superhuman Pack.
+      type: object
+      required:
+      - pack
+      - metrics
+      additionalProperties: false
+      properties:
+        pack:
+          $ref: '#/components/schemas/PackAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsMetrics'
+    AnalyticsLastUpdatedResponse:
+      x-schema-name: AnalyticsLastUpdatedResponse
+      description: Response representing the last day analytics were updated.
+      type: object
+      required:
+      - docAnalyticsLastUpdated
+      - packAnalyticsLastUpdated
+      - packFormulaAnalyticsLastUpdated
+      additionalProperties: false
+      properties:
+        docAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that doc analytics were last updated.
+          example: '2022-05-01'
+        packAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack analytics were last updated.
+          example: '2022-05-01'
+        packFormulaAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack formula analytics were last updated.
+          example: '2022-05-01'
+    PackAnalyticsSummary:
+      x-schema-name: PackAnalyticsSummary
+      description: Summary analytics for Packs.
+      type: object
+      required:
+      - totalDocInstalls
+      - totalWorkspaceInstalls
+      - totalInvocations
+      additionalProperties: false
+      properties:
+        totalDocInstalls:
+          type: integer
+          description: The number of times this Pack was installed in docs.
+        totalWorkspaceInstalls:
+          type: integer
+          description: The number of times this Pack was installed in workspaces.
+        totalInvocations:
+          type: integer
+          description: The number of times formulas in this Pack were invoked.
+    PackFormulaAnalyticsCollection:
+      x-schema-name: PackFormulaAnalyticsCollection
+      description: A collection of analytics for Superhuman Packs formulas over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz
     PackAnalyticsDetails:
       x-schema-name: PackAnalyticsDetails
       description: Metadata about a Pack relevant to analytics.
@@ -507,63 +1030,6 @@ components:
           format: date-time
           description: Creation time of the Pack.
           example: '2022-04-11T00:18:57.946Z'
-    PageAnalyticsDetails:
-      x-schema-name: PageAnalyticsDetails
-      description: Metadata about a page relevant to analytics.
-      required:
-      - id
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: section-IjkLmnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        icon:
-          $ref: '#/components/schemas/Icon'
-          example: https://docs.superhuman.com/d/_dAbCDeFGH
-    SortDirection:
-      x-schema-name: SortDirection
-      description: Direction of a sort for a table or view.
-      type: string
-      enum:
-      - ascending
-      - descending
-      x-tsEnumNames:
-      - Ascending
-      - Descending
-    PackFormulaType:
-      x-schema-name: PackFormulaType
-      type: string
-      enum:
-      - action
-      - formula
-      - sync
-      - metadata
-      x-tsEnumNames:
-      - Action
-      - Formula
-      - Sync
-      - Metadata
-    DocAnalyticsItem:
-      x-schema-name: DocAnalyticsItem
-      description: Analytics data for a document.
-      type: object
-      required:
-      - doc
-      - metrics
-      additionalProperties: false
-      properties:
-        doc:
-          $ref: '#/components/schemas/DocAnalyticsDetails'
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocAnalyticsMetrics'
     PackAnalyticsMetrics:
       x-schema-name: PackAnalyticsMetrics
       description: Analytics metrics for a Superhuman Pack.
@@ -693,162 +1159,6 @@ components:
         revenueUsd:
           type: string
           description: Amount of revenue (in USD) that the Pack has produced.
-    PackFormulaAnalyticsCollection:
-      x-schema-name: PackFormulaAnalyticsCollection
-      description: A collection of analytics for Superhuman Packs formulas over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackFormulaAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz
-    PackFormulaAnalyticsOrderBy:
-      x-schema-name: PackFormulaAnalyticsOrderBy
-      description: Determines how the Pack formula analytics returned are sorted.
-      type: string
-      enum:
-      - date
-      - formulaName
-      - formulaType
-      - formulaInvocations
-      - medianLatencyMs
-      - medianResponseSizeBytes
-      - errors
-      - docsActivelyUsing
-      - docsActivelyUsing7Day
-      - docsActivelyUsing30Day
-      - docsActivelyUsing90Day
-      - docsActivelyUsingAllTime
-      - workspacesActivelyUsing
-      - workspacesActivelyUsing7Day
-      - workspacesActivelyUsing30Day
-      - workspacesActivelyUsing90Day
-      - workspacesActivelyUsingAllTime
-      x-tsEnumNames:
-      - AnalyticsDate
-      - FormulaName
-      - FormulaType
-      - FormulaInvocations
-      - MedianLatencyMs
-      - MedianResponseSizeBytes
-      - Errors
-      - DocsActivelyUsing
-      - DocsActivelyUsing7Day
-      - DocsActivelyUsing30Day
-      - DocsActivelyUsing90Day
-      - DocsActivelyUsingAllTime
-      - WorkspacesActivelyUsing
-      - WorkspacesActivelyUsing7Day
-      - WorkspacesActivelyUsing30Day
-      - WorkspacesActivelyUsing90Day
-      - WorkspacesActivelyUsingAllTime
-    PackAnalyticsCollection:
-      x-schema-name: PackAnalyticsCollection
-      description: List of analytics for Superhuman Packs over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/analytics/packs?pageToken=xyz
-    DocAnalyticsMetrics:
-      x-schema-name: DocAnalyticsMetrics
-      description: Analytics metrics for a document.
-      type: object
-      required:
-      - date
-      - views
-      - copies
-      - likes
-      - sessionsMobile
-      - sessionsDesktop
-      - sessionsOther
-      - totalSessions
-      - aiCreditsChat,
-      - aiCreditsBlock,
-      - aiCreditsColumn,
-      - aiCreditsAssistant,
-      - aiCreditsReviewer,
-      - aiCredits,
-      additionalProperties: false
-      properties:
-        date:
-          type: string
-          format: date
-          description: Date of the analytics data.
-          example: '2020-09-02'
-        views:
-          type: integer
-          description: Number of times the doc was viewed.
-          example: 980
-        copies:
-          type: integer
-          description: Number of times the doc was copied.
-          example: 24
-        likes:
-          type: integer
-          description: Number of times the doc was liked.
-          example: 342
-        sessionsMobile:
-          type: integer
-          description: Number of unique visitors to this doc from a mobile device.
-          example: 530
-        sessionsDesktop:
-          type: integer
-          description: Number of unique visitors to this doc from a desktop device.
-          example: 212
-        sessionsOther:
-          type: integer
-          description: Number of unique visitors to this doc from an unknown device type.
-          example: 10
-        totalSessions:
-          type: integer
-          description: Sum of the total sessions from any device.
-          example: 1000
-        aiCreditsChat:
-          type: integer
-          description: Number of credits used for AI chat.
-          example: 10
-        aiCreditsBlock:
-          type: integer
-          description: Number of credits used for AI block.
-          example: 10
-        aiCreditsColumn:
-          type: integer
-          description: Number of credits used for AI column.
-          example: 10
-        aiCreditsAssistant:
-          type: integer
-          description: Number of credits used for AI assistant.
-          example: 10
-        aiCreditsReviewer:
-          type: integer
-          description: Number of credits used for AI reviewer.
-          example: 10
-        aiCredits:
-          type: integer
-          description: Total number of AI credits used.
-          example: 50
     AnalyticsScale:
       x-schema-name: AnalyticsScale
       description: Quantization period over which to view analytics.
@@ -859,150 +1169,37 @@ components:
       x-tsEnumNames:
       - Daily
       - Cumulative
-    Icon:
-      x-schema-name: icon
-      description: Info about the icon.
+    DocReference:
+      x-schema-name: DocReference
+      description: Reference to a document.
       type: object
       required:
-      - name
+      - id
       - type
       - browserLink
+      - href
       additionalProperties: false
       properties:
-        name:
+        id:
           type: string
-          description: Name of the icon.
+          description: ID of the document.
+          example: AbCDeFGH
         type:
           type: string
-          description: MIME type of the icon
+          description: The type of this resource.
+          enum:
+          - doc
+          x-tsType: Type.Doc
+        href:
+          type: string
+          format: url
+          description: API link to the document.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH
         browserLink:
           type: string
           format: url
-          description: Browser-friendly link to an icon.
-          example: https://cdn.coda.io/icons/png/color/icon-32.png
-    DocAnalyticsCollection:
-      x-schema-name: DocAnalyticsCollection
-      description: List of analytics for documents over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/analytics/docs?pageToken=xyz
-    PackAnalyticsSummary:
-      x-schema-name: PackAnalyticsSummary
-      description: Summary analytics for Packs.
-      type: object
-      required:
-      - totalDocInstalls
-      - totalWorkspaceInstalls
-      - totalInvocations
-      additionalProperties: false
-      properties:
-        totalDocInstalls:
-          type: integer
-          description: The number of times this Pack was installed in docs.
-        totalWorkspaceInstalls:
-          type: integer
-          description: The number of times this Pack was installed in workspaces.
-        totalInvocations:
-          type: integer
-          description: The number of times formulas in this Pack were invoked.
-    PackFormulaIdentifier:
-      x-schema-name: PackFormulaIdentifier
-      type: object
-      required:
-      - name
-      - type
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: The Pack formula name.
-          example: SquareRoot
-        type:
-          $ref: '#/components/schemas/PackFormulaType'
-    PackAnalyticsItem:
-      x-schema-name: PackAnalyticsItem
-      description: Analytics data for a Superhuman Pack.
-      type: object
-      required:
-      - pack
-      - metrics
-      additionalProperties: false
-      properties:
-        pack:
-          $ref: '#/components/schemas/PackAnalyticsDetails'
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackAnalyticsMetrics'
-    PackAnalyticsOrderBy:
-      x-schema-name: PackAnalyticsOrderBy
-      description: Determines how the Pack analytics returned are sorted.
-      type: string
-      enum:
-      - date
-      - packId
-      - name
-      - createdAt
-      - docInstalls
-      - workspaceInstalls
-      - numFormulaInvocations
-      - numActionInvocations
-      - numSyncInvocations
-      - numMetadataInvocations
-      - docsActivelyUsing
-      - docsActivelyUsing7Day
-      - docsActivelyUsing30Day
-      - docsActivelyUsing90Day
-      - docsActivelyUsingAllTime
-      - workspacesActivelyUsing
-      - workspacesActivelyUsing7Day
-      - workspacesActivelyUsing30Day
-      - workspacesActivelyUsing90Day
-      - workspacesActivelyUsingAllTime
-      - workspacesWithActiveSubscriptions
-      - workspacesWithSuccessfulTrials
-      - revenueUsd
-      x-tsEnumNames:
-      - AnalyticsDate
-      - PackId
-      - Name
-      - CreatedAt
-      - DocInstalls
-      - WorkspaceInstalls
-      - NumFormulaInvocations
-      - NumActionInvocations
-      - NumSyncInvocations
-      - NumMetadataInvocations
-      - DocsActivelyUsing
-      - DocsActivelyUsing7Day
-      - DocsActivelyUsing30Day
-      - DocsActivelyUsing90Day
-      - DocsActivelyUsingAllTime
-      - WorkspacesActivelyUsing
-      - WorkspacesActivelyUsing7Day
-      - WorkspacesActivelyUsing30Day
-      - WorkspacesActivelyUsing90Day
-      - WorkspacesActivelyUsingAllTime
-      - WorkspacesWithActiveSubscriptions
-      - WorkspacesWithSuccessfulTrials
-      - RevenueUsd
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
+          description: Browser-friendly link to the document.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH
     PageAnalyticsMetrics:
       x-schema-name: PageAnalyticsMetrics
       description: Analytics metrics for a page within a document.
@@ -1046,94 +1243,9 @@ components:
           type: integer
           description: Number of unique tabs that opened the doc on the given day.
           example: 10
-    DocAnalyticsOrderBy:
-      x-schema-name: DocAnalyticsOrderBy
-      description: Determines how the Doc analytics returned are sorted.
-      type: string
-      enum:
-      - date
-      - docId
-      - title
-      - createdAt
-      - publishedAt
-      - likes
-      - copies
-      - views
-      - sessionsDesktop
-      - sessionsMobile
-      - sessionsOther
-      - totalSessions
-      - aiCreditsChat
-      - aiCreditsBlock
-      - aiCreditsColumn
-      - aiCreditsAssistant
-      - aiCreditsReviewer
-      - aiCredits
-      x-tsEnumNames:
-      - AnalyticsDate
-      - DocId
-      - Title
-      - CreatedAt
-      - PublishedAt
-      - Likes
-      - Copies
-      - Views
-      - SessionsDesktop
-      - SessionsMobile
-      - SessionsOther
-      - TotalSessions
-      - AiCreditsChat
-      - AiCreditsBlock
-      - AiCreditsColumn
-      - AiCreditsAssistant
-      - AiCreditsReviewer
-      - AiCredits
-    DocAnalyticsSummary:
-      x-schema-name: DocAnalyticsSummary
-      description: Summarized metrics for documents.
-      type: object
-      required:
-      - totalSessions
-      additionalProperties: false
-      properties:
-        totalSessions:
-          type: integer
-          description: Total number of sessions across all docs.
-          example: 1337
-    DocReference:
-      x-schema-name: DocReference
-      description: Reference to a document.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the document.
-          example: AbCDeFGH
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - doc
-          x-tsType: Type.Doc
-        href:
-          type: string
-          format: url
-          description: API link to the document.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the document.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH
-    PageAnalyticsCollection:
-      x-schema-name: PageAnalyticsCollection
-      description: List of analytics for pages within a document over a date range.
+    DocAnalyticsCollection:
+      x-schema-name: DocAnalyticsCollection
+      description: List of analytics for documents over a date range.
       type: object
       required:
       - items
@@ -1142,141 +1254,29 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/PageAnalyticsItem'
+            $ref: '#/components/schemas/DocAnalyticsItem'
         nextPageToken:
           $ref: '#/components/schemas/nextPageToken'
         nextPageLink:
           allOf:
           - $ref: '#/components/schemas/nextPageLink'
           - type: string
-            example: https://docs.superhuman.com/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz
-    PackFormulaAnalyticsMetrics:
-      x-schema-name: PackFormulaAnalyticsMetrics
-      description: Analytics metrics for a Superhuman Pack formula.
+            example: https://docs.superhuman.com/apis/v1/analytics/docs?pageToken=xyz
+    DocAnalyticsItem:
+      x-schema-name: DocAnalyticsItem
+      description: Analytics data for a document.
       type: object
       required:
-      - date
-      - formulaInvocations
-      - errors
-      - docsActivelyUsing
-      - docsActivelyUsing7Day
-      - docsActivelyUsing30Day
-      - docsActivelyUsing90Day
-      - docsActivelyUsingAllTime
-      - workspacesActivelyUsing
-      - workspacesActivelyUsing7Day
-      - workspacesActivelyUsing30Day
-      - workspacesActivelyUsing90Day
-      - workspacesActivelyUsingAllTime
-      additionalProperties: false
-      properties:
-        date:
-          type: string
-          format: date
-          description: Date of the analytics data.
-          example: '2020-09-02'
-        formulaInvocations:
-          type: integer
-          description: Number of times this formula has been invoked.
-          example: 123
-        errors:
-          type: integer
-          description: Number of errors from invocations.
-          example: 5
-        medianLatencyMs:
-          type: integer
-          description: Median latency of an invocation in milliseconds. Only present for daily metrics.
-          example: 500
-        medianResponseSizeBytes:
-          type: integer
-          description: Median response size in bytes. Only present for daily metrics.
-          example: 300
-        docsActivelyUsing:
-          type: integer
-          description: Number of unique docs that have invoked a formula from this Pack in the past day.
-          example: 50
-        docsActivelyUsing7Day:
-          type: integer
-          description: Number of unique docs that have invoked a formula from this Pack in the past 7 days.
-          example: 100
-        docsActivelyUsing30Day:
-          type: integer
-          description: Number of unique docs that have invoked a formula from this Pack in the past 30 days.
-          example: 200
-        docsActivelyUsing90Day:
-          type: integer
-          description: Number of unique docs that have invoked a formula from this Pack in the past 90 days.
-          example: 300
-        docsActivelyUsingAllTime:
-          type: integer
-          description: Number of unique docs that have invoked a formula from this Pack ever.
-          example: 500
-        workspacesActivelyUsing:
-          type: integer
-          description: Number of unique workspaces that have invoked a formula from this Pack in the past day.
-          example: 10
-        workspacesActivelyUsing7Day:
-          type: integer
-          description: Number of unique workspaces that have invoked a formula from this Pack in the past 7 days.
-          example: 15
-        workspacesActivelyUsing30Day:
-          type: integer
-          description: Number of unique workspaces that have invoked a formula from this Pack in the past 30 days.
-          example: 20
-        workspacesActivelyUsing90Day:
-          type: integer
-          description: Number of unique workspaces that have invoked a formula from this Pack in the past 90 days.
-          example: 30
-        workspacesActivelyUsingAllTime:
-          type: integer
-          description: Number of unique workspaces that have invoked a formula from this Pack ever.
-          example: 50
-        workspacesActivelyTrialing:
-          type: integer
-          description: Number of unique workspaces that are currently involved in a trial.
-        workspacesActivelyTrialing7Day:
-          type: integer
-          description: Number of unique workspaces that have been involved in a trial in the last 7 days.
-        workspacesActivelyTrialing30Day:
-          type: integer
-          description: Number of unique workspaces that have been involved in a trial in the last 30 days.
-        workspacesActivelyTrialing90Day:
-          type: integer
-          description: Number of unique workspaces that have been involved in a trial in the last 90 days.
-        workspacesActivelyTrialingAllTime:
-          type: integer
-          description: Number of unique workspaces that have been involved in a trial ever.
-        workspacesNewlySubscribed:
-          type: integer
-          description: Number of unique workspaces that have recently subscribed to the Pack.
-        workspacesWithActiveSubscriptions:
-          type: integer
-          description: Number of unique workspaces that are currently subscribed to the Pack.
-        workspacesWithSuccessfulTrials:
-          type: integer
-          description: Number of unique workspaces that subscribed after undertaking a Pack trial.
-        revenueUsd:
-          type: string
-          description: Amount of revenue (in USD) that the Pack has produced.
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    PackFormulaAnalyticsItem:
-      x-schema-name: PackFormulaAnalyticsItem
-      description: Analytics data for a Superhuman Pack formula.
-      type: object
-      required:
-      - formula
+      - doc
       - metrics
       additionalProperties: false
       properties:
-        formula:
-          $ref: '#/components/schemas/PackFormulaIdentifier'
+        doc:
+          $ref: '#/components/schemas/DocAnalyticsDetails'
         metrics:
           type: array
           items:
-            $ref: '#/components/schemas/PackFormulaAnalyticsMetrics'
+            $ref: '#/components/schemas/DocAnalyticsMetrics'
   responses:
     TooManyRequestsError:
       description: The client has sent too many requests.

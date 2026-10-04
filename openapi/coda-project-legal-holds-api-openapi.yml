@@ -561,27 +561,34 @@ paths:
         source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>'\nbody = {\n  'userEmailsToAdd': ['jordan@example.com'],\n  'userEmailsToRemove': ['jane@example.com'],\n}\nres = requests.put(uri, headers=headers, params=params, json=body).json()\n\nprint(f'Updated legal hold users')\n"
 components:
   schemas:
+    DocSearchHit:
+      x-schema-name: DocSearchHit
+      description: Details on where the search query appeared in the doc.
+      type: object
+      required:
+      - matchText
+      - browserLink
+      additionalProperties: false
+      properties:
+        matchText:
+          type: string
+          description: Snippet of text from the doc showing context for the search match.
+          example: 'Objective: Key Results:
+
+            * Reach <span class="hit">feature parity</span> with previous version
+
+            '
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the location in the document where the search term appears.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH
     UpdateLegalHoldUsersResult:
       x-schema-name: UpdateLegalHoldUsersResult
       description: The result of updating a legal hold's users.
       type: object
       additionalProperties: false
       properties: {}
-    DocType:
-      x-schema-name: DocType
-      type: string
-      enum:
-      - doc
-      - form
-      - template
-      x-tsEnumNames:
-      - Doc
-      - Form
-      - Template
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
     WorkspacePrincipal:
       type: object
       required:
@@ -599,24 +606,31 @@ components:
           type: string
           description: WorkspaceId for the principal.
           example: ws-sdfmsdf9
-    MinPermissionCount:
-      x-schema-name: MinPermissionCount
-      description: Minimum count of permissions.
+    LegalHoldUsersList:
+      x-schema-name: LegalHoldUsersList
+      description: List of legal hold users.
       type: object
       required:
-      - type
-      - minCount
+      - items
+      - href
       additionalProperties: false
       properties:
-        type:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrgUser'
+        href:
           type: string
-          description: The type of this resource.
-          enum:
-          - minCount
-          x-tsType: PermissionCountType.MinCount
-        minCount:
-          type: number
-          description: Minimum count of permissions.
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/users
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/users?pageToken=eyJsaW1pd
     UpdateLegalHoldRequest:
       x-schema-name: AddLegalHoldResult
       description: Request payload for updating a legal hold.
@@ -642,10 +656,9 @@ components:
           format: date-time
           description: Timestamp of the end of the hold range
           example: '2024-04-11T00:00:00.000Z'
-    EmailPrincipal:
+    AnyonePrincipal:
       type: object
       required:
-      - email
       - type
       additionalProperties: false
       properties:
@@ -653,12 +666,75 @@ components:
           type: string
           description: The type of this principal.
           enum:
-          - email
-          x-tsType: PrincipalType.Email
+          - anyone
+          x-tsType: PrincipalType.Anyone
+    AddLegalHoldExportResult:
+      x-schema-name: AddLegalHoldExportResult
+      description: The result of creating a legal hold export.
+      type: object
+      required:
+      - id
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Id of the new legal hold export
+    OrgUser:
+      x-schema-name: OrgUser
+      description: Metadata of a user in an organization.
+      type: object
+      required:
+      - email
+      - name
+      - status
+      - registeredAt
+      additionalProperties: false
+      properties:
+        id:
+          type: number
+          description: Unique id of the user.
+          example: 12345
         email:
           type: string
-          description: Email for the principal.
-          example: example@domain.com
+          description: Email of the user.
+          example: hello@example.com
+        name:
+          type: string
+          description: Name of the user.
+          example: Sally Jane
+        pictureUrl:
+          type: string
+          description: Picture url of the user.
+          format: url
+          example: codahosted.io/123
+        status:
+          $ref: '#/components/schemas/OrgUserStatus'
+        registeredAt:
+          type: string
+          format: date-time
+          description: Timestamp representing when the user registered with Superhuman Docs.
+          example: '2018-04-11T00:18:57.946Z'
+        deactivatedAt:
+          type: string
+          format: date-time
+          description: Timestamp representing when the user was deactivated from Superhuman Docs.
+          example: '2018-04-11T00:18:57.946Z'
+        ownedDocCount:
+          type: number
+          description: Number of docs owned by this user.
+          example: 12
+    DocType:
+      x-schema-name: DocType
+      type: string
+      enum:
+      - doc
+      - form
+      - template
+      x-tsEnumNames:
+      - Doc
+      - Form
+      - Template
     LegalHoldExportFormat:
       x-schema-name: LegalHoldExportFormat
       type: string
@@ -666,27 +742,9 @@ components:
       - pdfzip
       x-tsEnumNames:
       - PdfZip
-    ExactPermissionCount:
-      x-schema-name: ExactPermissionCount
-      description: Exact count of permissions.
-      type: object
-      required:
-      - type
-      - exactCount
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - exactCount
-          x-tsType: PermissionCountType.ExactCount
-        exactCount:
-          type: number
-          description: Exact count of permissions.
-    DocList:
-      x-schema-name: DocList
-      description: List of docs.
+    LegalHoldExportList:
+      x-schema-name: LegalHoldExportList
+      description: List of legal hold exports.
       type: object
       required:
       - items
@@ -696,116 +754,93 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Doc'
+            $ref: '#/components/schemas/LegalHoldExport'
         href:
           type: string
           format: url
           description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/docs
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/exports
         nextPageToken:
           $ref: '#/components/schemas/NextPageToken'
         nextPageLink:
           allOf:
           - $ref: '#/components/schemas/NextPageLink'
           - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/docs?pageToken=eyJsaW1pd
-    AddLegalHoldRequest:
-      x-schema-name: AddLegalHoldRequest
-      description: Request payload for creating a legal hold.
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/exports?pageToken=eyJsaW1pd
+    LegalHoldExport:
+      x-schema-name: LegalHoldExport
+      description: Info about a legal hold export
       type: object
       required:
-      - name
-      - rangeStart
-      - userEmails
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: The name of the new legal hold
-          example: Investigation Matter 123
-        description:
-          type: string
-          description: Description of the new legal hold
-          example: Holding docs for legal matter 123
-        rangeStart:
-          type: string
-          format: date-time
-          description: Timestamp of the beginning of the hold range
-          example: '2024-01-08T00:00:00.000Z'
-        rangeEnd:
-          type: string
-          format: date-time
-          description: Timestamp of the end of the hold range
-          example: '2024-04-11T00:00:00.000Z'
-        userEmails:
-          type: array
-          items:
-            type: string
-            format: email
-          description: List of email addresses of users to include in the hold.
-    OrgUserStatus:
-      x-schema-name: OrgUserStatus
-      type: string
-      enum:
-      - Active
-      - Deactivated
-      - Deleted
-      x-tsEnumNames:
-      - Active
-      - Deactivated
-      - Deleted
-    LegalHoldState:
-      x-schema-name: LegalHoldState
-      type: string
-      enum:
-      - indexing
-      - active
-      x-tsEnumNames:
-      - Indexing
-      - Active
-    LegalHoldExportState:
-      x-schema-name: LegalHoldState
-      type: string
-      enum:
-      - generating
-      - ready
-      - error
-      x-tsEnumNames:
-      - Generating
-      - Ready
-      - Error
-    GroupPrincipal:
-      type: object
-      required:
-      - groupId
-      - groupName
       - type
+      - id
+      - name
+      - creator
+      - creatorName
+      - exportAt
+      - format
+      - state
+      - createdAt
+      - updatedAt
       additionalProperties: false
       properties:
         type:
           type: string
-          description: The type of this principal.
+          description: The type of this resource.
           enum:
-          - group
-          x-tsType: PrincipalType.Group
-        groupId:
+          - legalHoldExport
+          x-tsType: Type.LegalHoldExport
+        id:
           type: string
-          description: Group ID for the principal.
-          example: grp-6SM9xrKcqW
-        groupName:
+          format: uuid
+          description: ID of the legal hold export.
+          example: 0d470e5b-d145-4440-a897-df57f4d72dfb
+        name:
           type: string
-          description: Name of the group.
-          example: Marketing team
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    UpdateLegalHoldResult:
-      x-schema-name: UpdateLegalHoldResult
-      description: The result of updating a legal hold.
-      type: object
-      additionalProperties: false
-      properties: {}
+          description: Name of the export.
+          example: Export of docs for investigation matter 123
+        creator:
+          type: string
+          format: email
+          description: Email address of the legal hold export creator
+          example: april@example.com
+        creatorName:
+          type: string
+          description: Name of the legal hold export creator
+          example: April Jane
+        exportAt:
+          type: string
+          format: date-time
+          description: Docs are exported in the state corresponding to this timestamp
+          example: '2024-01-08T00:00:00.000Z'
+        format:
+          $ref: '#/components/schemas/LegalHoldExportFormat'
+        docCount:
+          type: number
+          description: Count of docs included in the export
+          example: 143
+        state:
+          $ref: '#/components/schemas/LegalHoldExportState'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the legal hold export was created.
+          example: '2024-04-13T00:18:57.946Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the legal hold export was last modified.
+          example: '2024-04-13T00:18:57.946Z'
+        downloadUrl:
+          type: string
+          format: url
+          description: URL to download the exported doc package once the export is complete
+        downloadSize:
+          type: number
+          description: Size of the exported doc package in bytes
+        error:
+          type: string
+          description: Error message if the export failed
     Doc:
       x-schema-name: Doc
       description: Info about a document.
@@ -911,62 +946,129 @@ components:
           example: true
         documentAnalytics:
           $ref: '#/components/schemas/DocumentAnalytics'
-    LegalHoldExportList:
-      x-schema-name: LegalHoldExportList
-      description: List of legal hold exports.
+    UpdateLegalHoldUsersRequest:
+      x-schema-name: UpdateLegalHoldUsersRequest
+      description: Request payload for updating a legal hold's users collection.
       type: object
-      required:
-      - items
-      - href
       additionalProperties: false
       properties:
-        items:
+        userEmailsToAdd:
           type: array
           items:
-            $ref: '#/components/schemas/LegalHoldExport'
-        href:
+            type: string
+            format: email
+          description: List of email addresses of users to add to the hold.
+        userEmailsToRemove:
+          type: array
+          items:
+            type: string
+            format: email
+          description: List of email addresses of users to remove from the hold.
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    DeleteLegalHoldExportResult:
+      x-schema-name: DeleteLegalHoldExportResult
+      description: The result of deleting a legal hold export.
+      type: object
+      additionalProperties: false
+      properties: {}
+    UpdateLegalHoldResult:
+      x-schema-name: UpdateLegalHoldResult
+      description: The result of updating a legal hold.
+      type: object
+      additionalProperties: false
+      properties: {}
+    AddLegalHoldResult:
+      x-schema-name: AddLegalHoldResult
+      description: The result of creating a legal hold.
+      type: object
+      required:
+      - id
+      additionalProperties: false
+      properties:
+        id:
           type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/exports
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/exports?pageToken=eyJsaW1pd
+          format: uuid
+          description: Id of the new legal hold
     DeleteLegalHoldResult:
       x-schema-name: DeleteLegalHoldResult
       description: The result of deleting a legal hold.
       type: object
       additionalProperties: false
       properties: {}
-    LegalHoldList:
-      x-schema-name: LegalHoldList
-      description: List of legal holds.
+    DocumentAnalytics:
+      x-schema-name: DocumentAnalytics
+      description: Metrics for a doc.
       type: object
       required:
-      - items
-      - href
+      - numPages
+      - numPageViewsLast90Days
+      - numCollaboratorsLast90Days
       additionalProperties: false
       properties:
-        items:
+        lastActiveDate:
+          type: string
+          format: date-time
+          description: Timestamp for when the doc was last accessed.
+          example: '2018-04-11T00:18:57.946Z'
+        numPages:
+          type: number
+          description: Number of pages in the doc.
+          example: 3
+        numPageViewsLast90Days:
+          type: number
+          description: Number of page views in the last 90 days.
+          example: 42
+        numCollaboratorsLast90Days:
+          type: number
+          description: Number of unique users that have viewed the doc in the last 90 days.
+          example: 42
+        externallySharedUserDomains:
           type: array
           items:
-            $ref: '#/components/schemas/LegalHold'
-        href:
+            type: string
+            format: email
+          description: Domains of users external to the organization this doc is shared with.
+          example:
+          - gmail.com
+          - outlook.com
+    ExactPermissionCount:
+      x-schema-name: ExactPermissionCount
+      description: Exact count of permissions.
+      type: object
+      required:
+      - type
+      - exactCount
+      additionalProperties: false
+      properties:
+        type:
           type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds?pageToken=eyJsaW1pd
+          description: The type of this resource.
+          enum:
+          - exactCount
+          x-tsType: PermissionCountType.ExactCount
+        exactCount:
+          type: number
+          description: Exact count of permissions.
+    EmailPrincipal:
+      type: object
+      required:
+      - email
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - email
+          x-tsType: PrincipalType.Email
+        email:
+          type: string
+          description: Email for the principal.
+          example: example@domain.com
     LegalHold:
       x-schema-name: LegalHold
       description: Info about a legal hold.
@@ -1042,194 +1144,46 @@ components:
           format: date-time
           description: Timestamp for when the legal hold was last modified.
           example: '2024-04-13T00:18:57.946Z'
-    DocSearchHit:
-      x-schema-name: DocSearchHit
-      description: Details on where the search query appeared in the doc.
-      type: object
-      required:
-      - matchText
-      - browserLink
-      additionalProperties: false
-      properties:
-        matchText:
-          type: string
-          description: Snippet of text from the doc showing context for the search match.
-          example: 'Objective: Key Results:
-
-            * Reach <span class="hit">feature parity</span> with previous version
-
-            '
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the location in the document where the search term appears.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH
-    AddLegalHoldResult:
-      x-schema-name: AddLegalHoldResult
-      description: The result of creating a legal hold.
-      type: object
-      required:
-      - id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Id of the new legal hold
-    AddLegalHoldExportRequest:
-      x-schema-name: AddLegalHoldExportRequest
-      description: Request payload for creating a legal hold export.
-      type: object
-      required:
-      - name
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: The name of the new legal hold export
-          example: Export of docs for investigation matter 123
-        exportAt:
-          type: string
-          format: date-time
-          description: Exports docs in the state they were in as of this timestamp
-          example: '2024-01-08T00:00:00.000Z'
-        docIds:
-          type: array
-          items:
-            type: string
-          description: List of doc IDs to include in the export
-    DeleteLegalHoldExportResult:
-      x-schema-name: DeleteLegalHoldExportResult
-      description: The result of deleting a legal hold export.
-      type: object
-      additionalProperties: false
-      properties: {}
-    Principal:
-      x-schema-name: Principal
-      description: Metadata about a principal.
-      oneOf:
-      - $ref: '#/components/schemas/EmailPrincipal'
-      - $ref: '#/components/schemas/GroupPrincipal'
-      - $ref: '#/components/schemas/DomainPrincipal'
-      - $ref: '#/components/schemas/WorkspacePrincipal'
-      - $ref: '#/components/schemas/AnyonePrincipal'
-      discriminator:
-        propertyName: type
-        mapping:
-          email: '#/components/schemas/EmailPrincipal'
-          group: '#/components/schemas/GroupPrincipal'
-          domain: '#/components/schemas/DomainPrincipal'
-          workspace: '#/components/schemas/WorkspacePrincipal'
-          anyone: '#/components/schemas/AnyonePrincipal'
-    AccessType:
-      x-schema-name: AccessType
-      description: Type of access.
+    OrgUserStatus:
+      x-schema-name: OrgUserStatus
       type: string
       enum:
-      - readonly
-      - write
-      - comment
-      - none
+      - Active
+      - Deactivated
+      - Deleted
       x-tsEnumNames:
-      - ReadOnly
-      - Write
-      - Comment
-      - None
-    AnyonePrincipal:
+      - Active
+      - Deactivated
+      - Deleted
+    DocList:
+      x-schema-name: DocList
+      description: List of docs.
       type: object
       required:
-      - type
+      - items
+      - href
       additionalProperties: false
       properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - anyone
-          x-tsType: PrincipalType.Anyone
-    DomainPrincipal:
-      type: object
-      required:
-      - domain
-      - type
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this principal.
-          enum:
-          - domain
-          x-tsType: PrincipalType.Domain
-        domain:
-          type: string
-          description: Domain for the principal.
-          example: domain.com
-    UpdateLegalHoldUsersRequest:
-      x-schema-name: UpdateLegalHoldUsersRequest
-      description: Request payload for updating a legal hold's users collection.
-      type: object
-      additionalProperties: false
-      properties:
-        userEmailsToAdd:
+        items:
           type: array
           items:
-            type: string
-            format: email
-          description: List of email addresses of users to add to the hold.
-        userEmailsToRemove:
-          type: array
-          items:
-            type: string
-            format: email
-          description: List of email addresses of users to remove from the hold.
-    DocumentAnalytics:
-      x-schema-name: DocumentAnalytics
-      description: Metrics for a doc.
-      type: object
-      required:
-      - numPages
-      - numPageViewsLast90Days
-      - numCollaboratorsLast90Days
-      additionalProperties: false
-      properties:
-        lastActiveDate:
+            $ref: '#/components/schemas/Doc'
+        href:
           type: string
-          format: date-time
-          description: Timestamp for when the doc was last accessed.
-          example: '2018-04-11T00:18:57.946Z'
-        numPages:
-          type: number
-          description: Number of pages in the doc.
-          example: 3
-        numPageViewsLast90Days:
-          type: number
-          description: Number of page views in the last 90 days.
-          example: 42
-        numCollaboratorsLast90Days:
-          type: number
-          description: Number of unique users that have viewed the doc in the last 90 days.
-          example: 42
-        externallySharedUserDomains:
-          type: array
-          items:
-            type: string
-            format: email
-          description: Domains of users external to the organization this doc is shared with.
-          example:
-          - gmail.com
-          - outlook.com
-    AddLegalHoldExportResult:
-      x-schema-name: AddLegalHoldExportResult
-      description: The result of creating a legal hold export.
-      type: object
-      required:
-      - id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Id of the new legal hold export
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/docs
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/docs?pageToken=eyJsaW1pd
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
     PermissionsSummary:
       x-schema-name: PermissionsSummary
       description: Summary of permissions.
@@ -1258,6 +1212,206 @@ components:
           $ref: '#/components/schemas/PermissionCount'
         numUserPermissions:
           $ref: '#/components/schemas/PermissionCount'
+    PermissionCount:
+      x-schema-name: PermissionCount
+      description: Count of permissions.
+      oneOf:
+      - $ref: '#/components/schemas/ExactPermissionCount'
+      - $ref: '#/components/schemas/MinPermissionCount'
+      discriminator:
+        propertyName: type
+        mapping:
+          exactCount: '#/components/schemas/ExactPermissionCount'
+          minCount: '#/components/schemas/MinPermissionCount'
+    LegalHoldState:
+      x-schema-name: LegalHoldState
+      type: string
+      enum:
+      - indexing
+      - active
+      x-tsEnumNames:
+      - Indexing
+      - Active
+    AddLegalHoldRequest:
+      x-schema-name: AddLegalHoldRequest
+      description: Request payload for creating a legal hold.
+      type: object
+      required:
+      - name
+      - rangeStart
+      - userEmails
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name of the new legal hold
+          example: Investigation Matter 123
+        description:
+          type: string
+          description: Description of the new legal hold
+          example: Holding docs for legal matter 123
+        rangeStart:
+          type: string
+          format: date-time
+          description: Timestamp of the beginning of the hold range
+          example: '2024-01-08T00:00:00.000Z'
+        rangeEnd:
+          type: string
+          format: date-time
+          description: Timestamp of the end of the hold range
+          example: '2024-04-11T00:00:00.000Z'
+        userEmails:
+          type: array
+          items:
+            type: string
+            format: email
+          description: List of email addresses of users to include in the hold.
+    GroupPrincipal:
+      type: object
+      required:
+      - groupId
+      - groupName
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - group
+          x-tsType: PrincipalType.Group
+        groupId:
+          type: string
+          description: Group ID for the principal.
+          example: grp-6SM9xrKcqW
+        groupName:
+          type: string
+          description: Name of the group.
+          example: Marketing team
+    DomainPrincipal:
+      type: object
+      required:
+      - domain
+      - type
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this principal.
+          enum:
+          - domain
+          x-tsType: PrincipalType.Domain
+        domain:
+          type: string
+          description: Domain for the principal.
+          example: domain.com
+    LegalHoldExportState:
+      x-schema-name: LegalHoldState
+      type: string
+      enum:
+      - generating
+      - ready
+      - error
+      x-tsEnumNames:
+      - Generating
+      - Ready
+      - Error
+    MinPermissionCount:
+      x-schema-name: MinPermissionCount
+      description: Minimum count of permissions.
+      type: object
+      required:
+      - type
+      - minCount
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - minCount
+          x-tsType: PermissionCountType.MinCount
+        minCount:
+          type: number
+          description: Minimum count of permissions.
+    LegalHoldList:
+      x-schema-name: LegalHoldList
+      description: List of legal holds.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalHold'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds?pageToken=eyJsaW1pd
+    AccessType:
+      x-schema-name: AccessType
+      description: Type of access.
+      type: string
+      enum:
+      - readonly
+      - write
+      - comment
+      - none
+      x-tsEnumNames:
+      - ReadOnly
+      - Write
+      - Comment
+      - None
+    AddLegalHoldExportRequest:
+      x-schema-name: AddLegalHoldExportRequest
+      description: Request payload for creating a legal hold export.
+      type: object
+      required:
+      - name
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name of the new legal hold export
+          example: Export of docs for investigation matter 123
+        exportAt:
+          type: string
+          format: date-time
+          description: Exports docs in the state they were in as of this timestamp
+          example: '2024-01-08T00:00:00.000Z'
+        docIds:
+          type: array
+          items:
+            type: string
+          description: List of doc IDs to include in the export
+    Principal:
+      x-schema-name: Principal
+      description: Metadata about a principal.
+      oneOf:
+      - $ref: '#/components/schemas/EmailPrincipal'
+      - $ref: '#/components/schemas/GroupPrincipal'
+      - $ref: '#/components/schemas/DomainPrincipal'
+      - $ref: '#/components/schemas/WorkspacePrincipal'
+      - $ref: '#/components/schemas/AnyonePrincipal'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/EmailPrincipal'
+          group: '#/components/schemas/GroupPrincipal'
+          domain: '#/components/schemas/DomainPrincipal'
+          workspace: '#/components/schemas/WorkspacePrincipal'
+          anyone: '#/components/schemas/AnyonePrincipal'
     Permission:
       x-schema-name: Permission
       description: A specific permission granted to a principal.
@@ -1282,209 +1436,59 @@ components:
           description: ID for the Permission
         access:
           $ref: '#/components/schemas/AccessType'
-    LegalHoldUsersList:
-      x-schema-name: LegalHoldUsersList
-      description: List of legal hold users.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrgUser'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/users
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/legalHolds/<your legal hold id>/users?pageToken=eyJsaW1pd
-    PermissionCount:
-      x-schema-name: PermissionCount
-      description: Count of permissions.
-      oneOf:
-      - $ref: '#/components/schemas/ExactPermissionCount'
-      - $ref: '#/components/schemas/MinPermissionCount'
-      discriminator:
-        propertyName: type
-        mapping:
-          exactCount: '#/components/schemas/ExactPermissionCount'
-          minCount: '#/components/schemas/MinPermissionCount'
-    OrgUser:
-      x-schema-name: OrgUser
-      description: Metadata of a user in an organization.
-      type: object
-      required:
-      - email
-      - name
-      - status
-      - registeredAt
-      additionalProperties: false
-      properties:
-        id:
-          type: number
-          description: Unique id of the user.
-          example: 12345
-        email:
-          type: string
-          description: Email of the user.
-          example: hello@example.com
-        name:
-          type: string
-          description: Name of the user.
-          example: Sally Jane
-        pictureUrl:
-          type: string
-          description: Picture url of the user.
-          format: url
-          example: codahosted.io/123
-        status:
-          $ref: '#/components/schemas/OrgUserStatus'
-        registeredAt:
-          type: string
-          format: date-time
-          description: Timestamp representing when the user registered with Superhuman Docs.
-          example: '2018-04-11T00:18:57.946Z'
-        deactivatedAt:
-          type: string
-          format: date-time
-          description: Timestamp representing when the user was deactivated from Superhuman Docs.
-          example: '2018-04-11T00:18:57.946Z'
-        ownedDocCount:
-          type: number
-          description: Number of docs owned by this user.
-          example: 12
-    LegalHoldExport:
-      x-schema-name: LegalHoldExport
-      description: Info about a legal hold export
-      type: object
-      required:
-      - type
-      - id
-      - name
-      - creator
-      - creatorName
-      - exportAt
-      - format
-      - state
-      - createdAt
-      - updatedAt
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - legalHoldExport
-          x-tsType: Type.LegalHoldExport
-        id:
-          type: string
-          format: uuid
-          description: ID of the legal hold export.
-          example: 0d470e5b-d145-4440-a897-df57f4d72dfb
-        name:
-          type: string
-          description: Name of the export.
-          example: Export of docs for investigation matter 123
-        creator:
-          type: string
-          format: email
-          description: Email address of the legal hold export creator
-          example: april@example.com
-        creatorName:
-          type: string
-          description: Name of the legal hold export creator
-          example: April Jane
-        exportAt:
-          type: string
-          format: date-time
-          description: Docs are exported in the state corresponding to this timestamp
-          example: '2024-01-08T00:00:00.000Z'
-        format:
-          $ref: '#/components/schemas/LegalHoldExportFormat'
-        docCount:
-          type: number
-          description: Count of docs included in the export
-          example: 143
-        state:
-          $ref: '#/components/schemas/LegalHoldExportState'
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the legal hold export was created.
-          example: '2024-04-13T00:18:57.946Z'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the legal hold export was last modified.
-          example: '2024-04-13T00:18:57.946Z'
-        downloadUrl:
-          type: string
-          format: url
-          description: URL to download the exported doc package once the export is complete
-        downloadSize:
-          type: number
-          description: Size of the exported doc package in bytes
-        error:
-          type: string
-          description: Error message if the export failed
+  parameters:
+    query:
+      name: query
+      description: Search terms used to narrow down results.
+      in: query
+      required: false
+      example: feature%parity
+      schema:
+        type: string
+    legalHoldId:
+      name: legalHoldId
+      description: ID of the legal hold.
+      in: path
+      required: true
+      example: 0d470e5b-d145-4440-a897-df57f4d72dfb
+      schema:
+        type: string
+        format: uuid
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    legalHoldExportId:
+      name: legalHoldExportId
+      description: ID of the legal hold export.
+      in: path
+      required: true
+      example: 0d470e5b-d145-4440-a897-df57f4d72dfb
+      schema:
+        type: string
+        format: uuid
   responses:
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -1509,6 +1513,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -1557,58 +1585,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
-  parameters:
-    legalHoldId:
-      name: legalHoldId
-      description: ID of the legal hold.
-      in: path
-      required: true
-      example: 0d470e5b-d145-4440-a897-df57f4d72dfb
-      schema:
-        type: string
-        format: uuid
-    query:
-      name: query
-      description: Search terms used to narrow down results.
-      in: query
-      required: false
-      example: feature%parity
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
-    legalHoldExportId:
-      name: legalHoldExportId
-      description: ID of the legal hold export.
-      in: path
-      required: true
-      example: 0d470e5b-d145-4440-a897-df57f4d72dfb
-      schema:
-        type: string
-        format: uuid
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

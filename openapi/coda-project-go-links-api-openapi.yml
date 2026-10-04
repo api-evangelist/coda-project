@@ -71,49 +71,6 @@ paths:
         '403':
           $ref: '#/components/responses/ForbiddenError'
 components:
-  schemas:
-    AddGoLinkRequest:
-      x-schema-name: AddGoLinkRequest
-      description: Payload for creating a Go Link
-      type: object
-      required:
-      - name
-      - destinationUrl
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: The name of the Go Link that comes after go/. Only alphanumeric characters, dashes, and underscores are allowed.
-          maxLength: 128
-          pattern: ^[a-zA-Z0-9\-_]+$
-        destinationUrl:
-          type: string
-          description: The URL that the Go Link redirects to.
-          maxLength: 2048
-        description:
-          type: string
-          description: Optional description for the Go Link.
-          maxLength: 512
-        urlPattern:
-          type:
-          - string
-          - 'null'
-          description: Optional destination URL with {*} placeholders for variables to be inserted. Variables are specified like go/<name>/<var1>/<var2>.
-          example: https://example.com/{*}/{*}
-          maxLength: 2048
-        creatorEmail:
-          type:
-          - string
-          - 'null'
-          description: Optional creator email for the Go Link. Only organization admins can set this field.
-          example: foo@bar.com
-          maxLength: 512
-    AddGoLinkResult:
-      x-schema-name: AddGoLinkResult
-      description: The result of adding a Go Link.
-      type: object
-      additionalProperties: false
-      properties: {}
   responses:
     ForbiddenError:
       description: The API token does not grant access to this resource.
@@ -163,6 +120,49 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
+  schemas:
+    AddGoLinkResult:
+      x-schema-name: AddGoLinkResult
+      description: The result of adding a Go Link.
+      type: object
+      additionalProperties: false
+      properties: {}
+    AddGoLinkRequest:
+      x-schema-name: AddGoLinkRequest
+      description: Payload for creating a Go Link
+      type: object
+      required:
+      - name
+      - destinationUrl
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name of the Go Link that comes after go/. Only alphanumeric characters, dashes, and underscores are allowed.
+          maxLength: 128
+          pattern: ^[a-zA-Z0-9\-_]+$
+        destinationUrl:
+          type: string
+          description: The URL that the Go Link redirects to.
+          maxLength: 2048
+        description:
+          type: string
+          description: Optional description for the Go Link.
+          maxLength: 512
+        urlPattern:
+          type:
+          - string
+          - 'null'
+          description: Optional destination URL with {*} placeholders for variables to be inserted. Variables are specified like go/<name>/<var1>/<var2>.
+          example: https://example.com/{*}/{*}
+          maxLength: 2048
+        creatorEmail:
+          type:
+          - string
+          - 'null'
+          description: Optional creator email for the Go Link. Only organization admins can set this field.
+          example: foo@bar.com
+          maxLength: 512
   parameters:
     organizationId:
       name: organizationId
