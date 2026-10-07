@@ -436,6 +436,8 @@ apis:
   - type: OpenAPI
     url: openapi/coda-project-legal-holds-api-openapi.yml
 common:
+- type: Plans
+  url: plans/coda-project-plans-pricing.yml
 - type: Website
   url: https://coda.io
 - type: CapabilityMap
