@@ -30,7 +30,7 @@ workflows:
     successCriteria:
     - condition: $statusCode == 200
   - stepId: listDocs
-    operationId: listDocs
+    operationId: getDocs
     parameters:
     - name: query
       in: query

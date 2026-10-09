@@ -2,7 +2,7 @@
 name: List docs and read table rows
 description: Discover a Coda doc, find a table, and read its rows using the Coda Docs API.
 api: openapi/coda-project-openapi-original.json
-operations: [whoami, listDocs, listTables, listColumns, listRows, getRow]
+operations: [whoami, getDocs, listTables, listColumns, listRows, getRow]
 ---
 
 # List docs and read table rows

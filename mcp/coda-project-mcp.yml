@@ -34,3 +34,17 @@ deployment:
   probe: gated
   checked: '2026-08-12'
   source: catalog MCP census
+rfc9728:
+  endpoint: https://coda.io/apis/mcp
+  metadata_url: https://coda.io/.well-known/oauth-protected-resource/apis/mcp
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://coda.io/apis/mcp
+    authorization_servers:
+    - https://coda.io
+    scopes_supported:
+    - mcp:all
+    resource_name: Superhuman Docs MCP Server

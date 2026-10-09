@@ -1,0 +1,95 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://superhuman.com/plans/docs?source=coda.io
+sources:
+- https://superhuman.com/plans/docs?source=coda.io
+- https://coda.io/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+  managed_tier: Pro
+published: true
+note: Superhuman Docs (formerly Coda) plans page; per-Doc-Maker seat pricing with annual/monthly rates,
+  Enterprise is custom.
+plan_count: 4
+currency: USD
+plans:
+- name: Free
+  price_text: $0 USD
+  price: 0
+  currency: USD
+  period: month
+  unit: per Doc Maker
+  included_quota: Collaborative docs, connected tables, views, forms, formulas and automations
+- name: Pro
+  price_text: $12 USD / month per Doc Maker , billed annually
+  price: 12
+  currency: USD
+  period: month
+  unit: per Doc Maker
+  included_quota: Everything in Free, plus unlimited doc size, AI, 30-day version history
+  overage: $15 when billed monthly
+- name: Business
+  price_text: $33 USD / month per Doc Maker , billed annually
+  price: 33
+  currency: USD
+  period: month
+  unit: per Doc Maker
+  included_quota: Everything in Pro, plus databases, unlimited automations and version history
+  overage: $40 when billed monthly
+- name: Enterprise
+  price_text: Custom
+  period: none
+  included_quota: Everything in Business, plus SAML SSO, SCIM, governance
+rate_limit_statements:
+- Automations Low quota Medium quota Unlimited Unlimited
+- Attachments 1Gb per doc 5Gb per doc Unlimited Unlimited
+- Connectors Manual refresh Daily refresh Hourly refresh Hourly refresh
+- Version history 7 days 30 days Unlimited Unlimited
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - hybrid
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Pro
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Business
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none

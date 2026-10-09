@@ -1,24 +1,38 @@
-generated: '2026-07-18'
+generated: '2026-09-23'
 method: generated
-source: openapi/coda-project-admin-openapi-original.json, openapi/coda-project-openapi-original.json
+source: openapi/coda-project-account-api-openapi.yml, openapi/coda-project-analytics-api-openapi.yml,
+  openapi/coda-project-api-tokens-api-openapi.yml, openapi/coda-project-automations-api-openapi.yml,
+  openapi/coda-project-columns-api-openapi.yml, openapi/coda-project-controls-api-openapi.yml,
+  openapi/coda-project-customdocdomains-api-openapi.yml, openapi/coda-project-doc-export-api-openapi.yml,
+  openapi/coda-project-doc-permissions-api-openapi.yml, openapi/coda-project-docs-api-openapi.yml,
+  openapi/coda-project-events-api-openapi.yml, openapi/coda-project-folder-permissions-api-openapi.yml,
+  openapi/coda-project-folders-api-openapi.yml, openapi/coda-project-formulas-api-openapi.yml,
+  openapi/coda-project-go-links-api-openapi.yml, openapi/coda-project-groups-api-openapi.yml,
+  openapi/coda-project-legal-holds-api-openapi.yml, openapi/coda-project-miscellaneous-api-openapi.yml,
+  openapi/coda-project-organization-users-api-openapi.yml, openapi/coda-project-organizations-api-openapi.yml,
+  openapi/coda-project-pack-configurations-api-openapi.yml, openapi/coda-project-pack-controls-api-openapi.yml,
+  openapi/coda-project-packs-api-openapi.yml, openapi/coda-project-pages-api-openapi.yml, openapi/coda-project-permissions-api-openapi.yml,
+  openapi/coda-project-preferences-api-openapi.yml, openapi/coda-project-publishing-api-openapi.yml,
+  openapi/coda-project-rows-api-openapi.yml, openapi/coda-project-tables-api-openapi.yml, openapi/coda-project-webhooks-api-openapi.yml,
+  openapi/coda-project-workspace-users-api-openapi.yml, openapi/coda-project-workspaces-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
   operations: 212
   by_action_class:
-    connected: 110
-    acting: 102
+    connected: 111
+    acting: 101
   by_consequence:
-    read: 110
+    read: 111
     safety-critical: 4
-    write: 97
+    write: 96
     physical: 1
   human_in_the_loop_required: 4
 operations:
-- path: /organizations
+- path: /whoami
   method: get
-  operationId: listOrganizations
+  operationId: whoami
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -26,9 +40,69 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}
+- path: /analytics/docs
   method: get
-  operationId: getOrganization
+  operationId: listDocAnalytics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analytics/docs/{docId}/pages
+  method: get
+  operationId: listPageAnalytics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analytics/docs/summary
+  method: get
+  operationId: listDocAnalyticsSummary
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analytics/packs
+  method: get
+  operationId: listPackAnalytics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analytics/packs/summary
+  method: get
+  operationId: listPackAnalyticsSummary
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analytics/packs/{packId}/formulas
+  method: get
+  operationId: listPackFormulaAnalytics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analytics/updated
+  method: get
+  operationId: getAnalyticsLastUpdated
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -62,49 +136,9 @@ operations:
     escalation:
       human-in-the-loop: required
     audit: required
-- path: /organizations/{organizationId}/audit/events
-  method: get
-  operationId: listEvents
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/docs
-  method: get
-  operationId: listDocs
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/docs/packConnections
-  method: get
-  operationId: listDocPackConnections
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}
-  method: get
-  operationId: getDocV2
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}
-  method: delete
-  operationId: deleteDocV2
+- path: /docs/{docId}/hooks/automation/{ruleId}
+  method: post
+  operationId: triggerWebhookAutomation
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -118,6 +152,166 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /docs/{docId}/tables/{tableIdOrName}/columns
+  method: get
+  operationId: listColumns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}
+  method: get
+  operationId: getColumn
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/controls
+  method: get
+  operationId: listControls
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/controls/{controlIdOrName}
+  method: get
+  operationId: getControl
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/${docId}/domains
+  method: get
+  operationId: listCustomDocDomains
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/${docId}/domains
+  method: post
+  operationId: addCustomDocDomain
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/domains/{customDocDomain}
+  method: delete
+  operationId: deleteCustomDocDomain
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/domains/{customDocDomain}
+  method: patch
+  operationId: updateCustomDocDomain
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /domains/provider/{customDocDomain}
+  method: get
+  operationId: getCustomDocDomainProvider
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/export
+  method: post
+  operationId: exportDocV2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/export/{exportId}
+  method: get
+  operationId: getExportRequestStatusV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/docs/{docId}/export
+  method: post
+  operationId: exportDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/docs/{docId}/export/{exportId}
+  method: get
+  operationId: getExportRequestStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/acl/permissions
   method: get
   operationId: listDocPermissionsV2
@@ -147,120 +341,6 @@ operations:
 - path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/acl/permissions/{docPermissionId}
   method: delete
   operationId: deleteDocPermissionV2
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/export
-  method: post
-  operationId: exportDocV2
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/export/{exportId}
-  method: get
-  operationId: getExportRequestStatusV2
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/revive
-  method: post
-  operationId: reviveDocV2
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/move
-  method: post
-  operationId: moveDocV2
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/pages
-  method: get
-  operationId: listPagesV2
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/pages/{pageId}
-  method: get
-  operationId: getPageV2
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/pageViewers
-  method: get
-  operationId: listPageViewersV2
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/docs/{docId}
-  method: get
-  operationId: getDoc
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/docs/{docId}
-  method: delete
-  operationId: deleteDoc
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -316,9 +396,29 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /organizations/{organizationId}/docs/{docId}/export
-  method: post
-  operationId: exportDoc
+- path: /organizations/{organizationId}/docs
+  method: get
+  operationId: listDocs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}
+  method: get
+  operationId: getDocV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}
+  method: delete
+  operationId: deleteDocV2
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -332,9 +432,41 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /organizations/{organizationId}/docs/{docId}/export/{exportId}
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/revive
+  method: post
+  operationId: reviveDocV2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/move
+  method: post
+  operationId: moveDocV2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/docs/{docId}
   method: get
-  operationId: getExportRequestStatus
+  operationId: getDoc
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -342,6 +474,22 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /organizations/{organizationId}/docs/{docId}
+  method: delete
+  operationId: deleteDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /organizations/{organizationId}/docs/{docId}/revive
   method: post
   operationId: reviveDoc
@@ -374,9 +522,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /organizations/{organizationId}/docs/{docId}/pages
+- path: /docs
   method: get
-  operationId: listPages
+  operationId: listDocs
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -384,9 +532,25 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/docs/{docId}/pages/{pageId}
+- path: /docs
+  method: post
+  operationId: createDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}
   method: get
-  operationId: getPage
+  operationId: getDoc
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -394,9 +558,41 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/docs/{docId}/pageViewers
+- path: /docs/{docId}
+  method: delete
+  operationId: deleteDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}
+  method: patch
+  operationId: updateDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/audit/events
   method: get
-  operationId: listPageViewers
+  operationId: listEvents
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -404,6 +600,188 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}/acl/permissions
+  method: get
+  operationId: listFolderPermissions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}/acl/permissions
+  method: post
+  operationId: addFolderPermission
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}/acl/permissions/{permissionId}
+  method: delete
+  operationId: deleteFolderPermission
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders
+  method: get
+  operationId: listFolders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}
+  method: get
+  operationId: getFolder
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}
+  method: delete
+  operationId: deleteFolder
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders
+  method: get
+  operationId: listFolders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders
+  method: post
+  operationId: createFolder
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders/{folderId}
+  method: get
+  operationId: getFolder
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{folderId}
+  method: patch
+  operationId: updateFolder
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders/{folderId}
+  method: delete
+  operationId: deleteFolder
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/formulas
+  method: get
+  operationId: listFormulas
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/formulas/{formulaIdOrName}
+  method: get
+  operationId: getFormula
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/goLinks
+  method: post
+  operationId: addGoLink
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /organizations/{organizationId}/groups
   method: get
   operationId: listGroups
@@ -590,9 +968,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /organizations/{organizationId}/importers/{importerId}/preferences
+- path: /resolveBrowserLink
   method: get
-  operationId: listImportPreferences
+  operationId: resolveBrowserLink
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -600,25 +978,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/importers/{importerId}/preferences
-  method: post
-  operationId: addImportPreference
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/importers/{importerId}/preferences/{importPreferenceId}
+- path: /mutationStatus/{requestId}
   method: get
-  operationId: getImportPreference
+  operationId: getMutationStatus
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -626,38 +988,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/importers/{importerId}/preferences/{importPreferenceId}
-  method: put
-  operationId: updateImportPreference
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/importers/{importerId}/preferences/{importPreferenceId}
-  method: delete
-  operationId: removeImportPreference
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /organizations/{organizationId}/users
   method: get
   operationId: listOrgUsers
@@ -718,9 +1048,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /organizations/{organizationId}/webhooks
+- path: /organizations
   method: get
-  operationId: listWebhooks
+  operationId: listOrganizations
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -728,25 +1058,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/webhooks
-  method: post
-  operationId: addWebhook
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/webhooks/{webhookId}
+- path: /organizations/{organizationId}
   method: get
-  operationId: getWebhook
+  operationId: getOrganization
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -754,210 +1068,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/webhooks/{webhookId}
-  method: put
-  operationId: updateWebhook
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/webhooks/{webhookId}
-  method: delete
-  operationId: removeWebhook
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/webhooks/{webhookId}/reset
-  method: post
-  operationId: resetWebhook
-  x-agentic-access:
-    action-class: acting
-    consequence: safety-critical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 120
-      exchange: true
-      purpose-required: true
-      proof-of-possession: true
-    escalation:
-      human-in-the-loop: required
-    audit: required
-- path: /organizations/{organizationId}/workspaces
-  method: get
-  operationId: listWorkspaces
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}
-  method: get
-  operationId: getWorkspace
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders
-  method: get
-  operationId: listFolders
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}
-  method: get
-  operationId: getFolder
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}
-  method: delete
-  operationId: deleteFolder
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}/acl/permissions
-  method: get
-  operationId: listFolderPermissions
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}/acl/permissions
-  method: post
-  operationId: addFolderPermission
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/folders/{folderId}/acl/permissions/{permissionId}
-  method: delete
-  operationId: deleteFolderPermission
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/users
-  method: get
-  operationId: listWorkspaceUsers
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/users
-  method: post
-  operationId: addWorkspaceUser
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/users/{userEmail}
-  method: put
-  operationId: updateWorkspaceUserRole
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{organizationId}/workspaces/{workspaceId}/users/{userEmail}
-  method: delete
-  operationId: removeWorkspaceUser
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /organizations/{organizationId}/packs/requests
   method: get
   operationId: listOrganizationPackRequests
@@ -968,32 +1078,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /organizations/{organizationId}/packs/controls
-  method: get
-  operationId: listOrganizationPackControls
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{organizationId}/packs/controls/{packId}
-  method: put
-  operationId: setOrganizationPackControl
-  x-agentic-access:
-    action-class: acting
-    consequence: safety-critical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 120
-      exchange: true
-      purpose-required: true
-      proof-of-possession: true
-    escalation:
-      human-in-the-loop: required
-    audit: required
 - path: /organizations/{organizationId}/packs/configurations
   method: get
   operationId: listOrganizationPackConfigurations
@@ -1162,9 +1246,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /categories
+- path: /organizations/{organizationId}/packs/controls
   method: get
-  operationId: listCategories
+  operationId: listOrganizationPackControls
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1172,775 +1256,25 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /docs
-  method: get
-  operationId: listDocs
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs
-  method: post
-  operationId: createDoc
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}
-  method: get
-  operationId: getDoc
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}
-  method: delete
-  operationId: deleteDoc
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}
-  method: patch
-  operationId: updateDoc
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/acl/metadata
-  method: get
-  operationId: getSharingMetadata
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/acl/permissions
-  method: get
-  operationId: getPermissions
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/acl/permissions
-  method: post
-  operationId: addPermission
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/acl/permissions/{permissionId}
-  method: delete
-  operationId: deletePermission
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/acl/principals/search
-  method: get
-  operationId: searchPrincipals
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/acl/settings
-  method: get
-  operationId: getAclSettings
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/acl/settings
-  method: patch
-  operationId: updateAclSettings
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/publish
+- path: /organizations/{organizationId}/packs/controls/{packId}
   method: put
-  operationId: publishDoc
+  operationId: setOrganizationPackControl
   x-agentic-access:
     action-class: acting
-    consequence: write
+    consequence: safety-critical
     subject: required
     audience: null
     token:
-      max-ttl: 900
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
     escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
+      human-in-the-loop: required
     audit: required
-- path: /docs/{docId}/publish
-  method: delete
-  operationId: unpublishDoc
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/pages
+- path: /organizations/{organizationId}/docs/packConnections
   method: get
-  operationId: listPages
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/pages
-  method: post
-  operationId: createPage
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/pages/{pageIdOrName}
-  method: get
-  operationId: getPage
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/pages/{pageIdOrName}
-  method: put
-  operationId: updatePage
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/pages/{pageIdOrName}
-  method: delete
-  operationId: deletePage
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/pages/{pageIdOrName}/content
-  method: get
-  operationId: listPageContent
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/pages/{pageIdOrName}/content
-  method: delete
-  operationId: deletePageContent
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/pages/{pageIdOrName}/export
-  method: post
-  operationId: beginPageContentExport
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/pages/{pageIdOrName}/export/{requestId}
-  method: get
-  operationId: getPageContentExportStatus
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/tables
-  method: get
-  operationId: listTables
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/tables/{tableIdOrName}
-  method: get
-  operationId: getTable
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/tables/{tableIdOrName}/columns
-  method: get
-  operationId: listColumns
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/tables/{tableIdOrName}/rows
-  method: get
-  operationId: listRows
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/tables/{tableIdOrName}/rows
-  method: post
-  operationId: upsertRows
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/tables/{tableIdOrName}/rows
-  method: delete
-  operationId: deleteRows
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
-  method: get
-  operationId: getRow
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
-  method: put
-  operationId: updateRow
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
-  method: delete
-  operationId: deleteRow
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}
-  method: post
-  operationId: pushButton
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}
-  method: get
-  operationId: getColumn
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/formulas
-  method: get
-  operationId: listFormulas
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/formulas/{formulaIdOrName}
-  method: get
-  operationId: getFormula
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/controls
-  method: get
-  operationId: listControls
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/controls/{controlIdOrName}
-  method: get
-  operationId: getControl
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/${docId}/domains
-  method: get
-  operationId: listCustomDocDomains
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/${docId}/domains
-  method: post
-  operationId: addCustomDocDomain
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/domains/{customDocDomain}
-  method: delete
-  operationId: deleteCustomDocDomain
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /docs/{docId}/domains/{customDocDomain}
-  method: patch
-  operationId: updateCustomDocDomain
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /domains/provider/{customDocDomain}
-  method: get
-  operationId: getCustomDocDomainProvider
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /folders
-  method: get
-  operationId: listFolders
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /folders
-  method: post
-  operationId: createFolder
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /folders/{folderId}
-  method: get
-  operationId: getFolder
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /folders/{folderId}
-  method: patch
-  operationId: updateFolder
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /folders/{folderId}
-  method: delete
-  operationId: deleteFolder
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /whoami
-  method: get
-  operationId: whoami
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /resolveBrowserLink
-  method: get
-  operationId: resolveBrowserLink
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /mutationStatus/{requestId}
-  method: get
-  operationId: getMutationStatus
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /docs/{docId}/hooks/automation/{ruleId}
-  method: post
-  operationId: triggerWebhookAutomation
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /analytics/docs
-  method: get
-  operationId: listDocAnalytics
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analytics/docs/{docId}/pages
-  method: get
-  operationId: listPageAnalytics
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analytics/docs/summary
-  method: get
-  operationId: listDocAnalyticsSummary
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analytics/packs
-  method: get
-  operationId: listPackAnalytics
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analytics/packs/summary
-  method: get
-  operationId: listPackAnalyticsSummary
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analytics/packs/{packId}/formulas
-  method: get
-  operationId: listPackFormulaAnalytics
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analytics/updated
-  method: get
-  operationId: getAnalyticsLastUpdated
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /workspaces/{workspaceId}/users
-  method: get
-  operationId: listWorkspaceMembers
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /workspaces/{workspaceId}/users/role
-  method: post
-  operationId: changeUserRole
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /workspaces/{workspaceId}/roles
-  method: get
-  operationId: listWorkspaceRoleActivity
+  operationId: listDocPackConnections
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -2040,18 +1374,12 @@ operations:
   method: post
   operationId: getNextPackVersion
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}
   method: get
   operationId: getPackVersionDiffs
@@ -2704,22 +2032,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /organizations/{organizationId}/goLinks
-  method: post
-  operationId: addGoLink
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds
   method: get
   operationId: listAgentSessionIds
@@ -2743,6 +2055,702 @@ operations:
 - path: /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}
   method: get
   operationId: getAgentPackLogDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/pages
+  method: get
+  operationId: listPagesV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/pages/{pageId}
+  method: get
+  operationId: getPageV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/docs/{docId}/pageViewers
+  method: get
+  operationId: listPageViewersV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/docs/{docId}/pages
+  method: get
+  operationId: listPages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/docs/{docId}/pages/{pageId}
+  method: get
+  operationId: getPage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/docs/{docId}/pageViewers
+  method: get
+  operationId: listPageViewers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/pages
+  method: get
+  operationId: listPages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/pages
+  method: post
+  operationId: createPage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/pages/{pageIdOrName}
+  method: get
+  operationId: getPage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/pages/{pageIdOrName}
+  method: put
+  operationId: updatePage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/pages/{pageIdOrName}
+  method: delete
+  operationId: deletePage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/pages/{pageIdOrName}/content
+  method: get
+  operationId: listPageContent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/pages/{pageIdOrName}/content
+  method: delete
+  operationId: deletePageContent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/pages/{pageIdOrName}/export
+  method: post
+  operationId: beginPageContentExport
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/pages/{pageIdOrName}/export/{requestId}
+  method: get
+  operationId: getPageContentExportStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/acl/metadata
+  method: get
+  operationId: getSharingMetadata
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/acl/permissions
+  method: get
+  operationId: getPermissions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/acl/permissions
+  method: post
+  operationId: addPermission
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/acl/permissions/{permissionId}
+  method: delete
+  operationId: deletePermission
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/acl/principals/search
+  method: get
+  operationId: searchPrincipals
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/acl/settings
+  method: get
+  operationId: getAclSettings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/acl/settings
+  method: patch
+  operationId: updateAclSettings
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/importers/{importerId}/preferences
+  method: get
+  operationId: listImportPreferences
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/importers/{importerId}/preferences
+  method: post
+  operationId: addImportPreference
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/importers/{importerId}/preferences/{importPreferenceId}
+  method: get
+  operationId: getImportPreference
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/importers/{importerId}/preferences/{importPreferenceId}
+  method: put
+  operationId: updateImportPreference
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/importers/{importerId}/preferences/{importPreferenceId}
+  method: delete
+  operationId: removeImportPreference
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /categories
+  method: get
+  operationId: listCategories
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/publish
+  method: put
+  operationId: publishDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/publish
+  method: delete
+  operationId: unpublishDoc
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/tables/{tableIdOrName}/rows
+  method: get
+  operationId: listRows
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/tables/{tableIdOrName}/rows
+  method: post
+  operationId: upsertRows
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/tables/{tableIdOrName}/rows
+  method: delete
+  operationId: deleteRows
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
+  method: get
+  operationId: getRow
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
+  method: put
+  operationId: updateRow
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
+  method: delete
+  operationId: deleteRow
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}
+  method: post
+  operationId: pushButton
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /docs/{docId}/tables
+  method: get
+  operationId: listTables
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /docs/{docId}/tables/{tableIdOrName}
+  method: get
+  operationId: getTable
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/webhooks
+  method: get
+  operationId: listWebhooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/webhooks
+  method: post
+  operationId: addWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/webhooks/{webhookId}
+  method: get
+  operationId: getWebhook
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/webhooks/{webhookId}
+  method: put
+  operationId: updateWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/webhooks/{webhookId}
+  method: delete
+  operationId: removeWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/webhooks/{webhookId}/reset
+  method: post
+  operationId: resetWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/users
+  method: get
+  operationId: listWorkspaceUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/users
+  method: post
+  operationId: addWorkspaceUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/users/{userEmail}
+  method: put
+  operationId: updateWorkspaceUserRole
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces/{workspaceId}/users/{userEmail}
+  method: delete
+  operationId: removeWorkspaceUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{organizationId}/workspaces
+  method: get
+  operationId: listWorkspaces
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{organizationId}/workspaces/{workspaceId}
+  method: get
+  operationId: getWorkspace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /workspaces/{workspaceId}/users
+  method: get
+  operationId: listWorkspaceMembers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /workspaces/{workspaceId}/users/role
+  method: post
+  operationId: changeUserRole
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /workspaces/{workspaceId}/roles
+  method: get
+  operationId: listWorkspaceRoleActivity
   x-agentic-access:
     action-class: connected
     consequence: read
