@@ -120,64 +120,31 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>' |\n  jq .name\n"
 components:
-  schemas:
-    Organization:
-      x-schema-name: Organization
-      description: Info about a Superhuman Docs organization.
-      type: object
-      required:
-      - type
-      - id
-      - name
-      properties:
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - organization
-          x-tsType: Type.Organization
-        id:
-          type: string
-          description: ID of the Superhuman Docs organization.
-          example: org-1AbcdeFgh1
-        name:
-          type: string
-          description: Name of the organization.
-          example: Superhuman Docs
-    OrganizationList:
-      x-schema-name: OrganizationList
-      description: List of organizations.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Organization'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations?pageToken=eyJsaW1pd
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
   responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -226,54 +193,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -298,7 +217,38 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
   parameters:
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -317,13 +267,63 @@ components:
       example: org-AbCDeFGHIj
       schema:
         type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
+  schemas:
+    OrganizationList:
+      x-schema-name: OrganizationList
+      description: List of organizations.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations?pageToken=eyJsaW1pd
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
       example: eyJsaW1pd
-      schema:
-        type: string
+    Organization:
+      x-schema-name: Organization
+      description: Info about a Superhuman Docs organization.
+      type: object
+      required:
+      - type
+      - id
+      - name
+      properties:
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - organization
+          x-tsType: Type.Organization
+        id:
+          type: string
+          description: ID of the Superhuman Docs organization.
+          example: org-1AbcdeFgh1
+        name:
+          type: string
+          description: Name of the organization.
+          example: Superhuman Docs
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

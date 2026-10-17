@@ -245,154 +245,7 @@ paths:
         lang: shell
         source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/users/<user email>/deactivate'\n"
 components:
-  parameters:
-    query:
-      name: query
-      description: Search terms used to narrow down results.
-      in: query
-      required: false
-      example: feature%parity
-      schema:
-        type: string
-    isActivated:
-      name: isActivated
-      description: Filter results to users based on their activation status.
-      in: query
-      required: false
-      schema:
-        type: boolean
-        x-no-default: true
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
-    organizationId:
-      name: organizationId
-      description: ID of the organization.
-      in: path
-      required: true
-      example: org-AbCDeFGHIj
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    userEmail:
-      name: userEmail
-      description: User to act upon.
-      in: path
-      required: true
-      example: april@example.com
-      schema:
-        type: string
-        format: email
   responses:
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
     BadRequestError:
       description: The request parameters did not conform to expectations.
       content:
@@ -417,6 +270,102 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
   schemas:
     OrgUser:
       x-schema-name: OrgUser
@@ -462,45 +411,10 @@ components:
           type: number
           description: Number of docs owned by this user.
           example: 12
-    TransferResourcesResponse:
-      x-schema-name: TransferResourcesResponse
-      description: Result of the transfer resources request
-      type: object
-      required:
-      - requestId
-      additionalProperties: false
-      properties:
-        requestId:
-          type: string
-          description: An opaque identifier that represents the request.
-          example: c5cb3278-800e-4ae3-be53-19b0b794f8e1
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
+    NextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
       type: string
-      example: eyJsaW1pd
-    OrgUserList:
-      x-schema-name: OrgUserList
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrgUser'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/NextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/NextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?pageToken=eyJsaW1pd
+      format: url
     OrgUserActivationChangeRequest:
       x-schema-name: OrgUserActivationChangeRequest
       description: Payload for making changes to an org user's state.
@@ -516,21 +430,6 @@ components:
       type: object
       additionalProperties: false
       properties: {}
-    OrgUserStatus:
-      x-schema-name: OrgUserStatus
-      type: string
-      enum:
-      - Active
-      - Deactivated
-      - Deleted
-      x-tsEnumNames:
-      - Active
-      - Deactivated
-      - Deleted
-    NextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
     TransferResourcesRequest:
       x-schema-name: TransferResourcesRequest
       description: Payload for transferring resources between users.
@@ -555,6 +454,107 @@ components:
           - AbCDeFGH
           items:
             type: string
+    OrgUserStatus:
+      x-schema-name: OrgUserStatus
+      type: string
+      enum:
+      - Active
+      - Deactivated
+      - Deleted
+      x-tsEnumNames:
+      - Active
+      - Deactivated
+      - Deleted
+    TransferResourcesResponse:
+      x-schema-name: TransferResourcesResponse
+      description: Result of the transfer resources request
+      type: object
+      required:
+      - requestId
+      additionalProperties: false
+      properties:
+        requestId:
+          type: string
+          description: An opaque identifier that represents the request.
+          example: c5cb3278-800e-4ae3-be53-19b0b794f8e1
+    OrgUserList:
+      x-schema-name: OrgUserList
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrgUser'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/NextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/NextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/admin/v1/organizations/org-1AbcdeFgh1/users?pageToken=eyJsaW1pd
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+  parameters:
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
+    userEmail:
+      name: userEmail
+      description: User to act upon.
+      in: path
+      required: true
+      example: april@example.com
+      schema:
+        type: string
+        format: email
+    organizationId:
+      name: organizationId
+      description: ID of the organization.
+      in: path
+      required: true
+      example: org-AbCDeFGHIj
+      schema:
+        type: string
+    query:
+      name: query
+      description: Search terms used to narrow down results.
+      in: query
+      required: false
+      example: feature%parity
+      schema:
+        type: string
+    isActivated:
+      name: isActivated
+      description: Filter results to users based on their activation status.
+      in: query
+      required: false
+      schema:
+        type: boolean
+        x-no-default: true
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

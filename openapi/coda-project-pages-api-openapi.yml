@@ -944,15 +944,31 @@ paths:
       description: Superhuman Docs API (v1)
 components:
   parameters:
-    pageViewersLimit:
-      name: pageViewersLimit
-      description: Limit number of users returned per page.
-      in: query
+    pageId:
+      name: pageId
+      description: ID of the page.
+      in: path
+      required: true
+      example: canvas-AbCDeFGHIj
       schema:
-        type: integer
-        minimum: 1
-        default: 100
-        maximum: 500
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: d-AbCDeFGHIj
+      schema:
+        type: string
+    sinceDate:
+      name: sinceDate
+      description: Limit results to activity on or after this date.
+      in: query
+      example: '2020-08-01'
+      required: true
+      schema:
+        type: string
+        format: date
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -971,15 +987,6 @@ components:
       example: org-AbCDeFGHIj
       schema:
         type: string
-    untilDate:
-      name: untilDate
-      description: Limit results to activity on or before this date.
-      in: query
-      example: '2020-08-05'
-      required: true
-      schema:
-        type: string
-        format: date
     pageToken:
       name: pageToken
       description: An opaque token used to fetch the next page of results.
@@ -987,19 +994,20 @@ components:
       example: eyJsaW1pd
       schema:
         type: string
-    pageId:
-      name: pageId
-      description: ID of the page.
-      in: path
-      required: true
-      example: canvas-AbCDeFGHIj
-      schema:
-        type: string
-    sinceDate:
-      name: sinceDate
-      description: Limit results to activity on or after this date.
+    pageViewersLimit:
+      name: pageViewersLimit
+      description: Limit number of users returned per page.
       in: query
-      example: '2020-08-01'
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        maximum: 500
+    untilDate:
+      name: untilDate
+      description: Limit results to activity on or before this date.
+      in: query
+      example: '2020-08-05'
       required: true
       schema:
         type: string
@@ -1020,14 +1028,6 @@ components:
       example: ws-AbCDeFGHIj
       schema:
         type: string
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: d-AbCDeFGHIj
-      schema:
-        type: string
     docId_2:
       name: docId
       description: ID of the doc.
@@ -1036,15 +1036,6 @@ components:
       example: AbCDeFGH
       schema:
         type: string
-    limit_2:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
     pageContentLimit:
       name: limit
       description: Maximum number of content items to return in this query.
@@ -1055,6 +1046,33 @@ components:
         minimum: 1
         maximum: 500
         default: 50
+    contentFormat:
+      name: contentFormat
+      description: The format to return content in. Defaults to plainText.
+      in: query
+      example: plainText
+      schema:
+        type: string
+        enum:
+        - plainText
+        default: plainText
+    limit_2:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
+    requestId:
+      name: requestId
+      description: ID of the request.
+      in: path
+      required: true
+      example: abc-123-def-456
+      schema:
+        type: string
     pageIdOrName:
       name: pageIdOrName
       description: 'ID or name of the page. Names are discouraged because they''re easily prone to being changed by users. If you''re using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.
@@ -1068,114 +1086,173 @@ components:
       example: canvas-IjkLmnO
       schema:
         type: string
-    requestId:
-      name: requestId
-      description: ID of the request.
-      in: path
-      required: true
-      example: abc-123-def-456
-      schema:
-        type: string
-    contentFormat:
-      name: contentFormat
-      description: The format to return content in. Defaults to plainText.
-      in: query
-      example: plainText
-      schema:
-        type: string
-        enum:
-        - plainText
-        default: plainText
+  responses:
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    GoneError:
+      description: The resource has been deleted.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 410
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Gone
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Gone
   schemas:
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
+    PageContent:
+      x-schema-name: PageContent
+      description: Content of a page
       type: object
       required:
-      - type
-      - id
-      - name
-      - href
-      - browserLink
+      - createdAt
+      - content
       additionalProperties: false
       properties:
-        type:
+        createdAt:
           type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        id:
+          format: date-time
+          description: Timestamp representing when this page was created.
+        updatedAt:
           type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        href:
+          format: date-time
+          description: Timestamp representing when this page was last updated.
+        content:
           type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your org id>/docs/<doc id>/pages/<page id>
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-    Page:
-      x-schema-name: Page
-      description: Info about a page.
-      type: object
-      required:
-      - type
-      - id
-      - name
-      - href
-      - browserLink
-      additionalProperties: false
-      properties:
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your org id>/docs/<doc id>/pages/<page id>
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        parent:
-          $ref: '#/components/schemas/PageReference'
-    OutputFormat:
-      x-schema-name: OutputFormat
-      description: Output format of the doc or page content.
-      type: string
-      default: None
-      enum:
-      - None
-      - LossyPlainText
-      x-tsEnumNames:
-      - None
-      - LossyPlainText
+          description: The content of the page.
+          example: Some page contents.\nAnd some more page contents!\n
     PageList:
       x-schema-name: PageList
       description: List of pages.
@@ -1225,10 +1302,6 @@ components:
           - $ref: '#/components/schemas/NextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/admin/v1/organizations/<your organization id>/docs/<your doc id>/pageViewers?pageToken=eyJsaW1pd
-    NextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
     NextPageLink:
       description: If specified, a link that can be used to fetch the next page of results.
       type: string
@@ -1255,27 +1328,57 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
-    PageContent:
-      x-schema-name: PageContent
-      description: Content of a page
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
       type: object
       required:
-      - createdAt
-      - content
+      - type
+      - id
+      - name
+      - href
+      - browserLink
       additionalProperties: false
       properties:
-        createdAt:
+        type:
           type: string
-          format: date-time
-          description: Timestamp representing when this page was created.
-        updatedAt:
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        id:
           type: string
-          format: date-time
-          description: Timestamp representing when this page was last updated.
-        content:
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        href:
           type: string
-          description: The content of the page.
-          example: Some page contents.\nAnd some more page contents!\n
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your org id>/docs/<doc id>/pages/<page id>
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+    OutputFormat:
+      x-schema-name: OutputFormat
+      description: Output format of the doc or page content.
+      type: string
+      default: None
+      enum:
+      - None
+      - LossyPlainText
+      x-tsEnumNames:
+      - None
+      - LossyPlainText
+    NextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     PageWithContent:
       x-schema-name: PageWithContent
       description: Info about a page.
@@ -1320,6 +1423,48 @@ components:
           $ref: '#/components/schemas/PageReference'
         pageContent:
           $ref: '#/components/schemas/PageContent'
+    Page:
+      x-schema-name: Page
+      description: Info about a page.
+      type: object
+      required:
+      - type
+      - id
+      - name
+      - href
+      - browserLink
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/admin/v1/organizations/<your org id>/docs/<doc id>/pages/<page id>
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        parent:
+          $ref: '#/components/schemas/PageReference'
     User:
       x-schema-name: User
       description: Info about the user who initiated an action.
@@ -1344,6 +1489,210 @@ components:
           type: string
           description: Email address of the user.
           example: user@example.com
+    PageContentUpdate:
+      x-schema-name: PageContentUpdate
+      description: Payload for updating the content of an existing page.
+      type: object
+      additionalProperties: false
+      required:
+      - insertionMode
+      - canvasContent
+      properties:
+        insertionMode:
+          $ref: '#/components/schemas/PageContentInsertionMode'
+        elementId:
+          type: string
+          example: cl-lzqh0Q0poT
+          description: 'ID of the element on the page to use as a reference point for editing content. If provided, the operation will be relative to this element (e.g., append after it, prepend before it, replace it). If omitted, the operation will be performed on the entire page (e.g., append to end, prepend to beginning, replace all).
+
+            '
+        canvasContent:
+          $ref: '#/components/schemas/PageContent_2'
+    BeginPageContentExportRequest:
+      x-schema-name: BeginPageContentExportRequest
+      description: Request for beginning an export of page content.
+      type: object
+      additionalProperties: false
+      required:
+      - outputFormat
+      properties:
+        outputFormat:
+          $ref: '#/components/schemas/PageContentOutputFormat'
+    PageCreateResult:
+      x-schema-name: PageCreateResult
+      description: The result of a page creation.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the created page.
+            example: canvas-tuVwxYz
+    PageContentDeleteResult:
+      x-schema-name: PageContentDeleteResult
+      description: The result of a page content deletion.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the page whose content was deleted.
+            example: canvas-tuVwxYz
+    PageContentItemContentFormat:
+      x-schema-name: PageContentItemContentFormat
+      description: Content format for the item.
+      type: string
+      enum:
+      - plainText
+      x-tsEnumNames:
+      - PlainText
+    PageEmbedRenderMethod:
+      x-schema-name: PageEmbedRenderMethod
+      description: Render mode for a page using the Embed page type.
+      type: string
+      enum:
+      - compatibility
+      - standard
+      x-tsEnumNames:
+      - Compatibility
+      - Standard
+    PageUpdateResult:
+      x-schema-name: PageUpdateResult
+      description: The result of a page update.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the updated page.
+            example: canvas-tuVwxYz
+    PageContent_2:
+      x-schema-name: PageContent
+      description: 'Content to be added or replaced with in a page (canvas).
+
+        '
+      type: object
+      additionalProperties: false
+      required:
+      - format
+      - content
+      properties:
+        format:
+          $ref: '#/components/schemas/PageContentFormat'
+        content:
+          type: string
+          description: The actual page content.
+          example: <p><b>This</b> is rich text</p>
+    LinkedDataObject:
+      x-schema-name: LinkedDataObject
+      description: Base type for a JSON-LD (Linked Data) object.
+      type: object
+      additionalProperties: false
+      required:
+      - '@context'
+      - '@type'
+      properties:
+        '@context':
+          type: string
+          description: A url describing the schema context for this object, typically "http://schema.org/".
+          example: http://schema.org/
+        '@type':
+          $ref: '#/components/schemas/LinkedDataType'
+        additionalType:
+          type: string
+          description: 'An identifier of additional type info specific to Superhuman Docs that may not be present in a schema.org taxonomy,
+
+            '
+    PageList_2:
+      x-schema-name: PageList
+      description: List of pages.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page_2'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages?pageToken=eyJsaW1pd
+    LinkedDataType:
+      x-schema-name: LinkedDataType
+      description: A schema.org identifier for the object.
+      type: string
+      enum:
+      - ImageObject
+      - MonetaryAmount
+      - Person
+      - WebPage
+      - StructuredValue
+      x-tsEnumNames:
+      - ImageObject
+      - MonetaryAmount
+      - Person
+      - WebPage
+      - StructuredValue
+    DocumentMutateResponse:
+      x-schema-name: DocumentMutateResponse
+      description: Base response type for an operation that mutates a document.
+      type: object
+      additionalProperties: false
+      required:
+      - requestId
+      properties:
+        requestId:
+          type: string
+          description: An arbitrary unique identifier for this request.
+          example: abc-123-def-456
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    PageContentFormat:
+      x-schema-name: PageContentFormat
+      description: Supported content types for page (canvas) content.
+      type: string
+      enum:
+      - html
+      - markdown
+      x-tsEnumNames:
+      - Html
+      - Markdown
+    PageContentInsertionMode:
+      x-schema-name: PageContentInsertionMode
+      description: Mode for updating the content on an existing page.
+      type: string
+      enum:
+      - append
+      - prepend
+      - replace
+      x-tsEnumNames:
+      - Append
+      - Prepend
+      - Replace
     PageLineStyle:
       x-schema-name: PageLineStyle
       description: The style of a line element in a canvas page.
@@ -1372,27 +1721,94 @@ components:
       - NumberedList
       - Paragraph
       - PullQuote
-    Icon:
-      x-schema-name: icon
-      description: Info about the icon.
+    PersonValue:
+      x-schema-name: PersonValue
+      description: A named reference to a person, where the person is identified by email address.
+      allOf:
+      - $ref: '#/components/schemas/LinkedDataObject'
+      - type: object
+        additionalProperties: false
+        required:
+        - '@type'
+        - name
+        properties:
+          '@type':
+            type: string
+            enum:
+            - Person
+            x-tsType: LinkedDataType.Person
+          name:
+            type: string
+            description: The full name of the person.
+            example: Alice Atkins
+          email:
+            type: string
+            description: The email address of the person.
+            example: alice@atkins.com
+    PageCreate:
+      x-schema-name: PageCreate
+      description: Payload for creating a new page in a doc.
       type: object
-      required:
-      - name
-      - type
-      - browserLink
       additionalProperties: false
       properties:
         name:
           type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        iconName:
+          type: string
           description: Name of the icon.
-        type:
+          example: rocket
+        imageUrl:
           type: string
-          description: MIME type of the icon
-        browserLink:
+          description: Url of the cover image to use.
+          example: https://example.com/image.jpg
+        parentPageId:
           type: string
-          format: url
-          description: Browser-friendly link to an icon.
-          example: https://cdn.coda.io/icons/png/color/icon-32.png
+          description: The ID of this new page's parent, if creating a subpage.
+          example: canvas-tuVwxYz
+        pageContent:
+          $ref: '#/components/schemas/PageCreateContent'
+    PageContentItemContent:
+      x-schema-name: PageContentItemContent
+      description: Content details of the item.
+      type: object
+      required:
+      - style
+      - format
+      - content
+      additionalProperties: false
+      properties:
+        style:
+          $ref: '#/components/schemas/PageLineStyle'
+        format:
+          $ref: '#/components/schemas/PageContentItemContentFormat'
+        content:
+          type: string
+          description: Content of the item in the specified format.
+          example: This is a paragraph of text.
+        lineLevel:
+          type: integer
+          description: 'Indentation level of the element. Present for indentable elements (paragraphs, blockquotes, and list items).
+
+            '
+          example: 0
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    PageContentItemType:
+      x-schema-name: PageContentItemType
+      description: The type of content item in a page.
+      type: string
+      enum:
+      - line
+      x-tsEnumNames:
+      - Line
     PageUpdate:
       x-schema-name: PageUpdate
       description: Payload for updating a page.
@@ -1425,270 +1841,28 @@ components:
             description: Content with which to update an existing page.
             additionalProperties: false
           - $ref: '#/components/schemas/PageContentUpdate'
-    PageContentUpdate:
-      x-schema-name: PageContentUpdate
-      description: Payload for updating the content of an existing page.
+    BeginPageContentExportResponse:
+      x-schema-name: BeginPageContentExportResponse
+      description: Response when beginning an export of page content.
       type: object
       additionalProperties: false
-      required:
-      - insertionMode
-      - canvasContent
-      properties:
-        insertionMode:
-          $ref: '#/components/schemas/PageContentInsertionMode'
-        elementId:
-          type: string
-          example: cl-lzqh0Q0poT
-          description: 'ID of the element on the page to use as a reference point for editing content. If provided, the operation will be relative to this element (e.g., append after it, prepend before it, replace it). If omitted, the operation will be performed on the entire page (e.g., append to end, prepend to beginning, replace all).
-
-            '
-        canvasContent:
-          $ref: '#/components/schemas/PageContent_2'
-    PageContentInsertionMode:
-      x-schema-name: PageContentInsertionMode
-      description: Mode for updating the content on an existing page.
-      type: string
-      enum:
-      - append
-      - prepend
-      - replace
-      x-tsEnumNames:
-      - Append
-      - Prepend
-      - Replace
-    PageContentItemContent:
-      x-schema-name: PageContentItemContent
-      description: Content details of the item.
-      type: object
-      required:
-      - style
-      - format
-      - content
-      additionalProperties: false
-      properties:
-        style:
-          $ref: '#/components/schemas/PageLineStyle'
-        format:
-          $ref: '#/components/schemas/PageContentItemContentFormat'
-        content:
-          type: string
-          description: Content of the item in the specified format.
-          example: This is a paragraph of text.
-        lineLevel:
-          type: integer
-          description: 'Indentation level of the element. Present for indentable elements (paragraphs, blockquotes, and list items).
-
-            '
-          example: 0
-    PageReference_2:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
       required:
       - id
-      - type
-      - browserLink
+      - status
       - href
-      - name
-      additionalProperties: false
       properties:
         id:
           type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
+          description: The identifier of this export request.
+          example: AbCDeFGH
+        status:
           type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
+          description: The status of this export.
+          example: complete
         href:
           type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-    PageContentFormat:
-      x-schema-name: PageContentFormat
-      description: Supported content types for page (canvas) content.
-      type: string
-      enum:
-      - html
-      - markdown
-      x-tsEnumNames:
-      - Html
-      - Markdown
-    PageUpdateResult:
-      x-schema-name: PageUpdateResult
-      description: The result of a page update.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the updated page.
-            example: canvas-tuVwxYz
-    Page_2:
-      x-schema-name: Page
-      description: Metadata about a page.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      - name
-      - isHidden
-      - isEffectivelyHidden
-      - browserLink
-      - children
-      - contentType
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        icon:
-          $ref: '#/components/schemas/Icon'
-        image:
-          $ref: '#/components/schemas/Image'
-        contentType:
-          $ref: '#/components/schemas/PageType'
-        isHidden:
-          type: boolean
-          description: Whether the page is hidden in the UI.
-          example: true
-        isEffectivelyHidden:
-          type: boolean
-          description: Whether the page or any of its parents is hidden in the UI.
-          example: true
-        parent:
-          $ref: '#/components/schemas/PageReference_2'
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/PageReference_2'
-        authors:
-          description: Authors of the page
-          type: array
-          items:
-            $ref: '#/components/schemas/PersonValue'
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the page was created.
-          example: '2018-04-11T00:18:57.946Z'
-        createdBy:
-          $ref: '#/components/schemas/PersonValue'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when page content was last modified.
-          example: '2018-04-11T00:18:57.946Z'
-        updatedBy:
-          $ref: '#/components/schemas/PersonValue'
-    Image:
-      x-schema-name: Image
-      description: Info about the image.
-      type: object
-      required:
-      - browserLink
-      additionalProperties: false
-      properties:
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to an image.
-          example: https://codahosted.io/docs/nUYhlXysYO/blobs/bl-lYkYKNzkuT/3f879b9ecfa27448
-        type:
-          type: string
-          description: MIME type of the image.
-        width:
-          type: number
-          description: The width in pixels of the image.
-          example: 800
-        height:
-          type: number
-          description: The height in pixels of the image.
-          example: 600
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    BeginPageContentExportRequest:
-      x-schema-name: BeginPageContentExportRequest
-      description: Request for beginning an export of page content.
-      type: object
-      additionalProperties: false
-      required:
-      - outputFormat
-      properties:
-        outputFormat:
-          $ref: '#/components/schemas/PageContentOutputFormat'
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    PageList_2:
-      x-schema-name: PageList
-      description: List of pages.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Page_2'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages?pageToken=eyJsaW1pd
+          description: The URL that reports the status of this export. Poll this URL to get the content URL when the export has completed.
+          example: https://docs.superhuman.com/apis/v1/docs/somedoc/pages/somepage/export/some-request-id
     PageDeleteResult:
       x-schema-name: PageDeleteResult
       description: The result of a page deletion.
@@ -1703,42 +1877,6 @@ components:
             type: string
             description: ID of the page to be deleted.
             example: canvas-tuVwxYz
-    LinkedDataObject:
-      x-schema-name: LinkedDataObject
-      description: Base type for a JSON-LD (Linked Data) object.
-      type: object
-      additionalProperties: false
-      required:
-      - '@context'
-      - '@type'
-      properties:
-        '@context':
-          type: string
-          description: A url describing the schema context for this object, typically "http://schema.org/".
-          example: http://schema.org/
-        '@type':
-          $ref: '#/components/schemas/LinkedDataType'
-        additionalType:
-          type: string
-          description: 'An identifier of additional type info specific to Superhuman Docs that may not be present in a schema.org taxonomy,
-
-            '
-    PageContentDelete:
-      x-schema-name: PageContentDelete
-      description: Payload for deleting content from a page.
-      type: object
-      additionalProperties: false
-      properties:
-        elementIds:
-          type: array
-          description: 'IDs of the elements to delete from the page. If omitted or empty, all content will be deleted.
-
-            '
-          items:
-            type: string
-          example:
-          - cl-lzqh0Q0poT
-          - cl-abc123def
     PageContentExportStatusResponse:
       x-schema-name: PageContentExportStatusResponse
       description: Response when requesting the status of a page content export.
@@ -1864,62 +2002,97 @@ components:
               type: string
               description: The id of the document to insert as a sync page.
               example: sHbI4uIwiK
-    PersonValue:
-      x-schema-name: PersonValue
-      description: A named reference to a person, where the person is identified by email address.
-      allOf:
-      - $ref: '#/components/schemas/LinkedDataObject'
-      - type: object
-        additionalProperties: false
-        required:
-        - '@type'
-        - name
-        properties:
-          '@type':
-            type: string
-            enum:
-            - Person
-            x-tsType: LinkedDataType.Person
-          name:
-            type: string
-            description: The full name of the person.
-            example: Alice Atkins
-          email:
-            type: string
-            description: The email address of the person.
-            example: alice@atkins.com
-    PageEmbedRenderMethod:
-      x-schema-name: PageEmbedRenderMethod
-      description: Render mode for a page using the Embed page type.
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
+      type: object
+      required:
+      - name
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
+    PageContentOutputFormat:
+      x-schema-name: PageContentOutputFormat
+      description: Supported output content formats that can be requested for getting content for an existing page.
       type: string
       enum:
-      - compatibility
-      - standard
+      - html
+      - markdown
       x-tsEnumNames:
-      - Compatibility
-      - Standard
-    PageContentDeleteResult:
-      x-schema-name: PageContentDeleteResult
-      description: The result of a page content deletion.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the page whose content was deleted.
-            example: canvas-tuVwxYz
-    PageContentItemType:
-      x-schema-name: PageContentItemType
-      description: The type of content item in a page.
-      type: string
-      enum:
-      - line
-      x-tsEnumNames:
-      - Line
+      - Html
+      - Markdown
+    PageReference_2:
+      x-schema-name: PageReference
+      description: Reference to a page.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+    Image:
+      x-schema-name: Image
+      description: Info about the image.
+      type: object
+      required:
+      - browserLink
+      additionalProperties: false
+      properties:
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an image.
+          example: https://codahosted.io/docs/nUYhlXysYO/blobs/bl-lYkYKNzkuT/3f879b9ecfa27448
+        type:
+          type: string
+          description: MIME type of the image.
+        width:
+          type: number
+          description: The width in pixels of the image.
+          example: 800
+        height:
+          type: number
+          description: The height in pixels of the image.
+          example: 600
     PageContentList:
       x-schema-name: PageContentList
       description: List of page content elements.
@@ -1945,6 +2118,101 @@ components:
           - $ref: '#/components/schemas/nextPageLink'
           - type: string
             example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO/content?pageToken=eyJsaW1pd
+    PageType:
+      x-schema-name: PageType
+      description: The type of a page in a doc.
+      type: string
+      enum:
+      - canvas
+      - embed
+      - syncPage
+      x-tsEnumNames:
+      - Canvas
+      - Embed
+      - SyncPage
+    Page_2:
+      x-schema-name: Page
+      description: Metadata about a page.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      - isHidden
+      - isEffectivelyHidden
+      - browserLink
+      - children
+      - contentType
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        icon:
+          $ref: '#/components/schemas/Icon'
+        image:
+          $ref: '#/components/schemas/Image'
+        contentType:
+          $ref: '#/components/schemas/PageType'
+        isHidden:
+          type: boolean
+          description: Whether the page is hidden in the UI.
+          example: true
+        isEffectivelyHidden:
+          type: boolean
+          description: Whether the page or any of its parents is hidden in the UI.
+          example: true
+        parent:
+          $ref: '#/components/schemas/PageReference_2'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageReference_2'
+        authors:
+          description: Authors of the page
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValue'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the page was created.
+          example: '2018-04-11T00:18:57.946Z'
+        createdBy:
+          $ref: '#/components/schemas/PersonValue'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when page content was last modified.
+          example: '2018-04-11T00:18:57.946Z'
+        updatedBy:
+          $ref: '#/components/schemas/PersonValue'
     PageContentItem:
       x-schema-name: PageContentItem
       description: Content item in a page (canvas).
@@ -1962,290 +2230,22 @@ components:
           $ref: '#/components/schemas/PageContentItemType'
         itemContent:
           $ref: '#/components/schemas/PageContentItemContent'
-    PageType:
-      x-schema-name: PageType
-      description: The type of a page in a doc.
-      type: string
-      enum:
-      - canvas
-      - embed
-      - syncPage
-      x-tsEnumNames:
-      - Canvas
-      - Embed
-      - SyncPage
-    PageContent_2:
-      x-schema-name: PageContent
-      description: 'Content to be added or replaced with in a page (canvas).
+    PageContentDelete:
+      x-schema-name: PageContentDelete
+      description: Payload for deleting content from a page.
+      type: object
+      additionalProperties: false
+      properties:
+        elementIds:
+          type: array
+          description: 'IDs of the elements to delete from the page. If omitted or empty, all content will be deleted.
 
-        '
-      type: object
-      additionalProperties: false
-      required:
-      - format
-      - content
-      properties:
-        format:
-          $ref: '#/components/schemas/PageContentFormat'
-        content:
-          type: string
-          description: The actual page content.
-          example: <p><b>This</b> is rich text</p>
-    BeginPageContentExportResponse:
-      x-schema-name: BeginPageContentExportResponse
-      description: Response when beginning an export of page content.
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      - status
-      - href
-      properties:
-        id:
-          type: string
-          description: The identifier of this export request.
-          example: AbCDeFGH
-        status:
-          type: string
-          description: The status of this export.
-          example: complete
-        href:
-          type: string
-          description: The URL that reports the status of this export. Poll this URL to get the content URL when the export has completed.
-          example: https://docs.superhuman.com/apis/v1/docs/somedoc/pages/somepage/export/some-request-id
-    PageCreate:
-      x-schema-name: PageCreate
-      description: Payload for creating a new page in a doc.
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        iconName:
-          type: string
-          description: Name of the icon.
-          example: rocket
-        imageUrl:
-          type: string
-          description: Url of the cover image to use.
-          example: https://example.com/image.jpg
-        parentPageId:
-          type: string
-          description: The ID of this new page's parent, if creating a subpage.
-          example: canvas-tuVwxYz
-        pageContent:
-          $ref: '#/components/schemas/PageCreateContent'
-    PageCreateResult:
-      x-schema-name: PageCreateResult
-      description: The result of a page creation.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
+            '
+          items:
             type: string
-            description: ID of the created page.
-            example: canvas-tuVwxYz
-    PageContentItemContentFormat:
-      x-schema-name: PageContentItemContentFormat
-      description: Content format for the item.
-      type: string
-      enum:
-      - plainText
-      x-tsEnumNames:
-      - PlainText
-    LinkedDataType:
-      x-schema-name: LinkedDataType
-      description: A schema.org identifier for the object.
-      type: string
-      enum:
-      - ImageObject
-      - MonetaryAmount
-      - Person
-      - WebPage
-      - StructuredValue
-      x-tsEnumNames:
-      - ImageObject
-      - MonetaryAmount
-      - Person
-      - WebPage
-      - StructuredValue
-    PageContentOutputFormat:
-      x-schema-name: PageContentOutputFormat
-      description: Supported output content formats that can be requested for getting content for an existing page.
-      type: string
-      enum:
-      - html
-      - markdown
-      x-tsEnumNames:
-      - Html
-      - Markdown
-    DocumentMutateResponse:
-      x-schema-name: DocumentMutateResponse
-      description: Base response type for an operation that mutates a document.
-      type: object
-      additionalProperties: false
-      required:
-      - requestId
-      properties:
-        requestId:
-          type: string
-          description: An arbitrary unique identifier for this request.
-          example: abc-123-def-456
-  responses:
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    GoneError:
-      description: The resource has been deleted.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 410
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Gone
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Gone
+          example:
+          - cl-lzqh0Q0poT
+          - cl-abc123def
   securitySchemes:
     Bearer:
       description: 'The Superhuman Docs Admin API can be accessed using an API token, which can be obtained from [*My account*](https://docs.superhuman.com/account)

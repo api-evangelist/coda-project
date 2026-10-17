@@ -172,74 +172,24 @@ paths:
           '
 components:
   schemas:
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
+    SortBy:
+      x-schema-name: SortBy
+      description: Determines how the objects returned are sorted
+      type: string
+      enum:
       - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-    ControlList:
-      x-schema-name: ControlList
-      description: List of controls.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ControlReference'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/controls?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/controls?pageToken=eyJsaW1pd
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
+      x-tsEnumNames:
+      - Name
+    ScalarValue:
+      x-schema-name: ScalarValue
+      description: A Superhuman Docs result or entity expressed as a primitive type.
+      oneOf:
+      - type: string
+        example: $12.34
+      - type: number
+        example: 12.34
+      - type: boolean
+        example: true
     Control:
       x-schema-name: Control
       description: Details about a control.
@@ -278,6 +228,70 @@ components:
           $ref: '#/components/schemas/ControlType'
         value:
           $ref: '#/components/schemas/Value'
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    ControlList:
+      x-schema-name: ControlList
+      description: List of controls.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ControlReference'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/controls?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/controls?pageToken=eyJsaW1pd
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    ControlReference:
+      x-schema-name: ControlReference
+      description: Reference to a control.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the control.
+          example: ctrl-cDefGhij
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - control
+          x-tsType: Type.Control
+        href:
+          type: string
+          format: url
+          description: API link to the control.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/controls/ctrl-cDefGhij
+        name:
+          type: string
+          description: Name of the control.
+          example: Cost
+        parent:
+          $ref: '#/components/schemas/PageReference'
     ControlType:
       x-schema-name: ControlType
       description: Type of the control.
@@ -313,46 +327,42 @@ components:
       - Reaction
       - Textbox
       - TimePicker
-    ControlReference:
-      x-schema-name: ControlReference
-      description: Reference to a control.
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
       type: object
       required:
       - id
       - type
+      - browserLink
       - href
       - name
       additionalProperties: false
       properties:
         id:
           type: string
-          description: ID of the control.
-          example: ctrl-cDefGhij
+          description: ID of the page.
+          example: canvas-IjkLmnO
         type:
           type: string
           description: The type of this resource.
           enum:
-          - control
-          x-tsType: Type.Control
+          - page
+          x-tsType: Type.Page
         href:
           type: string
           format: url
-          description: API link to the control.
-          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/controls/ctrl-cDefGhij
+          description: API link to the page.
+          example: https://docs.superhuman.com/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://docs.superhuman.com/d/_dAbCDeFGH/Launch-Status_sumnO
         name:
           type: string
-          description: Name of the control.
-          example: Cost
-        parent:
-          $ref: '#/components/schemas/PageReference'
-    SortBy:
-      x-schema-name: SortBy
-      description: Determines how the objects returned are sorted
-      type: string
-      enum:
-      - name
-      x-tsEnumNames:
-      - Name
+          description: Name of the page.
+          example: Launch Status
     Value:
       x-schema-name: Value
       description: A Superhuman Docs result or entity expressed as a primitive type, or array of primitive types.
@@ -366,65 +376,7 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/ScalarValue'
-    ScalarValue:
-      x-schema-name: ScalarValue
-      description: A Superhuman Docs result or entity expressed as a primitive type.
-      oneOf:
-      - type: string
-        example: $12.34
-      - type: number
-        example: 12.34
-      - type: boolean
-        example: true
   responses:
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -449,6 +401,54 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -474,6 +474,14 @@ components:
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
   parameters:
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -483,6 +491,13 @@ components:
         type: integer
         minimum: 1
         default: 25
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
     sortBy:
       name: sortBy
       description: Determines how to sort the given objects.
@@ -497,21 +512,6 @@ components:
       in: path
       required: true
       example: ctrl-cDefGhij
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
       schema:
         type: string
   securitySchemes:
