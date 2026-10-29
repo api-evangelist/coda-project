@@ -64,6 +64,213 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Coda Project is a company surfaced as a portfolio company of canaan-partners and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Coda Project, Inc. is the maker of Coda (now branded Superhuman Docs), an all-in-one collaborative workspace that blends the flexibility of a document, the structure of a spreadsheet, the power of applications, and the intelligence of AI into a single canvas. Founded in 2014 by Shishir Mehrotra and Alex DeNeui and used by tens of thousands of teams, Coda exposes a RESTful Docs API that lets developers list and search docs, create and copy docs, discover pages, tables, formulas, and controls, and read, insert, upsert, update, and delete rows. A separate Admin API provides programmatic organization administration — workspaces, users, groups, legal holds, audit events, webhooks, and Pack governance. Coda also ships a first-party Packs SDK and CLI for extending the platform, an official remote MCP server for AI clients, OAuth 2.0 with dynamic client registration, and a public Postman workspace.
 
-Backed by: canaan-partners
+**Areas:** Company · Productivity · Documents · Spreadsheets · Collaboration · No-Code · Workspace · Artificial Intelligence · Content Management · Software-as-a-Service
+
+## Coda Project on APIs.io
+
+Everything profiled for Coda Project is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/coda-project/](https://apis.io/providers/coda-project/)** — or go straight to one of the APIs or properties below.
+
+### APIs (32)
+
+- [Coda Project Account API](https://apis.io/apis/coda-project/coda-project-account-api/) — At this time, the API exposes some limited information about your account. However, `/whoami` is a good endpoint to hit to verify that you're hitting the…
+- [Coda Project Analytics API](https://apis.io/apis/coda-project/coda-project-analytics-api/) — This API offers analytics data for your docs and Packs over time.
+- [Coda Project API Tokens API](https://apis.io/apis/coda-project/coda-project-api-tokens-api/) — View and revoke individual user API tokens within an organization.
+- [Coda Project Automations API](https://apis.io/apis/coda-project/coda-project-automations-api/) — This API allows you to trigger automations.
+- [Coda Project Columns API](https://apis.io/apis/coda-project/coda-project-columns-api/) — While columns in Superhuman Docs have user-friendly names, they also have immutable IDs that are used when reading and writing rows. These endpoints let you…
+- [Coda Project Controls API](https://apis.io/apis/coda-project/coda-project-controls-api/) — Controls provide a user-friendly way to input a value that can affect other parts of the doc. This API lets you list controls and get their current values.
+- [Coda Project CustomDocDomains API](https://apis.io/apis/coda-project/coda-project-customdocdomains-api/) — The CustomDocDomains API from Coda Project — 3 operation(s) for customdocdomains.
+- [Coda Project Doc Export API](https://apis.io/apis/coda-project/coda-project-doc-export-api/) — Export docs for backup or ingestion into a DLP or eDiscovery system.
+- [Coda Project Doc Permissions API](https://apis.io/apis/coda-project/coda-project-doc-permissions-api/) — This API lets you manage sharing and permissions for your docs.
+- [Coda Project Docs API](https://apis.io/apis/coda-project/coda-project-docs-api/) — Documents are foundational, top-level collaborative projects that contain pages. The API lets you list and search your documents.
+- [Coda Project Events API](https://apis.io/apis/coda-project/coda-project-events-api/) — Provides access to audit events within an organization.
+- [Coda Project Folder Permissions API](https://apis.io/apis/coda-project/coda-project-folder-permissions-api/) — This API lets you manage sharing and permissions for your folders.
+- [Coda Project Folders API](https://apis.io/apis/coda-project/coda-project-folders-api/) — Folders contain docs and enable folder members to access those docs.
+- [Coda Project Formulas API](https://apis.io/apis/coda-project/coda-project-formulas-api/) — Formulas can be great for performing one-off computations, or used with tables and other formulas to compute a single value. With this API, you can discover…
+- [Coda Project Go Links API](https://apis.io/apis/coda-project/coda-project-go-links-api/) — The Go Links API from Coda Project — 1 operation(s) for go links.
+- [Coda Project Groups API](https://apis.io/apis/coda-project/coda-project-groups-api/) — This API lets you enumerate groups and group membership.
+- [Coda Project Miscellaneous API](https://apis.io/apis/coda-project/coda-project-miscellaneous-api/) — These endpoints wouldn't fit anywhere else, but you may find them useful when working with Superhuman Docs.
+- [Coda Project Organization Users API](https://apis.io/apis/coda-project/coda-project-organization-users-api/) — This API enables viewing and modifying user information at the Organization level.
+- [Coda Project Organizations API](https://apis.io/apis/coda-project/coda-project-organizations-api/) — Organizations are where Enterprise-level policy is set for users and workspaces.
+- [Coda Project Pack Configurations API](https://apis.io/apis/coda-project/coda-project-pack-configurations-api/) — Pack configurations control fine grained access, scopes, feature sets, shareability of docs with installed Packs, and more settings.
+- [Coda Project Pack Controls API](https://apis.io/apis/coda-project/coda-project-pack-controls-api/) — Pack controls govern access to Packs within an organization.
+- [Coda Project Packs API](https://apis.io/apis/coda-project/coda-project-packs-api/) — Packs are integrations connecting Superhuman Docs to external data sources.
+- [Coda Project Pages API](https://apis.io/apis/coda-project/coda-project-pages-api/) — Pages in Superhuman Docs offer canvases containing rich text, tables, controls, and other objects.
+- [Coda Project Permissions API](https://apis.io/apis/coda-project/coda-project-permissions-api/) — This API lets you manage sharing and permissions for your docs.
+- [Coda Project Preferences API](https://apis.io/apis/coda-project/coda-project-preferences-api/) — Import preferences control how external entities are imported (exempt, owner, location), scoped to an organization and importer.
+- [Coda Project Publishing API](https://apis.io/apis/coda-project/coda-project-publishing-api/) — Documents can be published publicly and associated with categories to help the world discover them. This API lets you manage the publishing settings of your…
+- [Coda Project Rows API](https://apis.io/apis/coda-project/coda-project-rows-api/) — You'll likely use this part of the API the most. These endpoints let you retrieve row data from tables in Superhuman Docs as well as create, upsert, update,…
+- [Coda Project Tables API](https://apis.io/apis/coda-project/coda-project-tables-api/) — The Tables API from Coda Project — 2 operation(s) for tables.
+- [Coda Project Webhooks API](https://apis.io/apis/coda-project/coda-project-webhooks-api/) — The Webhooks API from Coda Project — 3 operation(s) for webhooks.
+- [Coda Project Workspace Users API](https://apis.io/apis/coda-project/coda-project-workspace-users-api/) — This API enables viewing and modifying user membership within a workspace. It is accessible both to organization admins and workspace admins for the…
+- [Coda Project Workspaces API](https://apis.io/apis/coda-project/coda-project-workspaces-api/) — This API allows you to list and view your organization's workspaces.
+- [Coda Project Legal Holds API](https://apis.io/apis/coda-project/coda-project-legal-holds-api/) — Legal holds are used to ensure a given set of docs cannot be deleted and enables simplified export management of doc content.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Arazzo workflows (3)
+
+Multi-step workflows that chain operations into a business task.
+
+- [Create a Coda doc and populate a table](https://apis.io/arazzos/coda-project/coda-project-create-doc-and-populate/)
+- [List and read Coda doc rows](https://apis.io/arazzos/coda-project/coda-project-list-and-read-rows/)
+- [Upsert and reconcile Coda table rows](https://apis.io/arazzos/coda-project/coda-project-upsert-rows/)
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Coda Project Webhooks](https://apis.io/asyncapis/coda-project/coda-project-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [coda](https://apis.io/servers/coda-project/coda/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Coda Project Agentic Access](https://apis.io/agentic-access/coda-project/coda-project-agentic-access/)
+
+#### Collections (64)
+
+Postman and Open Collection request collections.
+
+- [Superhuman Docs Admin Account API](https://apis.io/collections/coda-project/open-coda-project-account-api/)
+- [Superhuman Docs Admin Account Analytics API](https://apis.io/collections/coda-project/open-coda-project-analytics-api/)
+- [Superhuman Docs Admin Account API Tokens API](https://apis.io/collections/coda-project/open-coda-project-api-tokens-api/)
+- [Superhuman Docs Admin Account Automations API](https://apis.io/collections/coda-project/open-coda-project-automations-api/)
+- [Superhuman Docs Admin Account Columns API](https://apis.io/collections/coda-project/open-coda-project-columns-api/)
+- [Superhuman Docs Admin Account Controls API](https://apis.io/collections/coda-project/open-coda-project-controls-api/)
+- [Superhuman Docs Admin Account CustomDocDomains API](https://apis.io/collections/coda-project/open-coda-project-customdocdomains-api/)
+- [Superhuman Docs Admin Account Doc Export API](https://apis.io/collections/coda-project/open-coda-project-doc-export-api/)
+- [Superhuman Docs Admin Account Doc Permissions API](https://apis.io/collections/coda-project/open-coda-project-doc-permissions-api/)
+- [Superhuman Admin Account Docs API](https://apis.io/collections/coda-project/open-coda-project-docs-api/)
+- [Superhuman Docs Admin Account Events API](https://apis.io/collections/coda-project/open-coda-project-events-api/)
+- [Superhuman Docs Admin Account Folder Permissions API](https://apis.io/collections/coda-project/open-coda-project-folder-permissions-api/)
+- [Superhuman Docs Admin Account Folders API](https://apis.io/collections/coda-project/open-coda-project-folders-api/)
+- [Superhuman Docs Admin Account Formulas API](https://apis.io/collections/coda-project/open-coda-project-formulas-api/)
+- [Superhuman Docs Admin Account Go Links API](https://apis.io/collections/coda-project/open-coda-project-go-links-api/)
+- [Superhuman Docs Admin Account Groups API](https://apis.io/collections/coda-project/open-coda-project-groups-api/)
+- [Superhuman Docs Admin Account LegalHolds API](https://apis.io/collections/coda-project/open-coda-project-legalholds-api/)
+- [Superhuman Docs Admin Account Miscellaneous API](https://apis.io/collections/coda-project/open-coda-project-miscellaneous-api/)
+- [Superhuman Docs Admin Account Organization Users API](https://apis.io/collections/coda-project/open-coda-project-organization-users-api/)
+- [Superhuman Docs Admin Account Organizations API](https://apis.io/collections/coda-project/open-coda-project-organizations-api/)
+- [Superhuman Docs Admin Account Pack Configurations API](https://apis.io/collections/coda-project/open-coda-project-pack-configurations-api/)
+- [Superhuman Docs Admin Account Pack Controls API](https://apis.io/collections/coda-project/open-coda-project-pack-controls-api/)
+- [Superhuman Docs Admin Account Packs API](https://apis.io/collections/coda-project/open-coda-project-packs-api/)
+- [Superhuman Docs Admin Account Pages API](https://apis.io/collections/coda-project/open-coda-project-pages-api/)
+- [Superhuman Docs Admin Account Permissions API](https://apis.io/collections/coda-project/open-coda-project-permissions-api/)
+- …and 39 more published on APIs.io
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Coda Project Admin Overlay](https://apis.io/overlays/coda-project/coda-project-admin-overlay/)
+- [Coda Project Docs Overlay](https://apis.io/overlays/coda-project/coda-project-docs-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Coda Project Authentication](https://apis.io/security/coda-project/coda-project-authentication/)
+- [Coda Project Domain Security](https://apis.io/security/coda-project/coda-project-domain-security/)
+- [Coda Project Trust Center](https://apis.io/security/coda-project/coda-project-trust-center/)
+- [Coda Project Vulnerability Disclosure](https://apis.io/security/coda-project/coda-project-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Coda Project Scopes](https://apis.io/scopes/coda-project/coda-project-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Coda Project Plans Pricing](https://apis.io/plans/coda-project/coda-project-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Coda Project Rate Limits](https://apis.io/rate-limits/coda-project/coda-project-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://coda.io)
+- [Documentation](https://coda.io/developers/apis/v1)
+- [Getting started](https://coda.io/developers/apis/v1#section/Using-the-API)
+- [API reference](https://coda.io/developers/apis/v1)
+- [Pricing](https://coda.io/pricing)
+- [Sign up](https://coda.io/login)
+- [Support](https://help.coda.io/)
+- [Blog](https://coda.io/blog)
+- [Security](https://hackerone.com/coda_bbp)
+- [Terms of service](https://coda.io/trust/tos)
+- [Privacy policy](https://coda.io/trust/privacy)
+- [GitHub](https://github.com/coda)
+- [Status](https://status.coda.io)
+
+## API Evangelist rating
+
+**Kin Score 71.6** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 62.6 |
+| Contract governance | 4.5 |
+| Operational transparency | 68.4 |
+| Developer ergonomics | 75.6 |
+| Access clarity | 92.1 |
+
+**Agent readiness 55.2** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 41.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/coda-project/](https://apis.io/providers/coda-project/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Coda Project: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/coda-project/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
